@@ -3,82 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>XmasBox.hu – Ünnepi Karácsonyi Meglepetés Dobozok</title>
+  <title>XmasBox.hu – Karácsonyi Ajándékdobozok & Fődíj Kerék</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #2a080c;
-      color: #fffbeb;
-      overflow-x: hidden;
-      -webkit-tap-highlight-color: transparent;
-    }
-    . holiday-serif {
-      font-family: 'Playfair Display', serif;
-    }
-    /* Valódi, meghitt karácsonyi háttér meleg fényekkel */
-    .cozy-bg {
-      background-image: 
-        linear-gradient(180deg, rgba(42, 8, 12, 0.72) 0%, rgba(69, 10, 15, 0.65) 35%, rgba(35, 6, 9, 0.92) 100%),
-        url('https://images.unsplash.com/photo-1543589077-47d81606c1bf?auto=format&fit=crop&w=1400&q=85');
-      background-size: cover;
-      background-position: center top;
-      background-attachment: fixed;
-    }
-    /* Meleg krém-fehér ünnepi kártyák (nem fekete kaszinó stílus!) */
-    .cream-card {
-      background: linear-gradient(180deg, #fffdf9 0%, #fef3c7 100%);
-      color: #450a0a;
-      border: 2px solid #f59e0b;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45), 0 0 25px rgba(245, 158, 11, 0.25);
-    }
-    .ruby-card {
-      background: linear-gradient(165deg, rgba(127, 29, 29, 0.92) 0%, rgba(69, 10, 10, 0.96) 100%);
-      backdrop-filter: blur(12px);
-      border: 1.5px solid rgba(251, 191, 36, 0.45);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-    }
-    /* Felső meleg karácsonyi égősor */
-    @keyframes bulbGlow {
-      0%, 100% { opacity: 0.65; filter: drop-shadow(0 0 6px #fde047); }
-      50% { opacity: 1; filter: drop-shadow(0 0 16px #facc15); }
-    }
-    .warm-bulb { animation: bulbGlow 2.4s infinite ease-in-out; }
-    .warm-bulb-2 { animation: bulbGlow 2.4s infinite 1.2s ease-in-out; }
-
-    /* 3D Ajándékdoboz Fedél Lerepülés Animáció */
-    .gift-lid {
-      transition: all 0.75s cubic-bezier(0.34, 1.56, 0.64, 1);
-      transform-origin: center bottom;
-    }
-    .lid-open {
-      transform: translateY(-95px) rotate(-14deg) scale(1.05);
-      opacity: 0;
-    }
-    @keyframes boxFloat {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-7px); }
-    }
-    .floating-gift { animation: boxFloat 3.2s ease-in-out infinite; }
-    @keyframes ticker {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    .animate-ticker {
-      display: flex;
-      width: max-content;
-      animation: ticker 30s linear infinite;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body class="min-h-screen cozy-bg relative pb-20">
 
-  <!-- FINOM, MEGHITT HÓESÉS -->
+  <!-- FINOM HÓESÉS -->
   <canvas id="snowCanvas" class="fixed inset-0 pointer-events-none z-10"></canvas>
 
-  <!-- FELSŐ KARÁCSONYI ARANY ÉGŐSOR DÍSZÍTÉS -->
+  <!-- FELSŐ MELEG KARÁCSONYI ÉGŐSOR -->
   <div class="relative z-20 w-full overflow-hidden pointer-events-none h-7 flex justify-around items-start px-2">
     <div class="w-3 h-4 rounded-full bg-amber-300 warm-bulb -mt-1"></div>
     <div class="w-3 h-4 rounded-full bg-red-400 warm-bulb-2 -mt-1"></div>
@@ -92,13 +27,13 @@
     <div class="w-3 h-4 rounded-full bg-amber-200 warm-bulb-2 -mt-1"></div>
   </div>
 
-  <!-- ÉLŐ KARÁCSONYI AJÁNDÉKBONTÁSOK SÁV -->
+  <!-- ÉLŐ NYERTESEK SÁV -->
   <div class="relative z-20 bg-red-950/85 border-y border-amber-300/30 py-1.5 overflow-hidden backdrop-blur-md">
     <div class="animate-ticker flex space-x-10 text-xs font-semibold text-amber-100">
-      <span>🎄 <b class="text-amber-300">Kovács Bence (Budapest)</b> most bontotta ki: 2 db Steam Játék + <b class="text-white">1 500 Ft Adventi Kupon</b></span>
-      <span>✨ <b class="text-amber-300">Tóth Eszter (Győr)</b> lekaparta az Arany Sorsjegyet: <b class="text-yellow-300">10 000 Ft eMAG Ajándékkártya!</b></span>
-      <span>🎁 <b class="text-amber-300">Szabó Dávid (Debrecen)</b> most bontotta ki: 4 db VIP Steam Játék + <b class="text-white">1 500 Ft Adventi Kupon</b></span>
-      <span>🎄 <b class="text-amber-300">Kovács Bence (Budapest)</b> most bontotta ki: 2 db Steam Játék + <b class="text-white">1 500 Ft Adventi Kupon</b></span>
+      <span>🎄 <b class="text-amber-300">Kovács Bence (Bp)</b> most pörgette ki: 2x Steam Játék + <b class="text-white">-1 500 Ft VIP Kupon</b></span>
+      <span>🔥 <b class="text-amber-300">Tóth Eszter (Győr)</b> kipörgette a keréken: <b class="text-yellow-300">25 000 Ft eMAG Ajándékkártya!</b></span>
+      <span>🎁 <b class="text-amber-300">Szabó Dávid (Debrecen)</b> most bontotta ki: 4x VIP Steam Játék + <b class="text-white">-1 500 Ft Kupon</b></span>
+      <span>🎄 <b class="text-amber-300">Kovács Bence (Bp)</b> most pörgette ki: 2x Steam Játék + <b class="text-white">-1 500 Ft VIP Kupon</b></span>
     </div>
   </div>
 
@@ -108,7 +43,6 @@
     <!-- FEJLÉC -->
     <header class="flex items-center justify-between mb-6">
       <div class="flex items-center gap-3">
-        <!-- Elegáns Arany Harang SVG Logó -->
         <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-300 to-amber-500 flex items-center justify-center shadow-lg border border-white/50">
           <svg class="w-6 h-6 text-red-950" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 2a2 2 0 0 0-2 2v.29C7.12 5.14 5 7.82 5 11v5l-2 2v1h18v-1l-2-2v-5c0-3.18-2.12-5.86-5-6.71V4a2 2 0 0 0-2-2zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/>
@@ -116,37 +50,88 @@
         </div>
         <div>
           <span class="holiday-serif text-xl sm:text-2xl font-black tracking-wide text-amber-200 block leading-none">XmasBox.hu</span>
-          <span class="text-[11px] text-amber-100/90 font-semibold">Ünnepi Ajándékdobozok a Fa Alá</span>
+          <span class="text-[11px] text-amber-100/90 font-semibold">Ünnepi Ajándékdobozok & Fődíj Kerék</span>
         </div>
       </div>
 
-      <button onclick="openExperience('Arany Karácsonyi Doboz', 2, 4990)" class="bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 text-red-950 text-xs font-extrabold px-4 py-2.5 rounded-full shadow-xl border border-white hover:scale-105 active:scale-95 transition">
-        ✨ Ingyenes Próba-Bontás
+      <button onclick="openExperience('Arany Adventi Doboz', 2, 4990)" class="bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 text-red-950 text-xs font-extrabold px-4 py-2.5 rounded-full shadow-xl border border-white hover:scale-105 active:scale-95 transition">
+        🎰 Ingyen Próba-Pörgetés
       </button>
     </header>
 
-    <!-- MEGHITT KARÁCSONYI HERO SZEKCIÓ (LÁTSZIK A KARÁCSONYFA ÉS A HANGULAT!) -->
-    <div class="text-center max-w-2xl mx-auto mb-8 px-2">
+    <!-- MEGHITT KARÁCSONYI HERO SZEKCIÓ -->
+    <div class="text-center max-w-2xl mx-auto mb-7 px-2">
       <div class="inline-flex items-center gap-2 bg-red-900/80 border border-amber-300/50 text-amber-200 text-xs font-bold px-4 py-1.5 rounded-full mb-3 shadow-lg backdrop-blur-sm">
-        <span>🕯️</span> Meghitt Adventi Meglepetés • Garantált Ajándékokkal
+        <span>🎄</span> Garantált Steam Játékok + Karácsonyi Fődíj Kerék
       </div>
-      <h1 class="holiday-serif text-3xl sm:text-5xl font-black text-white leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
-        Bontsd ki a Karácsony Varázsát <span class="text-amber-300">Egyetlen Érintéssel!</span>
+      <h1 class="holiday-serif text-3xl sm:text-5xl font-black text-white leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.85)]">
+        Bontsd ki a Karácsonyi Dobozod & <span class="text-amber-300">Pörgess a Fődíjakért!</span>
       </h1>
-      <p class="text-sm sm:text-base text-amber-50/95 mt-3 leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] font-medium">
-        Válassz egy ünnepi díszdobozt magadnak vagy ajándékba a fa alá! Minden dobozban <b>garantáltan eredeti PC / Steam játékokat</b> találsz, mellé pedig kapsz egy <b>Arany Karácsonyi Kaparós Sorsjegyet</b>, amivel <b class="text-amber-300">iPhone 18-at, PlayStation 5-öt, eMAG utalványt</b> vagy azonnali kedvezményt kaparhatsz ki!
+      <p class="text-sm sm:text-base text-amber-50/95 mt-2.5 leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)] font-medium">
+        Minden ünnepi díszdobozban <b>garantáltan eredeti PC / Steam játékkulcsokat</b> kapsz, ráadásul minden doboz mellé jár <b>1 INGYENES pörgetés a Nagy Karácsonyi Fődíj Keréken</b>!
       </p>
     </div>
 
     <!-- =========================================================
-         A 3 ÜNNEPI AJÁNDÉKDOBOZ (MELEG KRÉM ÉS RUBIN KÁRTYÁK, VALÓDI SVG DOBOZOKKAL!)
+         VALÓDI FOTÓS FŐDÍJ GALÉRIA (HOGY KÉPPEL LÁSSÁK A NYEREMÉNYEKET!)
+         ========================================================= -->
+    <div class="mb-8">
+      <div class="text-center mb-3">
+        <span class="text-xs font-extrabold uppercase tracking-wider text-amber-300 drop-shadow">📸 Ezek a nyeremények pörögnek a Karácsonyi Keréken:</span>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <!-- 1. iPhone 18 Pro Fotós Kártya -->
+        <div class="ruby-card rounded-2xl p-2.5 text-center border border-amber-300/50 hover:scale-[1.03] transition">
+          <div class="h-24 w-full rounded-xl overflow-hidden mb-2 relative bg-black">
+            <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=400&q=80" alt="iPhone 18 Pro" class="w-full h-full object-cover">
+            <span class="absolute top-1.5 right-1.5 bg-amber-400 text-red-950 text-[9px] font-black uppercase px-2 py-0.5 rounded-full shadow">Fődíj</span>
+          </div>
+          <h4 class="font-black text-xs sm:text-sm text-white">iPhone 18 Pro</h4>
+          <span class="text-[10px] text-amber-300 font-bold block">450.000 Ft eMAG utalvány</span>
+        </div>
+
+        <!-- 2. PlayStation 5 Fotós Kártya -->
+        <div class="ruby-card rounded-2xl p-2.5 text-center border border-amber-300/50 hover:scale-[1.03] transition">
+          <div class="h-24 w-full rounded-xl overflow-hidden mb-2 relative bg-black">
+            <img src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=400&q=80" alt="PlayStation 5" class="w-full h-full object-cover">
+            <span class="absolute top-1.5 right-1.5 bg-amber-400 text-red-950 text-[9px] font-black uppercase px-2 py-0.5 rounded-full shadow">Fődíj</span>
+          </div>
+          <h4 class="font-black text-xs sm:text-sm text-white">PlayStation 5 Slim</h4>
+          <span class="text-[10px] text-amber-300 font-bold block">200.000 Ft eMAG utalvány</span>
+        </div>
+
+        <!-- 3. eMAG Ajándékutalvány Kártya -->
+        <div class="ruby-card rounded-2xl p-2.5 text-center border border-amber-300/50 hover:scale-[1.03] transition">
+          <div class="h-24 w-full rounded-xl overflow-hidden mb-2 relative bg-gradient-to-br from-blue-600 via-indigo-700 to-red-600 flex flex-col items-center justify-center p-2 border border-white/20">
+            <span class="text-[10px] uppercase font-extrabold text-white/80 tracking-widest">AJÁNDÉKKÁRTYA</span>
+            <span class="text-xl font-black text-white tracking-tight">eMAG.hu</span>
+            <span class="bg-amber-300 text-red-950 text-[10px] font-black px-2 py-0.5 rounded mt-1">5.000 – 50.000 Ft</span>
+          </div>
+          <h4 class="font-black text-xs sm:text-sm text-white">eMAG Utalványok</h4>
+          <span class="text-[10px] text-amber-300 font-bold block">Azonnali digitális kód</span>
+        </div>
+
+        <!-- 4. Steam Játékok + VIP Kupon Kártya -->
+        <div class="ruby-card rounded-2xl p-2.5 text-center border border-amber-300/50 hover:scale-[1.03] transition">
+          <div class="h-24 w-full rounded-xl overflow-hidden mb-2 relative bg-black">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80" alt="Steam Gaming" class="w-full h-full object-cover opacity-85">
+            <span class="absolute top-1.5 right-1.5 bg-emerald-400 text-slate-950 text-[9px] font-black uppercase px-2 py-0.5 rounded-full shadow">100% Nyerő</span>
+          </div>
+          <h4 class="font-black text-xs sm:text-sm text-white">Steam Kulcs & Kupon</h4>
+          <span class="text-[10px] text-emerald-300 font-bold block">Garantált játék + -1500 Ft</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         A 3 ÜNNEPI AJÁNDÉKDOBOZ
          ========================================================= -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 items-stretch">
 
-      <!-- ⭐ 1. ARANY KARÁCSONYI DOBOZ (KÖZÖNSÉGKEDVENC - MELEG KRÉM KÁRTYA!) -->
+      <!-- ⭐ 1. ARANY KARÁCSONYI DOBOZ (SLÁGER) -->
       <div class="order-1 md:order-2 cream-card rounded-3xl p-6 flex flex-col justify-between relative transform md:-translate-y-3">
-        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-red-700 via-red-600 to-red-700 text-amber-200 text-[11px] font-extrabold uppercase px-4 py-1 rounded-full shadow-lg border border-amber-300 whitespace-nowrap">
-          🎄 Legnépszerűbb Karácsonyi Ajándék
+        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-red-800 via-red-600 to-red-800 text-amber-200 text-[11px] font-extrabold uppercase px-4 py-1 rounded-full shadow-lg border border-amber-300 whitespace-nowrap">
+          🎄 Legnépszerűbb • Dupla Játék + Kerék
         </div>
 
         <div>
@@ -155,40 +140,36 @@
             <span class="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">Érték: 10 000 Ft+</span>
           </div>
 
-          <!-- VALÓDI KIDOLGOZOTT SVG KARÁCSONYI DÍSZDOBOZ (NEM EMOJI!) -->
           <div class="text-center my-3">
             <div class="w-28 h-28 mx-auto floating-gift">
               <svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-xl">
-                <!-- Doboz alap (Meleg ünnepi piros) -->
                 <rect x="20" y="45" width="80" height="65" rx="8" fill="#b91c1c" stroke="#f59e0b" stroke-width="2"/>
                 <rect x="52" y="45" width="16" height="65" fill="#fbbf24"/>
                 <rect x="20" y="70" width="80" height="14" fill="#fbbf24"/>
-                <!-- Doboz fedél -->
                 <rect x="15" y="32" width="90" height="18" rx="5" fill="#dc2626" stroke="#f59e0b" stroke-width="2"/>
                 <rect x="51" y="32" width="18" height="18" fill="#fde047"/>
-                <!-- Arany selyemmasni -->
                 <path d="M60 32 C40 10, 25 25, 52 32 Z" fill="#fbbf24" stroke="#b45309" stroke-width="1.5"/>
                 <path d="M60 32 C80 10, 95 25, 68 32 Z" fill="#fbbf24" stroke="#b45309" stroke-width="1.5"/>
                 <circle cx="60" cy="30" r="6" fill="#fef08a"/>
               </svg>
             </div>
             <h2 class="holiday-serif text-2xl font-black text-red-950">Arany Adventi Doboz</h2>
-            <p class="text-xs text-red-900/80 font-semibold mt-1">Dupla garantált játék + 1 Arany Kaparós Sorsjegy!</p>
+            <p class="text-xs text-red-900/80 font-semibold mt-1">2 db garantált Steam játék + 1 Pörgetés a Fődíj Keréken!</p>
           </div>
 
-          <div class="bg-white/80 rounded-2xl p-3.5 my-3 border border-amber-400/60 space-y-2 text-xs text-red-950 shadow-inner">
+          <div class="bg-white/85 rounded-2xl p-3.5 my-3 border border-amber-400/60 space-y-2 text-xs text-red-950 shadow-inner">
             <div class="font-extrabold text-amber-800 uppercase text-[10px] tracking-wider">A díszdoboz garantált tartalma:</div>
             <div class="flex items-center gap-2">
               <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0">✓</span>
-              <span><b>2 db Eredeti Steam PC Játék</b> (Aktiválható kulcs)</span>
+              <span><b>2 db Eredeti Steam PC Játék</b> (CD-kulcs)</span>
             </div>
             <div class="flex items-center gap-2">
-              <span class="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0">★</span>
-              <span><b>+1 db Arany Kaparós Sorsjegy</b> (Fődíj eséllyel!)</span>
+              <span class="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0">🎰</span>
+              <span><b>+1 Ingyen Pörgetés</b> a Nagy Karácsonyi Keréken!</span>
             </div>
             <div class="flex items-center gap-2">
               <span class="w-5 h-5 rounded-full bg-red-700 text-white flex items-center justify-center text-[10px] font-bold shrink-0">♥</span>
-              <span><b>Nyomtatható Karácsonyi Kártya</b> a fa alá</span>
+              <span><b>Nyomtatható Karácsonyi QR-kártya</b> a fa alá</span>
             </div>
           </div>
         </div>
@@ -199,12 +180,12 @@
             <span class="text-3xl font-black text-red-900">4 990 Ft</span>
           </div>
           <button onclick="openExperience('Arany Adventi Doboz', 2, 4990)" class="w-full py-4 rounded-2xl font-extrabold text-sm sm:text-base bg-gradient-to-r from-red-800 via-red-700 to-red-800 text-amber-200 shadow-xl border border-amber-300 hover:brightness-110 active:scale-95 transition">
-            🎀 DÍSZDOBOZ KIBONTÁSA MOST!
+            🎀 DOBOZ KIBONTÁSA + KERÉK PÖRGETÉS!
           </button>
         </div>
       </div>
 
-      <!-- 🥉 2. BRONZ KARÁCSONYI DOBOZ (BELÉPŐ) -->
+      <!-- 🥉 2. BRONZ KARÁCSONYI DOBOZ -->
       <div class="order-2 md:order-1 ruby-card rounded-3xl p-6 flex flex-col justify-between">
         <div>
           <div class="flex justify-between items-center mb-2">
@@ -212,7 +193,6 @@
             <span class="text-xs font-bold text-emerald-300">Érték: 5 000 Ft+</span>
           </div>
 
-          <!-- SVG Zöld-Arany Karácsonyi Doboz -->
           <div class="text-center my-3">
             <div class="w-24 h-24 mx-auto floating-gift">
               <svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-lg">
@@ -225,7 +205,7 @@
               </svg>
             </div>
             <h3 class="holiday-serif text-xl font-bold text-amber-200">Bronz Adventi Doboz</h3>
-            <p class="text-xs text-amber-100/80 mt-1">Hangolódj az ünnepekre egy garantált játékkal és sorsjeggyel!</p>
+            <p class="text-xs text-amber-100/80 mt-1">1 db garantált PC játék + 1 Pörgetés a Karácsonyi Keréken!</p>
           </div>
 
           <div class="bg-black/30 rounded-2xl p-3.5 my-3 border border-amber-300/20 space-y-2 text-xs text-amber-50">
@@ -234,12 +214,8 @@
               <span><b>1 db Garantált Steam PC Játék</b></span>
             </div>
             <div class="flex items-center gap-2">
-              <span class="text-amber-300 font-bold">★</span>
-              <span><b>+1 db Arany Kaparós Sorsjegy</b></span>
-            </div>
-            <div class="flex items-center gap-2 text-amber-200/70">
-              <span>🏆</span>
-              <span>Fődíj esély: <b>25 000 Ft eMAG</b> vagy <b>-1500 Ft Kupon</b></span>
+              <span class="text-amber-300 font-bold">🎰</span>
+              <span><b>+1 Ingyen Pörgetés</b> a Fődíj Keréken</span>
             </div>
           </div>
         </div>
@@ -254,7 +230,7 @@
         </div>
       </div>
 
-      <!-- 💎 3. KIRÁLYI VIP DOBOZ (PRÉMIUM) -->
+      <!-- 💎 3. KIRÁLYI VIP DOBOZ -->
       <div class="order-3 ruby-card rounded-3xl p-6 flex flex-col justify-between">
         <div>
           <div class="flex justify-between items-center mb-2">
@@ -262,7 +238,6 @@
             <span class="text-xs font-bold text-amber-300">Érték: 22 000 Ft+</span>
           </div>
 
-          <!-- SVG Királyi Arany-Fehér Doboz -->
           <div class="text-center my-3">
             <div class="w-24 h-24 mx-auto floating-gift">
               <svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-lg">
@@ -276,7 +251,7 @@
               </svg>
             </div>
             <h3 class="holiday-serif text-xl font-bold text-amber-300">Királyi VIP Doboz</h3>
-            <p class="text-xs text-amber-100/80 mt-1">4 db Prémium Játék + Dupla esély az iPhone 18 és PS5 fődíjakra!</p>
+            <p class="text-xs text-amber-100/80 mt-1">4 db Prémium Játék + 2x VIP Pörgetés az iPhone 18 és PS5 fődíjakra!</p>
           </div>
 
           <div class="bg-black/30 rounded-2xl p-3.5 my-3 border border-amber-300/20 space-y-2 text-xs text-amber-50">
@@ -285,12 +260,8 @@
               <span><b>4 db Prémium Steam PC Játék</b></span>
             </div>
             <div class="flex items-center gap-2 text-amber-300 font-bold">
-              <span>★</span>
-              <span><b>+2 db VIP Arany Kaparós Sorsjegy!</b></span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span>🏆</span>
-              <span>Maximális esély: <b>iPhone 18 & PS5 Utalvány!</b></span>
+              <span>🎰</span>
+              <span><b>+2 db VIP Pörgetés</b> a Fődíj Keréken!</span>
             </div>
           </div>
         </div>
@@ -307,35 +278,6 @@
 
     </div>
 
-    <!-- HOGYAN MŰKÖDIK ÉS MI VAN A SORSJEGYEKEN? (MEGHITT, TISZTA SZEKCIÓ) -->
-    <div class="ruby-card rounded-3xl p-6 mb-8">
-      <h3 class="holiday-serif text-xl sm:text-2xl font-bold text-amber-300 text-center mb-4">
-        🎄 Mit rejthet a dobozod mellé járó Arany Kaparós Sorsjegy?
-      </h3>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-        <div class="bg-black/30 rounded-2xl p-3.5 border border-amber-300/30">
-          <div class="text-xs font-extrabold uppercase text-amber-300 mb-1">Mega Fődíj</div>
-          <div class="text-base font-black text-white">iPhone 18 Pro</div>
-          <div class="text-[11px] text-amber-200/80 mt-0.5">450.000 Ft eMAG Kártya</div>
-        </div>
-        <div class="bg-black/30 rounded-2xl p-3.5 border border-amber-300/30">
-          <div class="text-xs font-extrabold uppercase text-amber-300 mb-1">Konzol Fődíj</div>
-          <div class="text-base font-black text-white">PlayStation 5</div>
-          <div class="text-[11px] text-amber-200/80 mt-0.5">200.000 Ft eMAG Kártya</div>
-        </div>
-        <div class="bg-black/30 rounded-2xl p-3.5 border border-amber-300/30">
-          <div class="text-xs font-extrabold uppercase text-sky-300 mb-1">Utalványok</div>
-          <div class="text-base font-black text-white">eMAG Kódok</div>
-          <div class="text-[11px] text-amber-200/80 mt-0.5">5.000 – 50.000 Ft értékben</div>
-        </div>
-        <div class="bg-black/30 rounded-2xl p-3.5 border border-emerald-400/40">
-          <div class="text-xs font-extrabold uppercase text-emerald-300 mb-1">Leggyakoribb</div>
-          <div class="text-base font-black text-white">-1 500 Ft Kupon</div>
-          <div class="text-[11px] text-emerald-200/90 mt-0.5">Azonnali kedvezmény kód!</div>
-        </div>
-      </div>
-    </div>
-
     <footer class="text-center text-xs text-amber-100/70 border-t border-amber-200/20 pt-5">
       🔒 Hivatalos Magyar Webshop • Apple Pay & Bankkártyás fizetés • Azonnali E-mail Kézbesítés • Számlázz.hu E-számla
     </footer>
@@ -343,39 +285,33 @@
   </div>
 
   <!-- =========================================================
-       INTERAKTÍV MODAL: 1. VALÓDI FEDÉL-LEREPÜLŐ AJÁNDÉKBONTÁS 
-                         2. UJJAL LEKAPARHATÓ ARANY KARÁCSONYI SORSJEGY!
+       MODAL: 1. DÍSZDOBOZ BONTÁS -> 2. KÉPES ADRENALIN KERÉK -> 3. PÉNZTÁR
        ========================================================= -->
-  <div id="unboxModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-3 overflow-y-auto">
+  <div id="unboxModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex items-center justify-center p-3 overflow-y-auto">
     <div class="cream-card rounded-3xl max-w-md w-full p-5 sm:p-6 relative text-center my-auto">
       
       <button onclick="closeModal()" class="absolute top-3.5 right-3.5 text-red-950/60 hover:text-red-950 text-lg font-extrabold w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center z-30">✕</button>
 
-      <!-- 1. LÉPÉS: AZ INTERAKTÍV KARÁCSONYI DÍSZDOBOZ KINYITÁSA -->
+      <!-- 1. LÉPÉS: MASNIS DÍSZDOBOZ KIBONTÁSA -->
       <div id="step-1-openbox" class="py-2">
         <span class="bg-red-800 text-amber-200 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full">🎄 1. Lépés: Ajándékdoboz Kibontása</span>
         <h3 id="modalBoxTitle" class="holiday-serif text-2xl font-black text-red-950 mt-2">Arany Adventi Doboz</h3>
         <p class="text-xs text-red-900/80 font-medium mt-1">Érintsd meg a selyemmasnis díszdobozt a fedél leemeléséhez!</p>
 
-        <!-- 3D SVG AJÁNDÉKDOBOZ KÜLÖN MOZGÓ FEDÉLLEL -->
         <div onclick="popGiftLid()" class="relative w-44 h-44 mx-auto my-4 cursor-pointer select-none flex items-center justify-center">
-          <!-- Arany fénykör a doboz mögött -->
-          <div id="boxGlow" class="absolute inset-0 bg-amber-400/30 rounded-full blur-2xl transition-all duration-700"></div>
+          <div class="absolute inset-0 bg-amber-400/30 rounded-full blur-2xl"></div>
 
-          <!-- Dobozból kiemelkedő Steam Kártya (rejtve, amíg ki nem nyílik) -->
           <div id="emergingCard" class="absolute opacity-0 transform translate-y-6 transition-all duration-700 z-10 bg-gradient-to-br from-slate-900 to-blue-950 text-white px-4 py-2.5 rounded-xl border-2 border-amber-400 shadow-2xl">
             <span class="text-[10px] uppercase tracking-wider text-amber-300 font-bold block">Garantált Ajándékod:</span>
             <span id="emergingSteamText" class="text-sm font-black block">🎮 2x STEAM JÁTÉK</span>
           </div>
 
           <svg viewBox="0 0 140 140" class="w-full h-full relative z-20 overflow-visible">
-            <!-- Doboz Alsó Része -->
             <g>
               <rect x="25" y="60" width="90" height="68" rx="8" fill="#b91c1c" stroke="#991b1b" stroke-width="2"/>
               <rect x="61" y="60" width="18" height="68" fill="#fbbf24"/>
               <rect x="25" y="88" width="90" height="14" fill="#fbbf24"/>
             </g>
-            <!-- Doboz Fedele + Masni (Ez repül le kattintáskor!) -->
             <g id="svgLid" class="gift-lid">
               <rect x="18" y="44" width="104" height="20" rx="6" fill="#dc2626" stroke="#f59e0b" stroke-width="2"/>
               <rect x="59" y="44" width="22" height="20" fill="#fde047"/>
@@ -391,301 +327,107 @@
         </button>
       </div>
 
-      <!-- 2. LÉPÉS: UJJAL LEKAPARHATÓ ARANY KARÁCSONYI SORSJEGY! -->
-      <div id="step-2-scratch" class="hidden py-1">
-        <div class="bg-emerald-900 text-white rounded-2xl p-3 mb-3 text-left flex items-center justify-between border border-emerald-400/40 shadow">
+      <!-- 2. LÉPÉS: NAGY KÉPES KARÁCSONYI SZERENCSEKERÉK (ADRENALIN PÖRGETÉS!) -->
+      <div id="step-2-wheel" class="hidden py-1">
+        <div class="bg-emerald-900 text-white rounded-2xl p-2.5 mb-2.5 text-left flex items-center justify-between border border-emerald-400/40 shadow">
           <div>
             <span class="text-[10px] uppercase font-bold text-emerald-300 block">✓ 1. Garantált Ajándékod Megvan:</span>
-            <h4 id="wonSteamBadge" class="text-sm font-black">2 db Eredeti Steam PC Játékkulcs</h4>
+            <h4 id="wonSteamBadge" class="text-xs sm:text-sm font-black">2 db Eredeti Steam PC Játékkulcs</h4>
           </div>
-          <span class="bg-emerald-500 text-slate-950 text-[10px] font-black px-2.5 py-1 rounded-lg">Kész!</span>
+          <span class="bg-emerald-400 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-md">Kész!</span>
         </div>
 
-        <span class="bg-amber-500 text-white text-[10px] font-extrabold uppercase px-3 py-0.5 rounded-full">✨ 2. Lépés: Bónusz Fődíj Sorsjegy</span>
-        <h3 class="holiday-serif text-2xl font-black text-red-950 mt-1">Kapard le az Arany Sorsjegyet!</h3>
-        <p class="text-xs text-red-900/80 font-medium mb-3">
-          Húzd végig az ujjad (vagy az egeret) az arany mezőn, vagy nyomj az azonnali lekaparás gombra:
-        </p>
+        <h3 class="holiday-serif text-xl sm:text-2xl font-black text-red-950">Karácsonyi Fődíj Kerék</h3>
 
-        <!-- VALÓDI INTERAKTÍV KAPARÓS SORSJEGY (CANVAS) -->
-        <div class="relative w-full h-44 rounded-2xl overflow-hidden border-2 border-amber-500 shadow-xl mb-3 select-none bg-gradient-to-br from-red-950 via-red-900 to-amber-950">
-          
-          <!-- A FÓLIA ALATTI NYEREMÉNY (Amit előkapar a felhasználó) -->
-          <div class="absolute inset-0 p-3 flex flex-col justify-between text-center">
-            <div class="grid grid-cols-3 gap-2 h-full items-center">
-              <!-- Bal mező (Near miss) -->
-              <div class="bg-black/35 rounded-xl p-2 border border-white/10 opacity-65">
-                <span class="text-[9px] uppercase text-amber-300 font-bold block">1. Mező</span>
-                <span class="text-xs font-black text-white block mt-1">iPhone 18</span>
-                <span class="text-[9px] text-amber-200 block">450.000 Ft</span>
-              </div>
-              <!-- KÖZÉPSŐ NYERTES MEZŐ! -->
-              <div class="bg-gradient-to-b from-amber-300 to-amber-500 text-red-950 rounded-xl p-2.5 border-2 border-white shadow-lg transform scale-105">
-                <span class="bg-red-800 text-amber-200 text-[9px] font-black uppercase px-2 py-0.5 rounded-full">★ NYERTÉL! ★</span>
-                <span class="text-base font-black block mt-1 leading-tight">-1 500 Ft</span>
-                <span class="text-[10px] font-extrabold block">EXTRA KUPON</span>
-              </div>
-              <!-- Jobb mező (Near miss) -->
-              <div class="bg-black/35 rounded-xl p-2 border border-white/10 opacity-65">
-                <span class="text-[9px] uppercase text-amber-300 font-bold block">3. Mező</span>
-                <span class="text-xs font-black text-white block mt-1">PS5 Konzol</span>
-                <span class="text-[9px] text-amber-200 block">200.000 Ft</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- A LEKAPARHATÓ ARANY FÓLIA RÉTEG -->
-          <canvas id="scratchCanvas" class="absolute inset-0 w-full h-full cursor-pointer touch-none z-20"></canvas>
+        <!-- ÉLŐ DISPLAY: MI VAN ÉPP A MUTATÓ ALATT -->
+        <div id="wheelStatusBanner" class="text-xs font-extrabold bg-red-950 text-amber-200 py-1.5 px-3 rounded-xl border border-amber-400 my-2 shadow-inner">
+          🔥 Pörgess az iPhone 18, PS5 vagy azonnali kedvezményért!
         </div>
 
-        <button id="autoScratchBtn" onclick="revealScratchCard()" class="w-full py-3 rounded-xl font-extrabold text-xs bg-amber-500/20 hover:bg-amber-500/30 text-red-950 border border-amber-600/40 mb-2 transition">
-          ✨ Sorsjegy Azonnali Lekaparása (1 Kattintás)
+        <!-- NAGY SZERENCSEKERÉK KONzol FIZIKAI MUTATÓVAL -->
+        <div class="relative w-[290px] h-[290px] sm:w-[310px] sm:h-[310px] mx-auto my-2 flex items-center justify-center select-none">
+          <!-- Fizikai Arany Mutató Nyelv (Flapper), ami bemozog a pöckökön -->
+          <div id="wheelFlapper" class="wheel-flapper absolute -top-3 left-1/2 -translate-x-1/2 z-30 drop-shadow-[0_5px_6px_rgba(0,0,0,0.75)]">
+            <svg width="34" height="42" viewBox="0 0 34 42">
+              <polygon points="17,40 3,10 31,10" fill="#fbbf24" stroke="#78350f" stroke-width="2.5"/>
+              <circle cx="17" cy="10" r="8" fill="#dc2626" stroke="#fde047" stroke-width="2.5"/>
+            </svg>
+          </div>
+
+          <canvas id="christmasWheel" width="310" height="310" class="w-full h-full rounded-full shadow-2xl"></canvas>
+
+          <!-- Középső Arany Pörgető Gomb -->
+          <button onclick="startAdrenalineWheel()" class="absolute w-16 h-16 rounded-full bg-gradient-to-b from-amber-300 via-amber-400 to-amber-600 border-4 border-white text-red-950 font-black text-[11px] shadow-[0_0_20px_rgba(0,0,0,0.8)] flex items-center justify-center z-20 active:scale-95">
+            PÖRGESS!
+          </button>
+        </div>
+
+        <button id="spinActionBtn" onclick="startAdrenalineWheel()" class="w-full py-4 rounded-2xl font-black text-sm sm:text-base bg-gradient-to-r from-red-800 via-red-600 to-red-800 text-amber-200 shadow-xl border border-amber-300 active:scale-95 transition mt-1">
+          🎰 KARÁCSONYI KERÉK MEGPÖRGETÉSE!
         </button>
 
-        <!-- VÉGSŐ NYEREMÉNY ÉS FIZETÉSI AJÁNLAT (Lekaparás után nyílik le) -->
-        <div id="finalOfferBox" class="hidden mt-3 bg-gradient-to-b from-red-950 to-red-900 text-white rounded-2xl p-4 border-2 border-amber-400 shadow-2xl text-left">
-          <div class="flex items-center justify-between mb-2">
-            <span class="bg-amber-400 text-red-950 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full">🎉 Sorsjegy Nyereményed Aktiválva!</span>
+        <!-- PÖRGETÉS UTÁNI ÖSSZESÍTŐ ÉS KUPON BEVÁLTÓ -->
+        <div id="finalOfferBox" class="hidden mt-2 bg-gradient-to-b from-red-950 to-red-900 text-white rounded-2xl p-4 border-2 border-amber-400 shadow-2xl text-left">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="bg-amber-400 text-red-950 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full">🎉 Kerék Nyereményed Aktiválva!</span>
             <span id="offerTimer" class="text-xs font-mono font-black text-amber-300">09:59</span>
           </div>
-          <h4 class="text-base font-black text-amber-300">Összesített Karácsonyi Csomagod:</h4>
           <ul class="text-xs text-amber-50 space-y-1 my-2">
             <li>✔ <b id="summaryGames">2 db Garantált Eredeti Steam PC Játék</b></li>
-            <li>✔ <b>-1 500 Ft Azonnali Kedvezmény</b> (Kód: <b>ADVENT1500</b>)</li>
+            <li>✔ <b>-1 500 Ft VIP Kedvezmény</b> (Kód: <b>XMAS1500</b>)</li>
           </ul>
-          <div class="bg-black/30 rounded-xl p-2.5 mb-3 flex items-center justify-between">
-            <span class="text-xs text-amber-200">Kedvezményes ár most:</span>
+          <div class="bg-black/35 rounded-xl p-2.5 mb-3 flex items-center justify-between">
+            <span class="text-xs text-amber-200">Fizetendő a kuponnal:</span>
             <div>
               <span id="oldPriceStrike" class="text-xs text-gray-400 line-through mr-1">4 990 Ft</span>
               <span id="discountedPriceText" class="text-xl font-black text-emerald-300">3 490 Ft</span>
             </div>
           </div>
-          <button onclick="alert('Ide kapcsoljuk be a Stripe / Apple Pay fizetést a kedvezményes árral! 🎄')" class="w-full py-3.5 rounded-xl font-black text-sm bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 text-red-950 shadow-xl">
-            🎄 MEGRENDELEM A CSOMAGOT 1 500 FT KEDVEZMÉNNYEL!
+          <button onclick="openCheckoutStep()" class="w-full py-3.5 rounded-xl font-black text-sm bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 text-red-950 shadow-xl hover:brightness-110 transition">
+            🎄 TOVÁBB A KEDVEZMÉNYES MEGRENDELÉSHEZ →
           </button>
         </div>
+      </div>
+
+      <!-- 3. LÉPÉS: BARÁTSÁGOS MINTA-PÉNZTÁR (CHECKOUT) -->
+      <div id="step-3-checkout" class="hidden py-2 text-left">
+        <span class="bg-emerald-700 text-white text-[10px] font-extrabold uppercase px-3 py-1 rounded-full">🔒 3. Lépés: Azonnali Kézbesítés</span>
+        <h3 class="holiday-serif text-2xl font-black text-red-950 mt-2">Hová küldjük az ajándékodat?</h3>
+        <p class="text-xs text-red-900/80 mb-4">A játékkulcsokat és a nyomtatható karácsonyi kártyát fizetés után azonnal e-mailben kapod meg.</p>
+
+        <form onsubmit="submitDemoOrder(event)" class="space-y-3">
+          <div class="bg-white rounded-xl p-3 border border-amber-400 flex justify-between items-center">
+            <div>
+              <span id="checkoutBoxName" class="font-black text-sm text-red-950 block">Arany Adventi Doboz</span>
+              <span class="text-[11px] text-emerald-700 font-bold">-1 500 Ft Kupon levonva (XMAS1500)</span>
+            </div>
+            <span id="checkoutFinalPrice" class="text-lg font-black text-red-900">3 490 Ft</span>
+          </div>
+
+          <div>
+            <label class="text-xs font-extrabold text-red-950 block mb-1">E-mail címed (ide küldjük a kódokat):</label>
+            <input id="customerEmail" type="email" required placeholder="pelda@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl border border-amber-400 bg-white text-red-950 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-700">
+          </div>
+
+          <div>
+            <label class="text-xs font-extrabold text-red-950 block mb-1">Számlázási Név (Magánszemély):</label>
+            <input type="text" required placeholder="Kovács János" class="w-full px-3.5 py-2.5 rounded-xl border border-amber-400 bg-white text-red-950 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-700">
+          </div>
+
+          <label class="flex items-center gap-2.5 bg-amber-500/15 p-3 rounded-xl border border-amber-500/40 cursor-pointer">
+            <input type="checkbox" checked class="w-4 h-4 accent-red-800">
+            <span class="text-xs font-bold text-red-950">Kérek ingyenes <b>nyomtatható Karácsonyi Ajándékkártyát</b> is az e-mailbe!</span>
+          </label>
+
+          <button type="submit" class="w-full py-4 rounded-2xl font-black text-sm sm:text-base bg-gradient-to-r from-red-800 via-red-700 to-red-800 text-amber-200 shadow-xl border border-amber-300">
+            💳 FIZETÉS MOST (Apple Pay / Bankkártya)
+          </button>
+        </form>
       </div>
 
     </div>
   </div>
 
-  <script>
-    // ==========================================
-    // 1. ÜNNEPI CSILINGELŐ HANGOK (WEB AUDIO)
-    // ==========================================
-    let audioCtx = null;
-    function initAudio() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-    }
-    function playChime() {
-      if (!audioCtx) return;
-      [587.33, 783.99, 987.77, 1174.66].forEach((freq, i) => {
-        setTimeout(() => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-          gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start();
-          osc.stop(audioCtx.currentTime + 0.35);
-        }, i * 85);
-      });
-    }
-
-    // ==========================================
-    // 2. DOBOZ KINYITÁS & KAPARÓS SORSJEGY LOGIKA
-    // ==========================================
-    let currentBoxPrice = 4990;
-    let currentGamesCount = 2;
-    let scratchRevealed = false;
-    let timerInt = null;
-
-    function openExperience(boxTitle, gamesCount, price) {
-      currentBoxPrice = price;
-      currentGamesCount = gamesCount;
-      scratchRevealed = false;
-
-      document.getElementById('modalBoxTitle').innerText = boxTitle;
-      document.getElementById('emergingSteamText').innerText = `🎮 ${gamesCount}x STEAM JÁTÉK`;
-      document.getElementById('wonSteamBadge').innerText = `${gamesCount} db Eredeti Steam PC Játékkulcs`;
-      document.getElementById('summaryGames').innerText = `${gamesCount} db Garantált Eredeti Steam PC Játék`;
-      document.getElementById('oldPriceStrike').innerText = `${price.toLocaleString('hu-HU')} Ft`;
-      document.getElementById('discountedPriceText').innerText = `${(price - 1500).toLocaleString('hu-HU')} Ft`;
-
-      document.getElementById('unboxModal').classList.remove('hidden');
-      document.getElementById('step-1-openbox').classList.remove('hidden');
-      document.getElementById('step-2-scratch').classList.add('hidden');
-      document.getElementById('finalOfferBox').classList.add('hidden');
-      document.getElementById('autoScratchBtn').classList.remove('hidden');
-
-      const lid = document.getElementById('svgLid');
-      lid.classList.remove('lid-open');
-      const card = document.getElementById('emergingCard');
-      card.className = 'absolute opacity-0 transform translate-y-6 transition-all duration-700 z-10 bg-gradient-to-br from-slate-900 to-blue-950 text-white px-4 py-2.5 rounded-xl border-2 border-amber-400 shadow-2xl';
-      
-      const btn = document.getElementById('openLidBtn');
-      btn.disabled = false;
-      btn.innerText = '🎀 MASNI KIOLDÁSA & DOBOZ KINYITÁSA!';
-    }
-
-    function popGiftLid() {
-      initAudio();
-      const btn = document.getElementById('openLidBtn');
-      if (btn.disabled) return;
-      btn.disabled = true;
-      btn.innerText = '✨ NYÍLIK A KARÁCSONYI DOBOZ...';
-
-      // Fedél lerepül, kártya kiemelkedik
-      document.getElementById('svgLid').classList.add('lid-open');
-      const card = document.getElementById('emergingCard');
-      card.classList.remove('opacity-0', 'translate-y-6');
-      card.classList.add('opacity-100', '-translate-y-10');
-
-      playChime();
-      confetti({ particleCount: 70, spread: 65, origin: { y: 0.55 } });
-
-      setTimeout(() => {
-        document.getElementById('step-1-openbox').classList.add('hidden');
-        document.getElementById('step-2-scratch').classList.remove('hidden');
-        initScratchCard();
-      }, 1400);
-    }
-
-    // INTERAKTÍV ARANY KAPARÓS SORSJEGY
-    function initScratchCard() {
-      const canvas = document.getElementById('scratchCanvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      canvas.style.opacity = '1';
-      canvas.style.pointerEvents = 'auto';
-
-      // Csillogó arany sorsjegy réteg felrajzolása
-      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-      grad.addColorStop(0, '#f59e0b');
-      grad.addColorStop(0.5, '#fde047');
-      grad.addColorStop(1, '#d97706');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Felirat az arany fólián
-      ctx.fillStyle = '#450a0a';
-      ctx.font = '800 15px Plus Jakarta Sans, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('✨ ARANY KARÁCSONYI SORSJEGY ✨', canvas.width / 2, canvas.height / 2 - 6);
-      ctx.font = '700 12px Plus Jakarta Sans, sans-serif';
-      ctx.fillText('Húzd itt az ujjad a lekaparáshoz!', canvas.width / 2, canvas.height / 2 + 16);
-
-      let isDrawing = false;
-      let scratchedPixels = 0;
-
-      function scratch(x, y) {
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(x, y, 26, 0, Math.PI * 2);
-        ctx.fill();
-        scratchedPixels++;
-        if (scratchedPixels > 18 && !scratchRevealed) {
-          revealScratchCard();
-        }
-      }
-
-      canvas.onmousedown = () => { isDrawing = true; };
-      canvas.onmouseup = () => { isDrawing = false; };
-      canvas.onmousemove = (e) => {
-        if (!isDrawing) return;
-        const rect = canvas.getBoundingClientRect();
-        scratch(e.clientX - rect.left, e.clientY - rect.top);
-      };
-
-      canvas.ontouchstart = (e) => {
-        isDrawing = true;
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        scratch(touch.clientX - rect.left, touch.clientY - rect.top);
-      };
-      canvas.ontouchmove = (e) => {
-        if (!isDrawing) return;
-        e.preventDefault();
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        scratch(touch.clientX - rect.left, touch.clientY - rect.top);
-      };
-    }
-
-    function revealScratchCard() {
-      if (scratchRevealed) return;
-      scratchRevealed = true;
-      initAudio();
-      playChime();
-
-      const canvas = document.getElementById('scratchCanvas');
-      canvas.style.transition = 'opacity 0.5s ease';
-      canvas.style.opacity = '0';
-      canvas.style.pointerEvents = 'none';
-
-      document.getElementById('autoScratchBtn').classList.add('hidden');
-      document.getElementById('finalOfferBox').classList.remove('hidden');
-      confetti({ particleCount: 110, spread: 85, origin: { y: 0.55 } });
-      startOfferCountdown(599);
-    }
-
-    function startOfferCountdown(sec) {
-      if (timerInt) clearInterval(timerInt);
-      const el = document.getElementById('offerTimer');
-      let rem = sec;
-      timerInt = setInterval(() => {
-        rem--;
-        if (rem <= 0) { clearInterval(timerInt); return; }
-        const m = String(Math.floor(rem / 60)).padStart(2, '0');
-        const s = String(rem % 60).padStart(2, '0');
-        el.innerText = `${m}:${s}`;
-      }, 1000);
-    }
-
-    function closeModal() {
-      document.getElementById('unboxModal').classList.add('hidden');
-    }
-
-    // ==========================================
-    // 3. FINOM HÓESÉS
-    // ==========================================
-    const sCanvas = document.getElementById('snowCanvas');
-    const sCtx = sCanvas.getContext('2d');
-    let w, h, flakes = [];
-    function initSnow() {
-      w = sCanvas.width = window.innerWidth;
-      h = sCanvas.height = window.innerHeight;
-      flakes = Array.from({ length: 42 }, () => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        r: Math.random() * 2.2 + 0.8,
-        d: Math.random() * 0.65 + 0.3
-      }));
-    }
-    function drawSnow() {
-      sCtx.clearRect(0, 0, w, h);
-      sCtx.fillStyle = 'rgba(255, 251, 235, 0.75)';
-      sCtx.beginPath();
-      for (let f of flakes) {
-        sCtx.moveTo(f.x, f.y);
-        sCtx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-      }
-      sCtx.fill();
-      for (let f of flakes) {
-        f.y += f.d;
-        f.x += Math.sin(f.y * 0.01) * 0.3;
-        if (f.y > h) { f.y = -5; f.x = Math.random() * w; }
-      }
-      requestAnimationFrame(drawSnow);
-    }
-    window.addEventListener('resize', initSnow);
-    initSnow();
-    drawSnow();
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
