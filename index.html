@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="hu" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>XmasBox.hu – Karácsonyi Mystery Box & Fődíj Kerék</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: radial-gradient(circle at top, #1a103c 0%, #090514 60%, #05020a 100%);
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+    .neon-gold {
+      box-shadow: 0 0 25px rgba(250, 204, 21, 0.35), inset 0 0 15px rgba(250, 204, 21, 0.15);
+    }
+    .neon-red {
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-ticker {
+      display: flex;
+      width: max-content;
+      animation: ticker 28s linear infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    .floating { animation: float 3s ease-in-out infinite; }
+    .reel-track {
+      transition: transform 5.5s cubic-bezier(0.12, 0.85, 0.15, 1);
+    }
+    .wheel-spin {
+      transition: transform 4.5s cubic-bezier(0.15, 0.88, 0.18, 1);
+    }
+  </style>
+</head>
+<body class="min-h-screen relative selection:bg-yellow-500 selection:text-black pb-20">
+
+  <!-- HÓSZÁLLINGÓZÁS HÁTTÉR (CANVAS) -->
+  <canvas id="snowCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-70"></canvas>
+
+  <!-- 1. ÉLŐ GYŐZTESEK FAL (LIVE TICKER) -->
+  <div class="relative z-20 bg-gradient-to-r from-red-950/90 via-purple-950/90 to-red-950/90 border-b border-white/10 py-2 overflow-hidden">
+    <div class="animate-ticker flex space-x-8 text-xs sm:text-sm font-semibold tracking-wide">
+      <span class="flex items-center gap-2"><span class="text-green-400">●</span> 🔥 Kovács B. (Budapest) most nyitott: <b class="text-yellow-400">10 000 Ft Zara Utalvány</b> (2 perce)</span>
+      <span class="flex items-center gap-2"><span class="text-green-400">●</span> 🎁 Szabó L. (Debrecen) kipörgette a Bónusz Keréken: <b class="text-pink-400">Ingyen Rénszarvas Box!</b> (4 perce)</span>
+      <span class="flex items-center gap-2"><span class="text-green-400">●</span> ⚡ Tóth M. (Győr) most nyitott: <b class="text-cyan-400">15 000 Ft Steam & Alza Csomag</b> (7 perce)</span>
+      <span class="flex items-center gap-2"><span class="text-green-400">●</span> 🍕 Nagy A. (Szeged) most nyitott: <b class="text-yellow-400">5 000 Ft Wolt Kupon + Élménycsomag</b> (9 perce)</span>
+      <!-- Duplikáció a végtelen úszáshoz -->
+      <span class="flex items-center gap-2"><span class="text-green-400">●</span> 🔥 Kovács B. (Budapest) most nyitott: <b class="text-yellow-400">10 000 Ft Zara Utalvány</b> (2 perce)</span>
+      <span class="flex items-center gap-2"><span class="text-green-400">●</span> 🎁 Szabó L. (Debrecen) kipörgette a Bónusz Keréken: <b class="text-pink-400">Ingyen Rénszarvas Box!</b> (4 perce)</span>
+    </div>
+  </div>
+
+  <!-- FŐ KONTÉNER -->
+  <div class="relative z-10 max-w-5xl mx-auto px-4 pt-6">
+
+    <!-- FEJLÉC / NAV -->
+    <header class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-2">
+        <span class="text-3xl">🎄</span>
+        <div>
+          <span class="text-xl sm:text-2xl font-black tracking-tight bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent">XMASBOX.HU</span>
+          <span class="block text-[10px] uppercase tracking-widest text-emerald-400 font-bold">100% Garantált Nyeremény</span>
+        </div>
+      </div>
+      <button onclick="openDemoModal('free')" class="bg-white/10 hover:bg-white/20 border border-yellow-400/40 text-yellow-300 text-xs sm:text-sm font-bold px-3.5 py-2 rounded-full transition flex items-center gap-1.5 shadow-lg">
+        <span>🎰</span> Ingyen Demó Pörgetés
+      </button>
+    </header>
+
+    <!-- 2. KÖZÖSSÉGI JACKPOT SZÁMLÁLÓ (FOMO) -->
+    <div class="glass rounded-2xl p-4 sm:p-5 mb-8 border border-yellow-500/30 neon-gold relative overflow-hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl sm:text-3xl animate-bounce">🏆</span>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="bg-red-600 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded-full animate-pulse">Élő Jackpot</span>
+              <h2 class="text-sm sm:text-base font-extrabold text-yellow-300">GARANTÁLT 50 000 FT-OS FŐDÍJ DROP!</h2>
+            </div>
+            <p class="text-xs text-gray-300">Minden 100. kinyitott láda automatikusan tartalmazza az 50 000 Ft-os Fődíj utalványt!</p>
+          </div>
+        </div>
+        <div class="text-right sm:min-w-[140px] bg-black/40 px-3 py-2 rounded-xl border border-white/10">
+          <span class="text-[11px] text-gray-400 block uppercase font-bold">Hátralévő ládák:</span>
+          <span class="text-xl sm:text-2xl font-black text-white"><span id="jackpotLeft" class="text-yellow-400">14</span> / 100</span>
+        </div>
+      </div>
+      <!-- Progress bar -->
+      <div class="w-full bg-black/60 h-3 rounded-full overflow-hidden p-0.5 border border-white/10">
+        <div class="bg-gradient-to-r from-emerald-500 via-yellow-400 to-red-500 h-full rounded-full transition-all duration-700" style="width: 86%"></div>
+      </div>
+    </div>
+
+    <!-- HERO SZEKCIÓ -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center gap-2 bg-red-500/20 border border-red-400/30 text-red-300 text-xs font-bold px-3 py-1 rounded-full mb-3">
+        ❄️ Karácsonyi Kiadás • Azonnali E-mail Kézbesítés 0 Perc Alatt
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight mb-3">
+        Nyisd ki a Karácsonyi <br class="sm:hidden">
+        <span class="bg-gradient-to-r from-yellow-300 via-amber-400 to-red-400 bg-clip-text text-transparent">Mystery Boxodat!</span>
+      </h1>
+      <p class="text-gray-300 text-sm sm:text-base max-w-xl mx-auto">
+        Nincs üres doboz! Minden láda garantáltan a vételár feletti csomagot rejt, plusz esélyt a <b class="text-white">Zara, Douglas, Wolt, Alza vagy PS5</b> fődíjakra!
+      </p>
+    </div>
+
+    <!-- 3. LÉPÉS 1: VÁLASSZ KATEGÓRIÁT (LÁNYOKNAK / UNISZEX / GAMER) -->
+    <div class="mb-8">
+      <div class="text-center mb-3">
+        <span class="text-xs font-extrabold uppercase tracking-wider text-yellow-400">1. Lépés: Milyen nyereményekre vadászol?</span>
+      </div>
+      <div class="grid grid-cols-3 gap-2.5 sm:gap-4 max-w-2xl mx-auto">
+        <!-- Csajos -->
+        <button onclick="selectCategory('beauty')" id="cat-beauty" class="cat-btn active-cat glass p-3 sm:p-4 rounded-2xl border-2 border-pink-500 bg-pink-500/20 text-center transition transform hover:scale-105">
+          <span class="text-2xl sm:text-3xl block mb-1">💅</span>
+          <span class="font-extrabold text-xs sm:text-sm block text-white">Csajos & Divat</span>
+          <span class="text-[10px] text-pink-200 hidden sm:block mt-0.5">Zara, Douglas, DM, Notino</span>
+        </button>
+        <!-- Élmény -->
+        <button onclick="selectCategory('lifestyle')" id="cat-lifestyle" class="cat-btn glass p-3 sm:p-4 rounded-2xl border-2 border-white/10 hover:border-amber-400/50 text-center transition transform hover:scale-105">
+          <span class="text-2xl sm:text-3xl block mb-1">🍕</span>
+          <span class="font-extrabold text-xs sm:text-sm block text-white">Élmény & Kaja</span>
+          <span class="text-[10px] text-amber-200 hidden sm:block mt-0.5">Wolt, Cinema City, Netflix</span>
+        </button>
+        <!-- Tech / Gamer -->
+        <button onclick="selectCategory('tech')" id="cat-tech" class="cat-btn glass p-3 sm:p-4 rounded-2xl border-2 border-white/10 hover:border-cyan-400/50 text-center transition transform hover:scale-105">
+          <span class="text-2xl sm:text-3xl block mb-1">🎮</span>
+          <span class="font-extrabold text-xs sm:text-sm block text-white">Tech & Gamer</span>
+          <span class="text-[10px] text-cyan-200 hidden sm:block mt-0.5">Alza, MediaMarkt, PS5, Steam</span>
+        </button>
+      </div>
+      <!-- Kategória dinamikus infó sáv -->
+      <div id="cat-info" class="text-center mt-3 text-xs sm:text-sm text-pink-300 font-semibold bg-pink-950/40 border border-pink-500/30 py-2 px-4 rounded-xl max-w-xl mx-auto">
+        ✨ Kiválasztva: <b>Csajos & Beauty Box</b> — Fődíjak a ládákban: <b>Zara, AboutYou, Douglas, DM utalványok & Dyson Airwrap!</b>
+      </div>
+    </div>
+
+    <!-- 4. LÉPÉS 2: A 3 MYSTERY BOX KÁRTYA -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 items-stretch">
+
+      <!-- 🥉 MANÓ BOX -->
+      <div class="glass rounded-3xl p-6 flex flex-col justify-between border border-white/15 hover:border-white/30 transition relative">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="bg-white/10 text-gray-200 text-xs font-bold px-3 py-1 rounded-full">Belépő Láda</span>
+            <span class="text-xs text-emerald-400 font-bold">Garantált 5 000 Ft+ érték</span>
+          </div>
+          <div class="text-center my-4">
+            <div class="text-6xl floating inline-block">🎁</div>
+            <h3 class="text-2xl font-black mt-2">Manó Box</h3>
+            <p class="text-xs text-gray-400 mt-1" id="box1-desc">Garantált digitális csomag + esély az 5 000 – 25 000 Ft-os Zara/DM utalványra</p>
+          </div>
+          <ul class="space-y-2 text-xs sm:text-sm text-gray-300 my-5 border-t border-white/10 pt-4">
+            <li class="flex items-center gap-2">✅ <span><b>100% Garantált</b> digitális csomag</span></li>
+            <li class="flex items-center gap-2">✅ <span id="box1-prize">Esély <b>25 000 Ft-os Zara/DM</b> kártyára</span></li>
+            <li class="flex items-center gap-2 text-gray-500">❌ <span>Nem jár hozzá Ingyen Bónusz Kerék</span></li>
+          </ul>
+        </div>
+        <div>
+          <div class="text-center mb-3">
+            <span class="text-3xl font-black text-white">2 990 Ft</span>
+          </div>
+          <button onclick="openDemoModal('mano')" class="w-full py-3.5 rounded-xl font-extrabold text-sm bg-white/15 hover:bg-white/25 text-white transition border border-white/20">
+            Kinyitom a Manó Boxot →
+          </button>
+        </div>
+      </div>
+
+      <!-- 🥈 RÉNSZARVAS BOX (SLÁGER) -->
+      <div class="glass rounded-3xl p-6 flex flex-col justify-between border-2 border-yellow-400 neon-gold relative transform md:-translate-y-3 bg-gradient-to-b from-yellow-500/10 to-transparent">
+        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-400 to-amber-500 text-black text-xs font-black uppercase px-4 py-1 rounded-full shadow-lg whitespace-nowrap">
+          🔥 A Vevők 82%-a Ezt Választja
+        </div>
+        <div>
+          <div class="flex justify-between items-start mb-4 mt-2">
+            <span class="bg-yellow-400/20 text-yellow-300 text-xs font-bold px-3 py-1 rounded-full">Sláger Láda</span>
+            <span class="text-xs text-emerald-400 font-bold">Garantált 10 000 Ft+ érték</span>
+          </div>
+          <div class="text-center my-4">
+            <div class="text-7xl floating inline-block drop-shadow-[0_0_25px_rgba(250,204,21,0.5)]">🦌</div>
+            <h3 class="text-2xl font-black mt-2 text-yellow-300">Rénszarvas Box</h3>
+            <p class="text-xs text-gray-300 mt-1" id="box2-desc">Dupla esély az utalványokra + 1 INGYEN Pörgetés a Fődíj Keréken!</p>
+          </div>
+          <ul class="space-y-2.5 text-xs sm:text-sm text-gray-200 my-5 border-t border-white/10 pt-4">
+            <li class="flex items-center gap-2">✅ <span><b>Garantált Prémium Csomag</b> + Kuponok</span></li>
+            <li class="flex items-center gap-2">🎰 <span class="text-yellow-300 font-bold">+1 INGYEN Bónusz Kerék Pörgetés!</span></li>
+            <li class="flex items-center gap-2">🏆 <span id="box2-prize">Esély az <b>50 000 Ft-os Zara / Douglas</b> fődíjra</span></li>
+            <li class="flex items-center gap-2">⚡ <span>Belépő a 100-as Garantált Jackpotba</span></li>
+          </ul>
+        </div>
+        <div>
+          <div class="text-center mb-3">
+            <span class="text-xs text-gray-400 line-through mr-1">7 990 Ft</span>
+            <span class="text-3xl font-black text-yellow-400">4 990 Ft</span>
+          </div>
+          <button onclick="openDemoModal('renszarvas')" class="w-full py-4 rounded-xl font-black text-base bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-500 hover:from-yellow-300 hover:to-amber-400 text-black shadow-xl transition transform active:scale-95">
+            🎰 KINYITOM + BÓNUSZ KERÉK!
+          </button>
+        </div>
+      </div>
+
+      <!-- 🥇 MIKULÁS VIP BOX -->
+      <div class="glass rounded-3xl p-6 flex flex-col justify-between border border-red-500/40 hover:border-red-500 transition relative">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="bg-red-500/20 text-red-300 text-xs font-bold px-3 py-1 rounded-full">VIP High-Roller</span>
+            <span class="text-xs text-emerald-400 font-bold">Garantált 20 000 Ft+ érték</span>
+          </div>
+          <div class="text-center my-4">
+            <div class="text-6xl floating inline-block">🎅</div>
+            <h3 class="text-2xl font-black mt-2 text-red-400">Mikulás VIP Box</h3>
+            <p class="text-xs text-gray-400 mt-1" id="box3-desc">Maximális esély a 150 000 Ft-os Mega Fődíjakra + 2x Bónusz Kerék!</p>
+          </div>
+          <ul class="space-y-2 text-xs sm:text-sm text-gray-300 my-5 border-t border-white/10 pt-4">
+            <li class="flex items-center gap-2">✅ <span><b>3x Garantált VIP Csomag</b> & Utalvány esély</span></li>
+            <li class="flex items-center gap-2">🎰 <span class="text-red-300 font-bold">+2 INGYEN Bónusz Kerék Pörgetés!</span></li>
+            <li class="flex items-center gap-2">💎 <span id="box3-prize">Esély a <b>150 000 Ft-os Dyson / Nagybevásárlás</b> díjra</span></li>
+          </ul>
+        </div>
+        <div>
+          <div class="text-center mb-3">
+            <span class="text-3xl font-black text-white">9 990 Ft</span>
+          </div>
+          <button onclick="openDemoModal('mikulas')" class="w-full py-3.5 rounded-xl font-extrabold text-sm bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white transition shadow-lg">
+            Kinyitom a VIP Boxot →
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 5. AJÁNDÉKBA A FA ALÁ (NYOMTATHATÓ QR KAPARÓS KÁRTYA OPCIÓ) -->
+    <div class="glass rounded-2xl p-5 mb-12 border border-emerald-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="text-4xl">🎄</div>
+        <div>
+          <h4 class="font-extrabold text-base sm:text-lg text-emerald-300">Ajándékba szánod a fa alá barátnőnek, barátnak vagy tesónak?</h4>
+          <p class="text-xs sm:text-sm text-gray-300">Vásárláskor 1 kattintással kérhetsz hozzá <b>nyomtatható, névre szóló Karácsonyi QR-kártyát</b>! Tedd borítékba a fa alá, és szenteste a saját telefonján pörgetheti ki a nyereményét!</p>
+        </div>
+      </div>
+      <label class="flex items-center gap-2.5 bg-emerald-950/60 border border-emerald-500/40 px-4 py-3 rounded-xl cursor-pointer shrink-0">
+        <input type="checkbox" checked class="w-5 h-5 accent-emerald-500 rounded">
+        <span class="text-xs sm:text-sm font-bold text-emerald-200">Ingyenes Ajándék QR-Kártya kérése</span>
+      </label>
+    </div>
+
+    <!-- LÁBLÉC / BIZALMI ELEMEK -->
+    <footer class="text-center text-xs text-gray-500 border-t border-white/10 pt-6 pb-8 space-y-2">
+      <div class="flex justify-center gap-4 text-gray-400 font-semibold mb-2">
+        <span>🔒 Biztonságos Stripe / Apple Pay fizetés</span>
+        <span>•</span>
+        <span>⚡ Azonnali e-mail kézbesítés</span>
+        <span>•</span>
+        <span>🧾 Hivatalos Számlázz.hu e-számla</span>
+      </div>
+      <p>© 2026 XmasBox Magyarország – Minden láda garantált digitális terméket és promóciós kupont tartalmaz. ÁSZF & Adatvédelem.</p>
+    </footer>
+
+  </div>
+
+  <!-- ==========================================
+       MODAL: CS:GO STÍLUSÚ LÁDANYITÓ + BÓNUSZ KERÉK
+       ========================================== -->
+  <div id="spinnerModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+    <div class="glass border-2 border-yellow-400/50 rounded-3xl max-w-xl w-full p-5 sm:p-6 relative text-center neon-gold my-8">
+      
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl font-bold w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">✕</button>
+
+      <!-- 1. NÉZET: CS:GO LÁDANYITÓ SZALAG (NEAR-MISS ANIMÁCIÓ) -->
+      <div id="view-box-open">
+        <span id="modalBadge" class="bg-yellow-400 text-black text-xs font-black uppercase px-3 py-1 rounded-full">Élő Ládanyitás Szimuláció</span>
+        <h3 id="modalTitle" class="text-2xl font-black mt-2 mb-1">Rénszarvas Box Kinyitása...</h3>
+        <p class="text-xs text-gray-300 mb-5">Figyeld a középső arany nyilat! A szalag megáll a nyereményeden:</p>
+
+        <!-- PÖRGETŐ ABLAK -->
+        <div class="relative w-full h-32 bg-black/80 rounded-2xl border-2 border-yellow-500/50 overflow-hidden mb-6 shadow-inner flex items-center">
+          <!-- Középső mutató nyíl -->
+          <div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1 bg-yellow-400 z-30 shadow-[0_0_15px_#facc15]"></div>
+          <div class="absolute left-1/2 -translate-x-1/2 -top-1 text-yellow-400 text-xl z-30">▼</div>
+          <div class="absolute left-1/2 -translate-x-1/2 -bottom-1 text-yellow-400 text-xl z-30">▲</div>
+
+          <!-- Mozgó szalag -->
+          <div id="reelTrack" class="reel-track flex items-center gap-3 px-4">
+            <!-- JS tölti fel a kártyákat -->
+          </div>
+        </div>
+
+        <button id="spinBoxBtn" onclick="startBoxSpin()" class="w-full py-4 rounded-xl font-black text-base bg-gradient-to-r from-yellow-400 to-amber-500 text-black shadow-xl hover:scale-[1.02] transition">
+          🎰 LÁDA KINYITÁSA MOST!
+        </button>
+      </div>
+
+      <!-- 2. NÉZET: NYEREMÉNY EREDMÉNY + BÓNUSZ SZERENCSEKERÉK -->
+      <div id="view-bonus-wheel" class="hidden">
+        <div class="bg-emerald-500/20 border border-emerald-400/40 rounded-2xl p-3 mb-4">
+          <span class="text-xs font-bold uppercase text-emerald-300 block">1. Ládád Garantált Nyereménye:</span>
+          <h4 id="wonItemTitle" class="text-lg font-black text-white mt-0.5">🎁 Prémium Csajos Glow-Up Csomag + 3 000 Ft Zara Kupon!</h4>
+          <p class="text-[11px] text-amber-300 mt-1">😱 <b>Hajszálon múlt!</b> Csak 1 mezővel csúsztál le az <b>50 000 Ft-os Fődíjról</b>!</p>
+        </div>
+
+        <h3 class="text-xl font-black text-yellow-300 mb-1">🎡 JÁR NEKED 1 BÓNUSZ KERÉK PÖRGETÉS!</h3>
+        <p class="text-xs text-gray-300 mb-4">Pörgess rá az ingyenes Bónusz Kerékre az azonnali extra nyereményért:</p>
+
+        <!-- SZERENCSEKERÉK (VIZUÁLIS) -->
+        <div class="relative w-48 h-48 mx-auto mb-5">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 text-2xl z-20 text-yellow-400 drop-shadow">▼</div>
+          <div id="bonusWheel" class="wheel-spin w-full h-full rounded-full border-4 border-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.4)] relative overflow-hidden"
+               style="background: conic-gradient(#dc2626 0deg 60deg, #1e1b4b 60deg 120deg, #ca8a04 120deg 180deg, #065f46 180deg 240deg, #9333ea 240deg 300deg, #1e1b4b 300deg 360deg);">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-12 h-12 rounded-full bg-yellow-400 text-black font-black flex items-center justify-center text-xs shadow-lg border-2 border-white">VIP</div>
+            </div>
+          </div>
+        </div>
+
+        <button id="spinWheelBtn" onclick="spinBonusWheel()" class="w-full py-3.5 rounded-xl font-black text-base bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white shadow-xl animate-pulse">
+          🎡 BÓNUSZ KERÉK MEGPÖRGETÉSE!
+        </button>
+
+        <!-- 10 PERCES FOMO VISSZASZÁMLÁLÓ AJÁNLAT (Pörgetés után jelenik meg) -->
+        <div id="fomoOffer" class="hidden mt-5 bg-gradient-to-b from-red-950/90 to-black p-4 rounded-2xl border-2 border-yellow-400">
+          <span class="bg-yellow-400 text-black text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full">🎉 Bónusz Kerék Nyereményed:</span>
+          <h4 class="text-lg font-black text-white mt-1">-1 500 Ft AZONNALI KEDVEZMÉNY + DUPLA FŐDÍJ ESÉLY!</h4>
+          <p class="text-xs text-gray-300 mt-1">Ha a számláló lejárta előtt kinyitsz egy valódi Rénszarvas Boxot, 4 990 Ft helyett <b class="text-yellow-300">csak 3 490 Ft-ba kerül</b>, és duplázzuk az esélyed az 50 000 Ft-os Fődíjra!</p>
+          
+          <div class="my-3 inline-block bg-black/70 border border-red-500/40 px-4 py-1.5 rounded-xl">
+            <span class="text-xs text-gray-400">Lejár: </span>
+            <span id="countdownTimer" class="text-lg font-black text-red-400 font-mono">09:59</span>
+          </div>
+
+          <button onclick="alert('A következő fázisban ide kötjük be az 1-kattintásos Apple Pay / Stripe fizetést! 🚀')" class="w-full py-3.5 rounded-xl font-black text-sm bg-gradient-to-r from-emerald-400 to-green-500 text-black shadow-lg hover:scale-[1.02] transition">
+            ⚡ KÉREM A VALÓDI LÁDÁT 3 490 FT-ÉRT (Apple Pay)
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIKA -->
+  <script>
+    // 1. KATEGÓRIA VÁLTÁS (CSAJOS / ÉLMÉNY / TECH)
+    const categories = {
+      beauty: {
+        info: '✨ Kiválasztva: <b>Csajos & Beauty Box</b> — Fődíjak a ládákban: <b>Zara, AboutYou, Douglas, DM utalványok & Dyson Airwrap!</b>',
+        colorClass: 'text-pink-300 bg-pink-950/40 border-pink-500/30',
+        box1: 'Esély <b>25 000 Ft-os Zara / DM</b> kártyára',
+        box2: 'Esély az <b>50 000 Ft-os Zara / Douglas</b> fődíjra',
+        box3: 'Esély a <b>150 000 Ft-os Dyson Airwrap / Bevásárlás</b> díjra',
+        items: [
+          { icon: '💅', name: 'Glow-Up Stílus Csomag + Kupon', rare: false },
+          { icon: '🛍️', name: '5 000 Ft Zara Ajándékkártya', rare: false },
+          { icon: '💎', name: '50 000 Ft ZARA / DOUGLAS FŐDÍJ!', rare: true },
+          { icon: '💄', name: 'Prémium Beauty Csomag + Preset', rare: false },
+          { icon: '✨', name: '150 000 Ft DYSON AIRWRAP UTALVÁNY', rare: true }
+        ]
+      },
+      lifestyle: {
+        info: '🍕 Kiválasztva: <b>Élmény & Lifestyle Box</b> — Fődíjak a ládákban: <b>Wolt, Cinema City VIP, Netflix, IKEA & Wellness hétvége!</b>',
+        colorClass: 'text-amber-300 bg-amber-950/40 border-amber-500/30',
+        box1: 'Esély <b>25 000 Ft-os Wolt / Mozi</b> kártyára',
+        box2: 'Esély az <b>50 000 Ft-os Wolt / Netflix</b> fődíjra',
+        box3: 'Esély a <b>150 000 Ft-os Wellness Hétvége</b> fődíjra',
+        items: [
+          { icon: '🎲', name: '50 Randi & Páros Kártyajáték Csomag', rare: false },
+          { icon: '🍔', name: '5 000 Ft Wolt Kredit Kód', rare: false },
+          { icon: '🏆', name: '50 000 Ft WOLT / MOZI VIP FŐDÍJ!', rare: true },
+          { icon: '🍿', name: 'Páros Mozijegy + Élmény Kupon', rare: false },
+          { icon: '🏨', name: '150 000 Ft WELLNESS ÁLOMHÉTVÉGE', rare: true }
+        ]
+      },
+      tech: {
+        info: '🎮 Kiválasztva: <b>Tech & Gamer Box</b> — Fődíjak a ládákban: <b>Alza, MediaMarkt, Steam, PlayStation 5 & Apple AirPods!</b>',
+        colorClass: 'text-cyan-300 bg-cyan-950/40 border-cyan-500/30',
+        box1: 'Esély <b>25 000 Ft-os Alza / Steam</b> kártyára',
+        box2: 'Esély az <b>50 000 Ft-os Alza / AirPods</b> fődíjra',
+        box3: 'Esély a <b>150 000 Ft-os PS5 / MediaMarkt</b> fődíjra',
+        items: [
+          { icon: '🎮', name: 'Prémium Random Steam Játék Kulcs', rare: false },
+          { icon: '🎧', name: '5 000 Ft Alza.hu Ajándékutalvány', rare: false },
+          { icon: '🔥', name: '50 000 Ft ALZA / AIRPODS FŐDÍJ!', rare: true },
+          { icon: '🕹️', name: 'Dupla Steam Játék + Tech Kupon', rare: false },
+          { icon: '🚀', name: '150 000 Ft PLAYSTATION 5 UTALVÁNY', rare: true }
+        ]
+      }
+    };
+
+    let currentCat = 'beauty';
+    let countdownInterval = null;
+
+    function selectCategory(cat) {
+      currentCat = cat;
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.className = 'cat-btn glass p-3 sm:p-4 rounded-2xl border-2 border-white/10 text-center transition transform hover:scale-105';
+      });
+      const activeBtn = document.getElementById('cat-' + cat);
+      const borderCol = cat === 'beauty' ? 'border-pink-500 bg-pink-500/20' : (cat === 'lifestyle' ? 'border-amber-400 bg-amber-500/20' : 'border-cyan-400 bg-cyan-500/20');
+      activeBtn.className = `cat-btn glass p-3 sm:p-4 rounded-2xl border-2 ${borderCol} text-center transition transform scale-105`;
+
+      const data = categories[cat];
+      const infoEl = document.getElementById('cat-info');
+      infoEl.className = `text-center mt-3 text-xs sm:text-sm font-semibold py-2 px-4 rounded-xl max-w-xl mx-auto border ${data.colorClass}`;
+      infoEl.innerHTML = data.info;
+
+      document.getElementById('box1-prize').innerHTML = data.box1;
+      document.getElementById('box2-prize').innerHTML = data.box2;
+      document.getElementById('box3-prize').innerHTML = data.box3;
+    }
+
+    // 2. MODAL ÉS CS:GO NEAR-MISS SZALAG GENERÁLÁSA
+    function openDemoModal(boxType) {
+      document.getElementById('spinnerModal').classList.remove('hidden');
+      document.getElementById('view-box-open').classList.remove('hidden');
+      document.getElementById('view-bonus-wheel').classList.add('hidden');
+      document.getElementById('fomoOffer').classList.add('hidden');
+      document.getElementById('spinBoxBtn').disabled = false;
+      document.getElementById('spinBoxBtn').innerText = '🎰 LÁDA KINYITÁSA MOST!';
+
+      const track = document.getElementById('reelTrack');
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(0px)';
+      track.innerHTML = '';
+
+      const pool = categories[currentCat].items;
+      // 35 kártyát generálunk; a 28. kártyán áll meg (pont a 27. FŐDÍJ mellett -> Near-Miss!)
+      for (let i = 0; i < 35; i++) {
+        let item = pool[i % pool.length];
+        if (i === 27) item = pool[2]; // 50 000 Ft Fődíj közvetlenül mellette!
+        if (i === 28) item = pool[3]; // Ahol megáll (Garantált csomag)
+        if (i === 29) item = pool[4]; // 150 000 Ft Fődíj a másik oldalán!
+
+        const card = document.createElement('div');
+        card.className = `shrink-0 w-28 h-24 rounded-xl flex flex-col items-center justify-center p-2 text-center border ${item.rare ? 'bg-gradient-to-b from-yellow-500/30 to-red-900/50 border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.4)]' : 'bg-white/5 border-white/15'}`;
+        card.innerHTML = `
+          <span class="text-2xl mb-1">${item.icon}</span>
+          <span class="text-[10px] font-extrabold leading-tight ${item.rare ? 'text-yellow-300' : 'text-gray-200'}">${item.name}</span>
+        `;
+        track.appendChild(card);
+      }
+    }
+
+    function startBoxSpin() {
+      const btn = document.getElementById('spinBoxBtn');
+      btn.disabled = true;
+      btn.innerText = '⏳ PÖRÖG A LÁDA...';
+
+      const track = document.getElementById('reelTrack');
+      track.style.transition = 'transform 5s cubic-bezier(0.12, 0.85, 0.15, 1)';
+      // Kiszámolt eltolás, hogy a 28. kártyán (a két fődíj között!) álljon meg
+      const cardWidth = 124; // 112px + 12px gap
+      const targetOffset = (28 * cardWidth) - 180;
+      track.style.transform = `translateX(-${targetOffset}px)`;
+
+      setTimeout(() => {
+        confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+        const wonItem = categories[currentCat].items[3];
+        document.getElementById('wonItemTitle').innerText = `${wonItem.icon} ${wonItem.name}`;
+        document.getElementById('view-box-open').classList.add('hidden');
+        document.getElementById('view-bonus-wheel').classList.remove('hidden');
+      }, 5200);
+    }
+
+    function spinBonusWheel() {
+      const wheel = document.getElementById('bonusWheel');
+      const btn = document.getElementById('spinWheelBtn');
+      btn.disabled = true;
+      btn.innerText = '🎡 PÖRÖG A KERÉK...';
+
+      wheel.style.transform = 'rotate(1840deg)';
+
+      setTimeout(() => {
+        confetti({ particleCount: 120, spread: 90, origin: { y: 0.5 } });
+        btn.classList.add('hidden');
+        document.getElementById('fomoOffer').classList.remove('hidden');
+        startCountdown(599);
+      }, 4600);
+    }
+
+    function startCountdown(seconds) {
+      if (countdownInterval) clearInterval(countdownInterval);
+      const timerEl = document.getElementById('countdownTimer');
+      let rem = seconds;
+      countdownInterval = setInterval(() => {
+        rem--;
+        if (rem <= 0) { clearInterval(countdownInterval); return; }
+        const m = String(Math.floor(rem / 60)).padStart(2, '0');
+        const s = String(rem % 60).padStart(2, '0');
+        timerEl.innerText = `${m}:${s}`;
+      }, 1000);
+    }
+
+    function closeModal() {
+      document.getElementById('spinnerModal').classList.add('hidden');
+      const wheel = document.getElementById('bonusWheel');
+      wheel.style.transition = 'none';
+      wheel.style.transform = 'rotate(0deg)';
+      setTimeout(() => wheel.style.transition = 'transform 4.5s cubic-bezier(0.15, 0.88, 0.18, 1)', 50);
+      document.getElementById('spinWheelBtn').classList.remove('hidden');
+      document.getElementById('spinWheelBtn').disabled = false;
+      document.getElementById('spinWheelBtn').innerText = '🎡 BÓNUSZ KERÉK MEGPÖRGETÉSE!';
+    }
+
+    // 3. HÓSZÁLLINGÓZÁS ANIMÁCIÓ
+    const canvas = document.getElementById('snowCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, flakes = [];
+
+    function initSnow() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      flakes = Array.from({ length: 55 }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 2.5 + 1,
+        d: Math.random() * 1 + 0.4
+      }));
+    }
+
+    function drawSnow() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+      ctx.beginPath();
+      for (let f of flakes) {
+        ctx.moveTo(f.x, f.y);
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
+      }
+      ctx.fill();
+      for (let f of flakes) {
+        f.y += f.d;
+        f.x += Math.sin(f.y * 0.01) * 0.4;
+        if (f.y > height) { f.y = -5; f.x = Math.random() * width; }
+      }
+      requestAnimationFrame(drawSnow);
+    }
+
+    window.addEventListener('resize', initSnow);
+    initSnow();
+    drawSnow();
+  </script>
+</body>
+</html>
