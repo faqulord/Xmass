@@ -6,7 +6,77 @@
   <title>XmasBox.hu – Karácsonyi Ajándékdobozok & Fődíj Kerék</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #260609;
+      color: #fffbeb;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .holiday-serif {
+      font-family: 'Playfair Display', serif;
+    }
+    .cozy-bg {
+      background-image: 
+        linear-gradient(180deg, rgba(38, 6, 9, 0.72) 0%, rgba(69, 10, 15, 0.65) 35%, rgba(28, 4, 7, 0.94) 100%),
+        url('https://images.unsplash.com/photo-1543589077-47d81606c1bf?auto=format&fit=crop&w=1400&q=85');
+      background-size: cover;
+      background-position: center top;
+      background-attachment: fixed;
+    }
+    .cream-card {
+      background: linear-gradient(180deg, #fffdf9 0%, #fef3c7 100%);
+      color: #450a0a;
+      border: 2px solid #f59e0b;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 30px rgba(245, 158, 11, 0.3);
+    }
+    .ruby-card {
+      background: linear-gradient(165deg, rgba(127, 29, 29, 0.92) 0%, rgba(55, 8, 12, 0.96) 100%);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1.5px solid rgba(251, 191, 36, 0.45);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    }
+    @keyframes bulbGlow {
+      0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 6px #fde047); }
+      50% { opacity: 1; filter: drop-shadow(0 0 16px #facc15); }
+    }
+    .warm-bulb { animation: bulbGlow 2.2s infinite ease-in-out; }
+    .warm-bulb-2 { animation: bulbGlow 2.2s infinite 1.1s ease-in-out; }
+
+    .gift-lid {
+      transition: all 0.75s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-origin: center bottom;
+    }
+    .lid-open {
+      transform: translateY(-95px) rotate(-14deg) scale(1.06);
+      opacity: 0;
+    }
+    @keyframes boxFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-7px); }
+    }
+    .floating-gift { animation: boxFloat 3.2s ease-in-out infinite; }
+
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-ticker {
+      display: flex;
+      width: max-content;
+      animation: ticker 28s linear infinite;
+    }
+    .wheel-flapper {
+      transform-origin: 50% 10%;
+      transition: transform 0.06s ease-out;
+    }
+    .flapper-hit {
+      transform: rotate(-28deg);
+    }
+  </style>
 </head>
 <body class="min-h-screen cozy-bg relative pb-20">
 
@@ -72,15 +142,12 @@
       </p>
     </div>
 
-    <!-- =========================================================
-         VALÓDI FOTÓS FŐDÍJ GALÉRIA (HOGY KÉPPEL LÁSSÁK A NYEREMÉNYEKET!)
-         ========================================================= -->
+    <!-- VALÓDI FOTÓS FŐDÍJ GALÉRIA -->
     <div class="mb-8">
       <div class="text-center mb-3">
         <span class="text-xs font-extrabold uppercase tracking-wider text-amber-300 drop-shadow">📸 Ezek a nyeremények pörögnek a Karácsonyi Keréken:</span>
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <!-- 1. iPhone 18 Pro Fotós Kártya -->
         <div class="ruby-card rounded-2xl p-2.5 text-center border border-amber-300/50 hover:scale-[1.03] transition">
           <div class="h-24 w-full rounded-xl overflow-hidden mb-2 relative bg-black">
             <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=400&q=80" alt="iPhone 18 Pro" class="w-full h-full object-cover">
@@ -90,7 +157,6 @@
           <span class="text-[10px] text-amber-300 font-bold block">450.000 Ft eMAG utalvány</span>
         </div>
 
-        <!-- 2. PlayStation 5 Fotós Kártya -->
         <div class="ruby-card rounded-2xl p-2.5 text-center border border-amber-300/50 hover:scale-[1.03] transition">
           <div class="h-24 w-full rounded-xl overflow-hidden mb-2 relative bg-black">
             <img src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=400&q=80" alt="PlayStation 5" class="w-full h-full object-cover">
@@ -100,7 +166,6 @@
           <span class="text-[10px] text-amber-300 font-bold block">200.000 Ft eMAG utalvány</span>
         </div>
 
-        <!-- 3. eMAG Ajándékutalvány Kártya -->
         <div class="ruby-card rounded-2xl p-2.5 text-center border border-amber-300/50 hover:scale-[1.03] transition">
           <div class="h-24 w-full rounded-xl overflow-hidden mb-2 relative bg-gradient-to-br from-blue-600 via-indigo-700 to-red-600 flex flex-col items-center justify-center p-2 border border-white/20">
             <span class="text-[10px] uppercase font-extrabold text-white/80 tracking-widest">AJÁNDÉKKÁRTYA</span>
@@ -111,7 +176,6 @@
           <span class="text-[10px] text-amber-300 font-bold block">Azonnali digitális kód</span>
         </div>
 
-        <!-- 4. Steam Játékok + VIP Kupon Kártya -->
         <div class="ruby-card rounded-2xl p-2.5 text-center border border-amber-300/50 hover:scale-[1.03] transition">
           <div class="h-24 w-full rounded-xl overflow-hidden mb-2 relative bg-black">
             <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80" alt="Steam Gaming" class="w-full h-full object-cover opacity-85">
@@ -123,12 +187,10 @@
       </div>
     </div>
 
-    <!-- =========================================================
-         A 3 ÜNNEPI AJÁNDÉKDOBOZ
-         ========================================================= -->
+    <!-- A 3 ÜNNEPI AJÁNDÉKDOBOZ -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 items-stretch">
 
-      <!-- ⭐ 1. ARANY KARÁCSONYI DOBOZ (SLÁGER) -->
+      <!-- ⭐ 1. ARANY KARÁCSONYI DOBOZ -->
       <div class="order-1 md:order-2 cream-card rounded-3xl p-6 flex flex-col justify-between relative transform md:-translate-y-3">
         <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-red-800 via-red-600 to-red-800 text-amber-200 text-[11px] font-extrabold uppercase px-4 py-1 rounded-full shadow-lg border border-amber-300 whitespace-nowrap">
           🎄 Legnépszerűbb • Dupla Játék + Kerék
@@ -284,9 +346,7 @@
 
   </div>
 
-  <!-- =========================================================
-       MODAL: 1. DÍSZDOBOZ BONTÁS -> 2. KÉPES ADRENALIN KERÉK -> 3. PÉNZTÁR
-       ========================================================= -->
+  <!-- MODAL: 1. DÍSZDOBOZ BONTÁS -> 2. KÉPES ADRENALIN KERÉK -> 3. PÉNZTÁR -->
   <div id="unboxModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex items-center justify-center p-3 overflow-y-auto">
     <div class="cream-card rounded-3xl max-w-md w-full p-5 sm:p-6 relative text-center my-auto">
       
@@ -327,7 +387,7 @@
         </button>
       </div>
 
-      <!-- 2. LÉPÉS: NAGY KÉPES KARÁCSONYI SZERENCSEKERÉK (ADRENALIN PÖRGETÉS!) -->
+      <!-- 2. LÉPÉS: NAGY KÉPES KARÁCSONYI SZERENCSEKERÉK -->
       <div id="step-2-wheel" class="hidden py-1">
         <div class="bg-emerald-900 text-white rounded-2xl p-2.5 mb-2.5 text-left flex items-center justify-between border border-emerald-400/40 shadow">
           <div>
@@ -339,14 +399,11 @@
 
         <h3 class="holiday-serif text-xl sm:text-2xl font-black text-red-950">Karácsonyi Fődíj Kerék</h3>
 
-        <!-- ÉLŐ DISPLAY: MI VAN ÉPP A MUTATÓ ALATT -->
         <div id="wheelStatusBanner" class="text-xs font-extrabold bg-red-950 text-amber-200 py-1.5 px-3 rounded-xl border border-amber-400 my-2 shadow-inner">
           🔥 Pörgess az iPhone 18, PS5 vagy azonnali kedvezményért!
         </div>
 
-        <!-- NAGY SZERENCSEKERÉK KONzol FIZIKAI MUTATÓVAL -->
         <div class="relative w-[290px] h-[290px] sm:w-[310px] sm:h-[310px] mx-auto my-2 flex items-center justify-center select-none">
-          <!-- Fizikai Arany Mutató Nyelv (Flapper), ami bemozog a pöckökön -->
           <div id="wheelFlapper" class="wheel-flapper absolute -top-3 left-1/2 -translate-x-1/2 z-30 drop-shadow-[0_5px_6px_rgba(0,0,0,0.75)]">
             <svg width="34" height="42" viewBox="0 0 34 42">
               <polygon points="17,40 3,10 31,10" fill="#fbbf24" stroke="#78350f" stroke-width="2.5"/>
@@ -356,7 +413,6 @@
 
           <canvas id="christmasWheel" width="310" height="310" class="w-full h-full rounded-full shadow-2xl"></canvas>
 
-          <!-- Középső Arany Pörgető Gomb -->
           <button onclick="startAdrenalineWheel()" class="absolute w-16 h-16 rounded-full bg-gradient-to-b from-amber-300 via-amber-400 to-amber-600 border-4 border-white text-red-950 font-black text-[11px] shadow-[0_0_20px_rgba(0,0,0,0.8)] flex items-center justify-center z-20 active:scale-95">
             PÖRGESS!
           </button>
@@ -366,7 +422,6 @@
           🎰 KARÁCSONYI KERÉK MEGPÖRGETÉSE!
         </button>
 
-        <!-- PÖRGETÉS UTÁNI ÖSSZESÍTŐ ÉS KUPON BEVÁLTÓ -->
         <div id="finalOfferBox" class="hidden mt-2 bg-gradient-to-b from-red-950 to-red-900 text-white rounded-2xl p-4 border-2 border-amber-400 shadow-2xl text-left">
           <div class="flex items-center justify-between mb-1.5">
             <span class="bg-amber-400 text-red-950 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full">🎉 Kerék Nyereményed Aktiválva!</span>
@@ -389,7 +444,7 @@
         </div>
       </div>
 
-      <!-- 3. LÉPÉS: BARÁTSÁGOS MINTA-PÉNZTÁR (CHECKOUT) -->
+      <!-- 3. LÉPÉS: BARÁTSÁGOS MINTA-PÉNZTÁR -->
       <div id="step-3-checkout" class="hidden py-2 text-left">
         <span class="bg-emerald-700 text-white text-[10px] font-extrabold uppercase px-3 py-1 rounded-full">🔒 3. Lépés: Azonnali Kézbesítés</span>
         <h3 class="holiday-serif text-2xl font-black text-red-950 mt-2">Hová küldjük az ajándékodat?</h3>
@@ -428,6 +483,340 @@
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <script>
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playWheelTick(pitch = 720) {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(pitch, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(180, audioCtx.currentTime + 0.045);
+      gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.045);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.045);
+    }
+
+    function playHolidayChime() {
+      if (!audioCtx) return;
+      [587.33, 783.99, 987.77, 1174.66, 1567.98].forEach((freq, i) => {
+        setTimeout(() => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.16, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.38);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.38);
+        }, i * 80);
+      });
+    }
+
+    const wheelSlices = [
+      { title: 'iPhone 18 Pro', sub: '450.000 Ft', color: '#991b1b', textCol: '#fef08a', icon: '📱', imgUrl: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=200&q=80' },
+      { title: '-1 500 Ft KUPON', sub: 'Azonnali Kód', color: '#fbbf24', textCol: '#450a0a', icon: '🎟️', imgUrl: '' },
+      { title: 'PlayStation 5', sub: '200.000 Ft', color: '#065f46', textCol: '#ffffff', icon: '🎮', imgUrl: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=200&q=80' },
+      { title: '5 000 Ft eMAG', sub: 'Utalvány', color: '#7f1d1d', textCol: '#fde68a', icon: '💳', imgUrl: '' },
+      { title: '50 000 Ft eMAG', sub: 'Nagyutalvány', color: '#1e3a8a', textCol: '#ffffff', icon: '💎', imgUrl: '' },
+      { title: '+1 Steam Játék', sub: 'Extra Kulcs', color: '#047857', textCol: '#fef08a', icon: '🕹️', imgUrl: '' },
+      { title: '25 000 Ft eMAG', sub: 'Utalvány', color: '#991b1b', textCol: '#ffffff', icon: '🎁', imgUrl: '' },
+      { title: 'Dupla Esély', sub: 'Bónusz Kód', color: '#78350f', textCol: '#fde68a', icon: '✨', imgUrl: '' }
+    ];
+
+    const loadedImages = {};
+    wheelSlices.forEach((s, idx) => {
+      if (s.imgUrl) {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = s.imgUrl;
+        img.onload = () => { loadedImages[idx] = img; drawWheel(currentWheelAngle); };
+      }
+    });
+
+    let currentWheelAngle = 0;
+    let isWheelSpinning = false;
+
+    function drawWheel(angleDeg = 0) {
+      const canvas = document.getElementById('christmasWheel');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      const outerR = cx - 8;
+      const innerR = outerR - 14;
+      const numSlices = wheelSlices.length;
+      const sliceRad = (2 * Math.PI) / numSlices;
+      const rotRad = (angleDeg * Math.PI) / 180;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, outerR, 0, 2 * Math.PI);
+      ctx.fillStyle = '#450a0a';
+      ctx.fill();
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = '#fbbf24';
+      ctx.stroke();
+
+      wheelSlices.forEach((slice, i) => {
+        const startA = i * sliceRad + rotRad;
+        const endA = startA + sliceRad;
+
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, innerR, startA, endA);
+        ctx.closePath();
+        ctx.fillStyle = slice.color;
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#fde047';
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(startA + sliceRad / 2);
+
+        const iconDist = innerR - 32;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(iconDist, 0, 16, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(0,0,0,0.35)';
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = '#fde047';
+        ctx.stroke();
+
+        if (loadedImages[i]) {
+          ctx.clip();
+          ctx.rotate(Math.PI / 2);
+          ctx.drawImage(loadedImages[i], -16, -iconDist - 16, 32, 32);
+        } else {
+          ctx.font = '16px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(slice.icon, iconDist, 1);
+        }
+        ctx.restore();
+
+        ctx.textAlign = 'right';
+        ctx.fillStyle = slice.textCol;
+        ctx.font = '900 11px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText(slice.title, innerR - 54, -2);
+
+        ctx.font = '700 9px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = slice.textCol === '#450a0a' ? '#78350f' : '#fef08a';
+        ctx.fillText(slice.sub, innerR - 54, 10);
+
+        ctx.restore();
+      });
+
+      for (let i = 0; i < 16; i++) {
+        const a = (i * 2 * Math.PI) / 16 + rotRad;
+        const px = cx + Math.cos(a) * (outerR - 6);
+        const py = cy + Math.sin(a) * (outerR - 6);
+        ctx.beginPath();
+        ctx.arc(px, py, 4, 0, 2 * Math.PI);
+        ctx.fillStyle = i % 2 === 0 ? '#fef08a' : '#ef4444';
+        ctx.fill();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = '#ffffff';
+        ctx.stroke();
+      }
+    }
+
+    let activeBoxName = 'Arany Adventi Doboz';
+    let activeGamesCount = 2;
+    let activeBoxPrice = 4990;
+    let countdownTimer = null;
+
+    function openExperience(boxTitle, gamesCount, price) {
+      activeBoxName = boxTitle;
+      activeGamesCount = gamesCount;
+      activeBoxPrice = price;
+      isWheelSpinning = false;
+
+      document.getElementById('modalBoxTitle').innerText = boxTitle;
+      document.getElementById('emergingSteamText').innerText = `🎮 ${gamesCount}x STEAM JÁTÉK`;
+      document.getElementById('wonSteamBadge').innerText = `${gamesCount} db Eredeti Steam PC Játékkulcs`;
+      document.getElementById('summaryGames').innerText = `${gamesCount} db Garantált Eredeti Steam PC Játék (${boxTitle})`;
+      document.getElementById('oldPriceStrike').innerText = `${price.toLocaleString('hu-HU')} Ft`;
+      document.getElementById('discountedPriceText').innerText = `${(price - 1500).toLocaleString('hu-HU')} Ft`;
+
+      document.getElementById('unboxModal').classList.remove('hidden');
+      document.getElementById('step-1-openbox').classList.remove('hidden');
+      document.getElementById('step-2-wheel').classList.add('hidden');
+      document.getElementById('step-3-checkout').classList.add('hidden');
+      document.getElementById('finalOfferBox').classList.add('hidden');
+      document.getElementById('spinActionBtn').classList.remove('hidden');
+      document.getElementById('spinActionBtn').disabled = false;
+      document.getElementById('spinActionBtn').innerText = '🎰 KARÁCSONYI KERÉK MEGPÖRGETÉSE!';
+      document.getElementById('wheelStatusBanner').innerText = '🔥 Pörgess az iPhone 18, PS5 vagy azonnali kedvezményért!';
+
+      document.getElementById('svgLid').classList.remove('lid-open');
+      const card = document.getElementById('emergingCard');
+      card.className = 'absolute opacity-0 transform translate-y-6 transition-all duration-700 z-10 bg-gradient-to-br from-slate-900 to-blue-950 text-white px-4 py-2.5 rounded-xl border-2 border-amber-400 shadow-2xl';
+      
+      const lidBtn = document.getElementById('openLidBtn');
+      lidBtn.disabled = false;
+      lidBtn.innerText = '🎀 MASNI KIOLDÁSA & DOBOZ KINYITÁSA!';
+    }
+
+    function popGiftLid() {
+      initAudio();
+      const btn = document.getElementById('openLidBtn');
+      if (btn.disabled) return;
+      btn.disabled = true;
+      btn.innerText = '✨ NYÍLIK A KARÁCSONYI DÍSZDOBOZ...';
+
+      document.getElementById('svgLid').classList.add('lid-open');
+      const card = document.getElementById('emergingCard');
+      card.classList.remove('opacity-0', 'translate-y-6');
+      card.classList.add('opacity-100', '-translate-y-10');
+
+      playHolidayChime();
+      confetti({ particleCount: 65, spread: 65, origin: { y: 0.55 } });
+
+      setTimeout(() => {
+        document.getElementById('step-1-openbox').classList.add('hidden');
+        document.getElementById('step-2-wheel').classList.remove('hidden');
+        currentWheelAngle = 0;
+        drawWheel(0);
+      }, 1350);
+    }
+
+    function startAdrenalineWheel() {
+      if (isWheelSpinning) return;
+      isWheelSpinning = true;
+      initAudio();
+
+      const btn = document.getElementById('spinActionBtn');
+      btn.disabled = true;
+      btn.innerText = '⏳ PÖRÖG A FŐDÍJ KERÉK...';
+
+      const flapper = document.getElementById('wheelFlapper');
+      const statusBanner = document.getElementById('wheelStatusBanner');
+
+      const totalSpins = 6 * 360;
+      const targetAngle = totalSpins + 206; 
+      const duration = 5800;
+      const startTime = performance.now();
+      let lastPegIndex = -1;
+
+      function animateWheel(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        const ease = 1 - Math.pow(1 - progress, 4.4);
+        currentWheelAngle = ease * targetAngle;
+        drawWheel(currentWheelAngle);
+
+        const normAngle = (270 - (currentWheelAngle % 360) + 360) % 360;
+        const activeSliceIndex = Math.floor(normAngle / 45) % wheelSlices.length;
+        const currentSlice = wheelSlices[activeSliceIndex];
+        statusBanner.innerHTML = `🎯 Mutató alatt: <b class="text-amber-300">${currentSlice.icon} ${currentSlice.title} (${currentSlice.sub})</b>`;
+
+        const pegIndex = Math.floor(currentWheelAngle / 22.5);
+        if (pegIndex !== lastPegIndex) {
+          playWheelTick(480 + progress * 320);
+          flapper.classList.add('flapper-hit');
+          setTimeout(() => flapper.classList.remove('flapper-hit'), 55);
+          lastPegIndex = pegIndex;
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(animateWheel);
+        } else {
+          playHolidayChime();
+          confetti({ particleCount: 130, spread: 90, origin: { y: 0.5 } });
+          statusBanner.innerHTML = `😱 <b>HAJSZÁLON MÚLT AZ IPHONE 18!</b> Nyereményed: <b class="text-emerald-300">-1 500 Ft VIP KUPON!</b>`;
+          btn.classList.add('hidden');
+          document.getElementById('finalOfferBox').classList.remove('hidden');
+          startOfferCountdown(599);
+        }
+      }
+
+      requestAnimationFrame(animateWheel);
+    }
+
+    function openCheckoutStep() {
+      document.getElementById('step-2-wheel').classList.add('hidden');
+      document.getElementById('step-3-checkout').classList.remove('hidden');
+      document.getElementById('checkoutBoxName').innerText = activeBoxName;
+      document.getElementById('checkoutFinalPrice').innerText = `${(activeBoxPrice - 1500).toLocaleString('hu-HU')} Ft`;
+    }
+
+    function submitDemoOrder(e) {
+      e.preventDefault();
+      const email = document.getElementById('customerEmail').value;
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      alert(`🎄 Köszönjük! Az élesítés után a rendszer most átirányít az Apple Pay / Bankkártyás fizetésre (${(activeBoxPrice - 1500).toLocaleString('hu-HU')} Ft), majd 0 percen belül küldi a Steam kulcsokat a(z) ${email} címre!`);
+      closeModal();
+    }
+
+    function startOfferCountdown(sec) {
+      if (countdownTimer) clearInterval(countdownTimer);
+      const el = document.getElementById('offerTimer');
+      let rem = sec;
+      countdownTimer = setInterval(() => {
+        rem--;
+        if (rem <= 0) { clearInterval(countdownTimer); return; }
+        const m = String(Math.floor(rem / 60)).padStart(2, '0');
+        const s = String(rem % 60).padStart(2, '0');
+        el.innerText = `${m}:${s}`;
+      }, 1000);
+    }
+
+    function closeModal() {
+      document.getElementById('unboxModal').classList.add('hidden');
+    }
+
+    const sCanvas = document.getElementById('snowCanvas');
+    const sCtx = sCanvas.getContext('2d');
+    let w, h, flakes = [];
+
+    function initSnow() {
+      w = sCanvas.width = window.innerWidth;
+      h = sCanvas.height = window.innerHeight;
+      flakes = Array.from({ length: 42 }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 2.2 + 0.8,
+        d: Math.random() * 0.65 + 0.3
+      }));
+    }
+
+    function drawSnow() {
+      sCtx.clearRect(0, 0, w, h);
+      sCtx.fillStyle = 'rgba(255, 251, 235, 0.75)';
+      sCtx.beginPath();
+      for (let f of flakes) {
+        sCtx.moveTo(f.x, f.y);
+        sCtx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+      }
+      sCtx.fill();
+      for (let f of flakes) {
+        f.y += f.d;
+        f.x += Math.sin(f.y * 0.01) * 0.3;
+        if (f.y > h) { f.y = -5; f.x = Math.random() * w; }
+      }
+      requestAnimationFrame(drawSnow);
+    }
+
+    window.addEventListener('resize', initSnow);
+    initSnow();
+    drawSnow();
+  </script>
 </body>
 </html>
