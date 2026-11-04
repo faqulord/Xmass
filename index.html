@@ -3,318 +3,388 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ROYAL VEGAS VIP – Prémium Kaszinó & Játékterem</title>
+  <title>MONTE CARLO VIP – Online Casino & Live Tables</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: radial-gradient(circle at 50% 0%, #1a103c 0%, #090514 50%, #030106 100%);
-      color: #ffffff;
+      background-color: #07090e;
+      background-image: radial-gradient(circle at 50% 0%, #161f30 0%, #07090e 70%);
+      color: #f8fafc;
       overflow-x: hidden;
       -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
-    .vegas-serif { font-family: 'Cinzel', serif; }
-    .vip-card {
-      background: linear-gradient(165deg, rgba(24, 18, 48, 0.92) 0%, rgba(10, 7, 22, 0.96) 100%);
-      backdrop-filter: blur(16px);
-      border: 1.5px solid rgba(250, 204, 21, 0.3);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    .luxury-font { font-family: 'Cinzel', serif; }
+
+    /* Prémium Stake / Evolution sötét panelek */
+    .casino-panel {
+      background: linear-gradient(180deg, #131b2e 0%, #0b101d 100%);
+      border: 1px solid rgba(212, 175, 55, 0.28);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
     }
-    .felt-table {
-      background: radial-gradient(circle at 50% 30%, #065f46 0%, #022c22 75%, #011812 100%);
-      border: 4px solid #d97706;
-      box-shadow: inset 0 0 40px rgba(0,0,0,0.85), 0 15px 35px rgba(0,0,0,0.7);
+
+    /* Valódi Kaszinó Posztó (Rulett és Blackjack) */
+    .casino-felt {
+      background: radial-gradient(circle at 50% 40%, #0d5c3a 0%, #063822 70%, #032214 100%);
+      border: 6px solid #4a2511;
+      box-shadow: inset 0 0 60px rgba(0,0,0,0.85), 0 15px 40px rgba(0,0,0,0.8);
     }
-    .slot-cell {
-      background: linear-gradient(180deg, #07040e 0%, #1e1538 50%, #07040e 100%);
-      border: 2px solid rgba(250, 204, 21, 0.45);
-      box-shadow: inset 0 8px 20px rgba(0,0,0,0.95);
+
+    /* Rulett Számtábla Mezők */
+    .r-cell {
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      font-weight: 800;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.12s ease;
     }
-    .playing-card {
-      width: 68px;
-      height: 98px;
-      background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    .r-cell:active { transform: scale(0.92); }
+    .r-cell:hover { filter: brightness(1.25); border-color: #facc15; z-index: 10; }
+    .r-red { background-color: #b91c1c; color: #ffffff; }
+    .r-black { background-color: #111827; color: #ffffff; }
+    .r-green { background-color: #059669; color: #ffffff; }
+    .r-side { background-color: rgba(0, 0, 0, 0.35); color: #fde68a; }
+
+    /* Posztóra lerakott Zseton (Chip) */
+    .table-chip {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border-radius: 9999px;
+      background: radial-gradient(circle, #facc15 0%, #b45309 100%);
+      border: 2px dashed #ffffff;
+      color: #000000;
+      font-size: 8px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.9);
+      pointer-events: none;
+      z-index: 20;
+      animation: popChip 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes popChip {
+      0% { transform: scale(0); }
+      100% { transform: scale(1); }
+    }
+
+    /* 5-Tárcsás Slot Cellák */
+    .slot-window {
+      background: linear-gradient(180deg, #04060a 0%, #161f33 50%, #04060a 100%);
+      border: 1.5px solid rgba(250, 204, 21, 0.35);
+      box-shadow: inset 0 10px 20px rgba(0,0,0,0.95);
+    }
+    .win-highlight {
+      border-color: #facc15 !important;
+      background: radial-gradient(circle, rgba(250,204,21,0.35) 0%, rgba(16,185,129,0.2) 100%) !important;
+      box-shadow: 0 0 20px rgba(250, 204, 21, 0.8) !important;
+      transform: scale(1.04);
+    }
+    @keyframes fastSpin {
+      0% { transform: translateY(-18px); filter: blur(2px); }
+      50% { transform: translateY(18px); filter: blur(3px); }
+      100% { transform: translateY(0); filter: blur(0); }
+    }
+    .reel-spinning { animation: fastSpin 0.1s infinite linear; }
+
+    /* Blackjack Kártyák */
+    .bj-card {
+      width: 66px;
+      height: 96px;
+      background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+      border-radius: 10px;
+      border: 1.5px solid #94a3b8;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.65);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 6px 8px;
+      padding: 6px;
       font-weight: 900;
-      border: 1.5px solid #cbd5e1;
-      transition: transform 0.25s ease;
+      animation: dealCard 0.25s ease-out;
     }
-    @keyframes reelBlur {
-      0% { transform: translateY(-12px) scaleY(1.1); filter: blur(2px); }
-      50% { transform: translateY(12px) scaleY(1.1); filter: blur(3px); }
-      100% { transform: translateY(0px) scaleY(1); filter: blur(0px); }
+    @keyframes dealCard {
+      0% { opacity: 0; transform: translateY(-30px) scale(0.8); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
     }
-    .spin-anim { animation: reelBlur 0.11s infinite linear; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
   </style>
 </head>
-<body class="min-h-screen pb-24">
+<body class="min-h-screen pb-20">
 
-  <!-- FELSŐ PRÉMIUM KASZINÓ FEJLÉC -->
-  <header class="sticky top-0 z-50 bg-[#070410]/95 backdrop-blur-xl border-b border-yellow-400/25 px-4 py-3 shadow-2xl">
-    <div class="max-w-5xl mx-auto flex items-center justify-between">
+  <!-- FELSŐ PRÉMIUM KASZINÓ SÁV -->
+  <header class="sticky top-0 z-50 bg-[#07090e]/95 backdrop-blur-xl border-b border-yellow-500/25 px-3 sm:px-6 py-3 shadow-2xl">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <!-- Logó -->
       <div class="flex items-center gap-2.5">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-300 via-amber-500 to-yellow-700 flex items-center justify-center shadow-[0_0_20px_rgba(250,204,21,0.4)] border border-yellow-100">
-          <span class="text-xl">👑</span>
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-300 via-amber-500 to-yellow-700 p-0.5 shadow-[0_0_20px_rgba(250,204,21,0.35)]">
+          <div class="w-full h-full bg-[#07090e] rounded-[10px] flex items-center justify-center">
+            <span class="luxury-font text-yellow-400 font-black text-xl">M</span>
+          </div>
         </div>
         <div>
-          <span class="vegas-serif text-base sm:text-xl font-black tracking-wider bg-gradient-to-r from-yellow-200 via-amber-400 to-yellow-200 bg-clip-text text-transparent block leading-none">
-            ROYAL VEGAS
+          <span class="luxury-font text-base sm:text-xl font-black tracking-wider bg-gradient-to-r from-yellow-200 via-yellow-400 to-amber-500 bg-clip-text text-transparent block leading-none">
+            MONTE CARLO
           </span>
-          <span class="text-[9px] uppercase tracking-[0.25em] text-emerald-400 font-extrabold">● VIP Casino Lounge</span>
+          <span class="text-[9px] uppercase tracking-[0.25em] text-emerald-400 font-bold">● Live VIP Casino</span>
         </div>
       </div>
 
-      <!-- Zseton Egyenleg & Ingyen Bank -->
+      <!-- Pénztárca & Zseton Töltő -->
       <div class="flex items-center gap-2">
-        <div class="bg-black/80 border border-yellow-400/50 rounded-2xl px-3.5 py-1.5 flex items-center gap-2 shadow-inner">
-          <span class="text-lg">🪙</span>
+        <div class="bg-[#111726] border border-yellow-500/40 rounded-xl px-3.5 py-1.5 flex items-center gap-2.5 shadow-inner">
+          <div class="w-5 h-5 rounded-full bg-gradient-to-tr from-yellow-500 to-amber-300 border border-white flex items-center justify-center text-[10px] font-black text-black">$</div>
           <div>
-            <span class="text-[9px] uppercase text-gray-400 font-bold block leading-none">VIP Egyenleg:</span>
-            <span id="balanceText" class="text-sm sm:text-base font-black text-yellow-400">25 000</span>
+            <span class="text-[9px] uppercase text-slate-400 font-bold block leading-none">Egyenleg:</span>
+            <span id="walletBalance" class="text-sm sm:text-base font-black text-white font-mono">50 000</span>
           </div>
         </div>
-        <button onclick="claimBonusChips()" class="bg-gradient-to-r from-emerald-400 to-green-600 text-black font-black text-xs px-3 py-2.5 rounded-2xl shadow-lg active:scale-95 transition">
-          +10K 🪙
+        <button onclick="refillBalance()" class="bg-gradient-to-r from-emerald-500 to-green-600 hover:brightness-110 text-black font-black text-xs px-3.5 py-2.5 rounded-xl shadow-lg active:scale-95 transition">
+          +25K Töltés
         </button>
       </div>
     </div>
   </header>
 
-  <main class="max-w-5xl mx-auto px-3 sm:px-4 pt-4 space-y-5">
+  <main class="max-w-6xl mx-auto px-3 sm:px-6 pt-4 space-y-5">
 
-    <!-- ÉLŐ JACKPOT ÉS KASZINÓ BANNER -->
-    <div class="vip-card rounded-3xl p-4 sm:p-5 relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-3 border-2 border-yellow-400/40">
-      <div class="absolute -right-12 -top-12 w-44 h-44 bg-yellow-400/15 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="text-center sm:text-left">
-        <span class="bg-red-600 text-white text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full tracking-wider">⚡ 5 Játék Élőben</span>
-        <h1 class="vegas-serif text-xl sm:text-2xl font-black text-white mt-1">Válassz asztalt vagy játékgépet!</h1>
-        <p class="text-xs text-gray-300">Valódi kaszinó fizika • Nyerőgép, Rakéta Crash, Rulett, Blackjack 21 és Gyémánt Bánya</p>
-      </div>
-      <div class="bg-black/70 border border-yellow-400/50 rounded-2xl px-5 py-2.5 text-center shrink-0">
-        <span class="text-[9px] font-black uppercase tracking-widest text-yellow-300 block">🏆 Royal Mega Jackpot</span>
-        <span id="jackpotTicker" class="text-xl sm:text-2xl font-black text-white font-mono">482 950 🪙</span>
-      </div>
-    </div>
-
-    <!-- 5 JÁTÉK VÁLASZTÓ MENÜSÁV (MOBILON GÖRGETHETŐ) -->
+    <!-- JÁTÉK KATEGÓRIA VÁLASZTÓ (MINT A STAKE / VEGAS OLDALAKON) -->
     <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-      <button onclick="openGame('slots')" id="nav-slots" class="game-tab shrink-0 px-4 py-3 rounded-2xl font-black text-xs sm:text-sm bg-gradient-to-r from-yellow-400 to-amber-500 text-black shadow-lg transition">
-        🎰 777 Megaways
+      <button onclick="switchTable('roulette')" id="tab-roulette" class="nav-pill shrink-0 px-5 py-3 rounded-xl font-black text-xs sm:text-sm bg-gradient-to-r from-yellow-400 to-amber-500 text-black shadow-lg transition flex items-center gap-2">
+        <span>🎡</span> European Roulette Pro
       </button>
-      <button onclick="openGame('crash')" id="nav-crash" class="game-tab shrink-0 px-4 py-3 rounded-2xl font-bold text-xs sm:text-sm bg-white/10 text-gray-200 hover:bg-white/15 transition">
-        🚀 Rakéta Crash
+      <button onclick="switchTable('slots')" id="tab-slots" class="nav-pill shrink-0 px-5 py-3 rounded-xl font-bold text-xs sm:text-sm bg-[#131b2e] text-slate-300 border border-white/10 hover:text-white transition flex items-center gap-2">
+        <span>🎰</span> 5-Reel Vegas Slot
       </button>
-      <button onclick="openGame('roulette')" id="nav-roulette" class="game-tab shrink-0 px-4 py-3 rounded-2xl font-bold text-xs sm:text-sm bg-white/10 text-gray-200 hover:bg-white/15 transition">
-        🎡 VIP Rulett
+      <button onclick="switchTable('blackjack')" id="tab-blackjack" class="nav-pill shrink-0 px-5 py-3 rounded-xl font-bold text-xs sm:text-sm bg-[#131b2e] text-slate-300 border border-white/10 hover:text-white transition flex items-center gap-2">
+        <span>🃏</span> VIP Blackjack 21
       </button>
-      <button onclick="openGame('blackjack')" id="nav-blackjack" class="game-tab shrink-0 px-4 py-3 rounded-2xl font-bold text-xs sm:text-sm bg-white/10 text-gray-200 hover:bg-white/15 transition">
-        🃏 Blackjack 21
-      </button>
-      <button onclick="openGame('mines')" id="nav-mines" class="game-tab shrink-0 px-4 py-3 rounded-2xl font-bold text-xs sm:text-sm bg-white/10 text-gray-200 hover:bg-white/15 transition">
-        💎 Gyémánt Bánya
+      <button onclick="switchTable('crash')" id="tab-crash" class="nav-pill shrink-0 px-5 py-3 rounded-xl font-bold text-xs sm:text-sm bg-[#131b2e] text-slate-300 border border-white/10 hover:text-white transition flex items-center gap-2">
+        <span>🚀</span> Aviator Crash
       </button>
     </div>
 
     <!-- =========================================================
-         1. JÁTÉK: 3x3 MEGAWAYS KASZINÓ NYERŐGÉP
+         1. JÁTÉK: IGAZI EURÓPAI RULETT (FORGÓ KERÉK + GOLYÓ + TELJES 0-36 POSZTÓ!)
          ========================================================= -->
-    <section id="sec-slots" class="vip-card rounded-3xl p-5 sm:p-7 space-y-5">
-      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+    <section id="view-roulette" class="casino-panel rounded-3xl p-4 sm:p-6 space-y-5">
+      
+      <!-- Felső Státusz + Utolsó Számok (History) -->
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
         <div>
-          <span class="text-[10px] font-black uppercase text-yellow-400 tracking-wider">Prémium Video Slot</span>
-          <h2 class="vegas-serif text-xl sm:text-2xl font-black text-white">🎰 Royal 777 Megaways (3×3)</h2>
+          <span class="text-[10px] font-black uppercase tracking-widest text-yellow-400">Live Studio Table #1</span>
+          <h2 class="luxury-font text-lg sm:text-2xl font-black text-white">European VIP Roulette</h2>
         </div>
-        <span class="text-xs font-bold text-emerald-400 bg-emerald-950/80 px-3 py-1 rounded-full border border-emerald-400/30">RTP: 98.5%</span>
-      </div>
-
-      <div id="slotBanner" class="text-center text-xs sm:text-sm font-extrabold text-yellow-300 bg-black/60 py-2.5 px-4 rounded-2xl border border-yellow-400/30">
-        Vízszintes és átlós nyerővonalak is fizetnek! Pörgess most! 🍀
-      </div>
-
-      <!-- 3x3-as Tárcsa Rács -->
-      <div class="relative max-w-md mx-auto bg-gradient-to-b from-amber-500 via-yellow-300 to-amber-600 p-1.5 rounded-3xl shadow-[0_0_35px_rgba(250,204,21,0.25)]">
-        <div id="slotGrid3x3" class="grid grid-cols-3 gap-2 bg-[#07040e] p-3 rounded-[20px]"></div>
-      </div>
-
-      <!-- Tét & Pörgetés vezérlő -->
-      <div class="max-w-md mx-auto space-y-3">
-        <div class="flex items-center justify-between bg-black/50 p-2.5 rounded-2xl border border-white/10">
-          <span class="text-xs font-bold text-gray-300 pl-2">Tét:</span>
-          <div class="flex gap-1.5">
-            <button onclick="setSlotBet(100)" id="sbet-100" class="sbet bg-white/10 text-white text-xs font-bold px-3 py-1.5 rounded-xl">100</button>
-            <button onclick="setSlotBet(250)" id="sbet-250" class="sbet bg-yellow-400 text-black text-xs font-black px-3 py-1.5 rounded-xl">250</button>
-            <button onclick="setSlotBet(500)" id="sbet-500" class="sbet bg-white/10 text-white text-xs font-bold px-3 py-1.5 rounded-xl">500</button>
-            <button onclick="setSlotBet(1000)" id="sbet-1000" class="sbet bg-white/10 text-white text-xs font-bold px-3 py-1.5 rounded-xl">1000</button>
-          </div>
-        </div>
-        <button id="slotSpinBtn" onclick="spinMegaways()" class="w-full py-4 rounded-2xl font-black text-base sm:text-lg bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-400 text-black shadow-[0_0_25px_rgba(250,204,21,0.5)] active:scale-95 transition">
-          🎰 PÖRGETÉS INDÍTÁSA (250 🪙)
-        </button>
-      </div>
-    </section>
-
-    <!-- =========================================================
-         2. JÁTÉK: NEON ROCKET CRASH (ÉLŐ GRAFIKONOS SZORZÓ!)
-         ========================================================= -->
-    <section id="sec-crash" class="hidden vip-card rounded-3xl p-5 sm:p-7 space-y-5">
-      <div class="flex items-center justify-between border-b border-white/10 pb-3">
-        <div>
-          <span class="text-[10px] font-black uppercase text-pink-400 tracking-wider">Adrenalin Multiplayer Stílus</span>
-          <h2 class="vegas-serif text-xl sm:text-2xl font-black text-white">🚀 Neon Rocket Crash</h2>
-        </div>
-        <span class="text-xs text-gray-300">Vedd ki a pénzt, mielőtt felrobban!</span>
-      </div>
-
-      <!-- Crash Grafikon Canvas -->
-      <div class="relative w-full h-64 sm:h-72 bg-[#06030d] rounded-3xl border-2 border-purple-500/40 overflow-hidden shadow-inner flex items-center justify-center">
-        <canvas id="crashCanvas" width="600" height="280" class="w-full h-full"></canvas>
-        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span id="crashStatusLabel" class="text-xs font-extrabold uppercase tracking-widest text-purple-300">Készülj a kilövésre!</span>
-          <span id="crashBigMult" class="text-5xl sm:text-6xl font-black text-white drop-shadow-[0_0_20px_rgba(168,85,247,0.8)]">1.00×</span>
-        </div>
-      </div>
-
-      <div class="max-w-md mx-auto space-y-3">
-        <div class="flex items-center justify-between bg-black/50 px-4 py-2.5 rounded-2xl border border-white/10">
-          <span class="text-xs font-bold text-gray-300">Rakéta Tét:</span>
-          <select id="crashBetSelect" class="bg-black border border-yellow-400/50 rounded-xl px-3 py-1.5 text-xs font-black text-yellow-400">
-            <option value="200">200 🪙</option>
-            <option value="500" selected>500 🪙</option>
-            <option value="1000">1 000 🪙</option>
-            <option value="2500">2 500 🪙</option>
-          </select>
-        </div>
-
-        <button id="crashLaunchBtn" onclick="startCrashRocket()" class="w-full py-4 rounded-2xl font-black text-base bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 text-white shadow-xl active:scale-95 transition">
-          🚀 RAKÉTA KILÖVÉSE (500 🪙)
-        </button>
-
-        <button id="crashCashoutBtn" onclick="cashoutCrashRocket()" class="hidden w-full py-4 rounded-2xl font-black text-base bg-gradient-to-r from-emerald-400 to-green-500 text-black shadow-[0_0_25px_rgba(52,211,153,0.6)] active:scale-95 transition">
-          💰 KIFIZETÉS MOST: 500 🪙
-        </button>
-      </div>
-    </section>
-
-    <!-- =========================================================
-         3. JÁTÉK: EUROPEAN VIP ROULETTE (VALÓDI FORGÓ KERÉKKEL!)
-         ========================================================= -->
-    <section id="sec-roulette" class="hidden vip-card rounded-3xl p-5 sm:p-7 space-y-5">
-      <div class="flex items-center justify-between border-b border-white/10 pb-3">
-        <div>
-          <span class="text-[10px] font-black uppercase text-emerald-400 tracking-wider">Klasszikus Kaszinó Asztal</span>
-          <h2 class="vegas-serif text-xl sm:text-2xl font-black text-white">🎡 European VIP Roulette</h2>
-        </div>
-        <span id="rouletteResultBadge" class="text-xs font-black bg-black/60 border border-yellow-400/40 px-3 py-1 rounded-full text-yellow-300">Tedd meg a téted!</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-        <!-- Forgó Rulettkerék Canvas -->
-        <div class="relative w-64 h-64 mx-auto flex items-center justify-center">
-          <div class="absolute -top-2 left-1/2 -translate-x-1/2 text-yellow-400 text-2xl z-20 drop-shadow">▼</div>
-          <canvas id="rouletteCanvas" width="260" height="260" class="w-full h-full rounded-full shadow-2xl"></canvas>
-        </div>
-
-        <!-- Fogadási Posztó Asztal -->
-        <div class="felt-table rounded-3xl p-5 space-y-4">
-          <span class="text-xs font-extrabold uppercase text-amber-200 block text-center">Válassz mezőt (Tét: 500 🪙):</span>
-          <div class="grid grid-cols-2 gap-2.5">
-            <button onclick="spinRouletteWheel('red')" class="py-3.5 rounded-xl font-black text-xs sm:text-sm bg-red-600 hover:bg-red-500 text-white border-2 border-yellow-300 shadow-lg active:scale-95 transition">
-              🔴 PIROS (2×)
-            </button>
-            <button onclick="spinRouletteWheel('black')" class="py-3.5 rounded-xl font-black text-xs sm:text-sm bg-gray-900 hover:bg-gray-800 text-white border-2 border-yellow-300 shadow-lg active:scale-95 transition">
-              ⚫ FEKETE (2×)
-            </button>
-            <button onclick="spinRouletteWheel('even')" class="py-3 rounded-xl font-bold text-xs bg-emerald-800/90 hover:bg-emerald-700 text-white border border-yellow-400/50">
-              PÁROS SZÁM (2×)
-            </button>
-            <button onclick="spinRouletteWheel('odd')" class="py-3 rounded-xl font-bold text-xs bg-emerald-800/90 hover:bg-emerald-700 text-white border border-yellow-400/50">
-              PÁRATLAN (2×)
-            </button>
-            <button onclick="spinRouletteWheel('zero')" class="col-span-2 py-3 rounded-xl font-black text-xs sm:text-sm bg-gradient-to-r from-emerald-500 to-green-600 text-black border-2 border-white shadow-lg">
-              🟢 ZÖLD NULLA - 0 (14× NYEREMÉNY!)
-            </button>
+        <div class="flex items-center gap-1.5">
+          <span class="text-[10px] uppercase text-slate-400 font-bold mr-1">Utolsó számok:</span>
+          <div id="rouletteHistory" class="flex gap-1">
+            <span class="w-6 h-6 rounded-full bg-red-600 text-white text-[10px] font-black flex items-center justify-center">32</span>
+            <span class="w-6 h-6 rounded-full bg-gray-900 border border-white/20 text-white text-[10px] font-black flex items-center justify-center">15</span>
+            <span class="w-6 h-6 rounded-full bg-emerald-600 text-white text-[10px] font-black flex items-center justify-center">0</span>
+            <span class="w-6 h-6 rounded-full bg-red-600 text-white text-[10px] font-black flex items-center justify-center">19</span>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- =========================================================
-         4. JÁTÉK: BLACKJACK 21 (ÉLŐ OSZTÓ ELLEN, KÁRTYÁKKAL!)
-         ========================================================= -->
-    <section id="sec-blackjack" class="hidden vip-card rounded-3xl p-5 sm:p-7 space-y-5">
-      <div class="flex items-center justify-between border-b border-white/10 pb-3">
-        <div>
-          <span class="text-[10px] font-black uppercase text-amber-400 tracking-wider">Kártya & Stratégia</span>
-          <h2 class="vegas-serif text-xl sm:text-2xl font-black text-white">🃏 VIP Blackjack 21</h2>
-        </div>
-        <span class="text-xs font-bold text-yellow-300">Tét: 500 🪙 / leosztás</span>
-      </div>
-
-      <!-- Zöld Posztó Kártyaasztal -->
-      <div class="felt-table rounded-3xl p-5 sm:p-7 space-y-6 text-center">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
         
-        <!-- Osztó (Dealer) Kéz -->
+        <!-- BAL OLDAL: VALÓDI 3D-HATÁSÚ FORGÓ RULETTKERÉK + PATTOGÓ GOLYÓ -->
+        <div class="lg:col-span-5 flex flex-col items-center">
+          <div class="relative w-[280px] h-[280px] sm:w-[310px] sm:h-[310px] flex items-center justify-center">
+            <canvas id="rouletteWheelCanvas" width="310" height="310" class="w-full h-full rounded-full shadow-[0_0_40px_rgba(0,0,0,0.9)]"></canvas>
+            <!-- Középső kijelző a nyertes számnak -->
+            <div id="wheelCenterBadge" class="absolute w-16 h-16 rounded-full bg-gradient-to-b from-amber-300 via-yellow-500 to-amber-700 border-2 border-white shadow-2xl flex flex-col items-center justify-center pointer-events-none">
+              <span class="text-[8px] font-black uppercase text-black leading-none">SZÁM</span>
+              <span id="wheelCenterNum" class="text-lg font-black text-black leading-tight">-</span>
+            </div>
+          </div>
+          <div id="rouletteBanner" class="mt-3 text-xs sm:text-sm font-extrabold text-yellow-300 bg-black/60 px-4 py-2 rounded-xl border border-yellow-500/30 text-center w-full">
+            Kattints a posztón a számokra vagy mezőkre a zsetonok lerakásához!
+          </div>
+        </div>
+
+        <!-- JOBB OLDAL: VALÓDI KASZINÓ POSZTÓ (0-36 SZÁMRÁCS + KÜLSŐ TÉTEK) -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="casino-felt rounded-2xl p-3 sm:p-4 overflow-x-auto">
+            <div class="min-w-[440px]">
+              
+              <!-- Zöld Nulla + 1..36 Hármas Sorok -->
+              <div class="grid grid-cols-13 gap-1 mb-1" style="grid-template-columns: 42px repeat(12, 1fr);">
+                <!-- 0 (3 sort fog át) -->
+                <div onclick="placeRouletteBet('n_0', '0 (36x)', 36)" id="rcell-n_0" class="r-cell r-green row-span-3 rounded-l-lg text-sm">
+                  0
+                </div>
+                <!-- Számok generálása JS-ből (3 sor x 12 oszlop) -->
+                <div id="rouletteNumbersGrid" class="col-span-12 grid grid-cols-12 gap-1"></div>
+              </div>
+
+              <!-- Tucatok (1st 12, 2nd 12, 3rd 12) -->
+              <div class="grid grid-cols-3 gap-1 mb-1 pl-[46px]">
+                <div onclick="placeRouletteBet('doz_1', '1. Tucat (1-12)', 3)" id="rcell-doz_1" class="r-cell r-side py-2">1st 12 (3×)</div>
+                <div onclick="placeRouletteBet('doz_2', '2. Tucat (13-24)', 3)" id="rcell-doz_2" class="r-cell r-side py-2">2nd 12 (3×)</div>
+                <div onclick="placeRouletteBet('doz_3', '3. Tucat (25-36)', 3)" id="rcell-doz_3" class="r-cell r-side py-2">3rd 12 (3×)</div>
+              </div>
+
+              <!-- Külső 2x-es Mezők (1-18, Even, Red, Black, Odd, 19-36) -->
+              <div class="grid grid-cols-6 gap-1 pl-[46px]">
+                <div onclick="placeRouletteBet('low', '1-18', 2)" id="rcell-low" class="r-cell r-side py-2.5">1-18</div>
+                <div onclick="placeRouletteBet('even', 'Páros', 2)" id="rcell-even" class="r-cell r-side py-2.5">PÁROS</div>
+                <div onclick="placeRouletteBet('red', 'Piros', 2)" id="rcell-red" class="r-cell r-red py-2.5">◆ PIROS</div>
+                <div onclick="placeRouletteBet('black', 'Fekete', 2)" id="rcell-black" class="r-cell r-black py-2.5">◆ FEKETE</div>
+                <div onclick="placeRouletteBet('odd', 'Páratlan', 2)" id="rcell-odd" class="r-cell r-side py-2.5">PÁRATLAN</div>
+                <div onclick="placeRouletteBet('high', '19-36', 2)" id="rcell-high" class="r-cell r-side py-2.5">19-36</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Zseton Érték Választó & Pörgetés Vezérlő -->
+          <div class="flex flex-wrap items-center justify-between gap-3 bg-[#0b101d] p-3 rounded-2xl border border-white/10">
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] font-bold text-slate-400 uppercase">Zseton:</span>
+              <button onclick="selectChipValue(100)" id="chip-100" class="chip-btn w-9 h-9 rounded-full bg-blue-600 border-2 border-dashed border-white text-[10px] font-black text-white shadow">100</button>
+              <button onclick="selectChipValue(500)" id="chip-500" class="chip-btn w-9 h-9 rounded-full bg-yellow-400 border-2 border-dashed border-black text-[10px] font-black text-black scale-110 ring-2 ring-yellow-300 shadow">500</button>
+              <button onclick="selectChipValue(1000)" id="chip-1000" class="chip-btn w-9 h-9 rounded-full bg-red-600 border-2 border-dashed border-white text-[10px] font-black text-white shadow">1K</button>
+              <button onclick="selectChipValue(5000)" id="chip-5000" class="chip-btn w-9 h-9 rounded-full bg-purple-600 border-2 border-dashed border-white text-[10px] font-black text-white shadow">5K</button>
+            </div>
+
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+              <button onclick="clearRouletteBets()" class="px-3.5 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-bold text-slate-300">
+                ✕ Tét Törlése
+              </button>
+              <button id="rouletteSpinBtn" onclick="spinRealRoulette()" class="flex-1 sm:flex-none px-6 py-3 rounded-xl font-black text-xs sm:text-sm bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-400 text-black shadow-[0_0_20px_rgba(250,204,21,0.4)] active:scale-95 transition">
+                🎡 KERÉK INDÍTÁSA (<span id="totalRouletteBetText">0</span> $)
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         2. JÁTÉK: 5-TÁRCSÁS VEGAS MEGA SLOT (5×3 PROFI GÉP)
+         ========================================================= -->
+    <section id="view-slots" class="hidden casino-panel rounded-3xl p-4 sm:p-6 space-y-5">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
         <div>
-          <span class="text-xs font-extrabold uppercase text-amber-200 tracking-wider block mb-2">
-            🎩 Osztó Lapjai (<span id="dealerScoreText">0</span>):
-          </span>
-          <div id="dealerCardsRow" class="flex items-center justify-center gap-2.5 min-h-[100px]"></div>
+          <span class="text-[10px] font-black uppercase tracking-widest text-yellow-400">5-Reel Video Slot • 20 Paylines</span>
+          <h2 class="luxury-font text-lg sm:text-2xl font-black text-white">Book of Monte Carlo Deluxe</h2>
+        </div>
+        <div class="bg-black/60 border border-yellow-500/40 px-3.5 py-1 rounded-xl text-right">
+          <span class="text-[9px] text-slate-400 uppercase font-bold block">Utolsó Nyeremény:</span>
+          <span id="slotLastWin" class="text-sm font-black text-emerald-400">0 $</span>
+        </div>
+      </div>
+
+      <div id="slotMsg" class="text-center text-xs sm:text-sm font-extrabold text-yellow-300 bg-black/60 py-2.5 px-4 rounded-xl border border-yellow-500/30">
+        3, 4 vagy 5 egyforma szimbólum balról jobbra (vagy középen) azonnal fizet! 🎰
+      </div>
+
+      <!-- 5x3-as Arany Keretes Tárcsa Ház -->
+      <div class="bg-gradient-to-b from-yellow-400 via-amber-600 to-yellow-500 p-1.5 rounded-3xl shadow-[0_0_40px_rgba(250,204,21,0.25)]">
+        <div id="slotGrid5x3" class="grid grid-cols-5 gap-1.5 sm:gap-2.5 bg-[#05070c] p-2.5 sm:p-4 rounded-[20px]"></div>
+      </div>
+
+      <!-- Vezérlőpult -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-[#0b101d] p-3.5 rounded-2xl border border-white/10">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-slate-400">Tét:</span>
+          <button onclick="changeSlotBet(200)" id="sbet-200" class="sbet-btn px-3 py-1.5 rounded-lg bg-white/10 text-xs font-bold">200</button>
+          <button onclick="changeSlotBet(500)" id="sbet-500" class="sbet-btn px-3 py-1.5 rounded-lg bg-yellow-400 text-black text-xs font-black">500</button>
+          <button onclick="changeSlotBet(1000)" id="sbet-1000" class="sbet-btn px-3 py-1.5 rounded-lg bg-white/10 text-xs font-bold">1 000</button>
+          <button onclick="changeSlotBet(2500)" id="sbet-2500" class="sbet-btn px-3 py-1.5 rounded-lg bg-white/10 text-xs font-bold">2 500</button>
         </div>
 
-        <div id="bjStatusBanner" class="inline-block bg-black/60 text-yellow-300 font-black text-xs sm:text-sm px-5 py-2 rounded-full border border-yellow-400/40">
-          Kattints az "Új Leosztás" gombra a játékhoz!
-        </div>
+        <button id="slotSpinMainBtn" onclick="spin5ReelSlot()" class="w-full sm:w-auto px-8 py-4 rounded-xl font-black text-sm sm:text-base bg-gradient-to-r from-emerald-400 via-green-500 to-emerald-500 text-black shadow-[0_0_25px_rgba(16,185,129,0.5)] active:scale-95 transition">
+          🎰 PÖRGETÉS (500 $)
+        </button>
+      </div>
+    </section>
 
-        <!-- Játékos Kéz -->
+    <!-- =========================================================
+         3. JÁTÉK: VIP BLACKJACK 21 (ÉLŐ POSZTÓ + DUPLÁZÁS)
+         ========================================================= -->
+    <section id="view-blackjack" class="hidden casino-panel rounded-3xl p-4 sm:p-6 space-y-5">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
         <div>
-          <div id="playerCardsRow" class="flex items-center justify-center gap-2.5 min-h-[100px] mb-2"></div>
-          <span class="text-xs font-extrabold uppercase text-emerald-300 tracking-wider block">
-            👤 Saját Lapjaid (<span id="playerScoreText">0</span>)
+          <span class="text-[10px] font-black uppercase tracking-widest text-emerald-400">Blackjack Pays 3 to 2 • Dealer Stands on 17</span>
+          <h2 class="luxury-font text-lg sm:text-2xl font-black text-white">Monte Carlo VIP Blackjack</h2>
+        </div>
+        <span id="bjBetBadge" class="text-xs font-black text-yellow-400 bg-black/60 px-3.5 py-1.5 rounded-xl border border-yellow-500/30">Tét: 1 000 $</span>
+      </div>
+
+      <div class="casino-felt rounded-3xl p-5 sm:p-8 text-center space-y-6 relative overflow-hidden">
+        <!-- Osztó -->
+        <div>
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-amber-200 block mb-2">
+            🎩 Élő Osztó (<span id="bjDealerSum">0</span>)
+          </span>
+          <div id="bjDealerCards" class="flex items-center justify-center gap-2.5 min-h-[98px]"></div>
+        </div>
+
+        <div id="bjBanner" class="inline-block bg-black/75 text-yellow-300 font-black text-xs sm:text-sm px-6 py-2 rounded-full border border-yellow-400/40 shadow-lg">
+          Kattints a "Leosztás" gombra az induláshoz!
+        </div>
+
+        <!-- Játékos -->
+        <div>
+          <div id="bjPlayerCards" class="flex items-center justify-center gap-2.5 min-h-[98px] mb-2"></div>
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-300 block">
+            👤 Saját Kezed (<span id="bjPlayerSum">0</span>)
           </span>
         </div>
 
-        <!-- Blackjack Vezérlő Gombok -->
+        <!-- Akciógombok -->
         <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <button id="bjDealBtn" onclick="startBlackjackHand()" class="px-7 py-3.5 rounded-2xl font-black text-sm bg-gradient-to-r from-yellow-400 to-amber-500 text-black shadow-xl">
-            🃏 ÚJ LEOSZTÁS (500 🪙)
+          <button id="bjBtnDeal" onclick="bjStart()" class="px-8 py-3.5 rounded-xl font-black text-sm bg-gradient-to-r from-yellow-400 to-amber-500 text-black shadow-xl">
+            🃏 LEOSZTÁS (1 000 $)
           </button>
-          <button id="bjHitBtn" onclick="bjHit()" class="hidden px-6 py-3.5 rounded-2xl font-black text-sm bg-emerald-500 text-black shadow-lg">
+          <button id="bjBtnHit" onclick="bjActionHit()" class="hidden px-6 py-3.5 rounded-xl font-black text-xs sm:text-sm bg-emerald-500 text-black shadow-lg">
             ➕ LAPOT KÉREK (HIT)
           </button>
-          <button id="bjStandBtn" onclick="bjStand()" class="hidden px-6 py-3.5 rounded-2xl font-black text-sm bg-red-600 text-white shadow-lg">
+          <button id="bjBtnStand" onclick="bjActionStand()" class="hidden px-6 py-3.5 rounded-xl font-black text-xs sm:text-sm bg-red-600 text-white shadow-lg">
             ✋ MEGÁLLOK (STAND)
+          </button>
+          <button id="bjBtnDouble" onclick="bjActionDouble()" class="hidden px-6 py-3.5 rounded-xl font-black text-xs sm:text-sm bg-amber-400 text-black shadow-lg">
+            ⚡ DUPLÁZÁS (2×)
           </button>
         </div>
       </div>
     </section>
 
     <!-- =========================================================
-         5. JÁTÉK: GYÉMÁNT BÁNYA PRO (MINES)
+         4. JÁTÉK: AVIATOR CRASH PRO
          ========================================================= -->
-    <section id="sec-mines" class="hidden vip-card rounded-3xl p-5 sm:p-7 space-y-5">
+    <section id="view-crash" class="hidden casino-panel rounded-3xl p-4 sm:p-6 space-y-5">
       <div class="flex items-center justify-between border-b border-white/10 pb-3">
         <div>
-          <span class="text-[10px] font-black uppercase text-cyan-400 tracking-wider">Crypto Casino Kedvenc</span>
-          <h2 class="vegas-serif text-xl sm:text-2xl font-black text-white">💎 Diamond Mines Pro</h2>
+          <span class="text-[10px] font-black uppercase tracking-widest text-rose-400">Multiplayer Crash Curve</span>
+          <h2 class="luxury-font text-lg sm:text-2xl font-black text-white">Aviator VIP Crash</h2>
         </div>
-        <span id="minesMultBadge" class="text-lg font-black text-cyan-400 bg-black/60 px-3.5 py-1 rounded-xl border border-cyan-400/30">1.00×</span>
+        <span class="text-xs text-slate-400">Tét: 1 000 $</span>
       </div>
 
-      <div id="minesGridPro" class="grid grid-cols-5 gap-2 sm:gap-3 max-w-sm mx-auto my-4"></div>
+      <div class="relative w-full h-64 sm:h-72 bg-[#05070c] rounded-2xl border border-rose-500/30 overflow-hidden flex items-center justify-center">
+        <canvas id="aviatorCanvas" width="650" height="280" class="w-full h-full"></canvas>
+        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+          <span id="aviatorState" class="text-xs font-bold uppercase tracking-widest text-rose-400">Felszállásra kész</span>
+          <span id="aviatorMult" class="text-5xl sm:text-6xl font-black text-white font-mono">1.00×</span>
+        </div>
+      </div>
 
-      <div class="max-w-sm mx-auto space-y-3">
-        <button id="minesStartBtnPro" onclick="startMinesPro()" class="w-full py-4 rounded-2xl font-black text-sm sm:text-base bg-gradient-to-r from-cyan-400 to-blue-600 text-black shadow-xl">
-          💎 ÚJ BÁNYA INDÍTÁSA (500 🪙)
+      <div class="max-w-md mx-auto">
+        <button id="aviatorStartBtn" onclick="startAviator()" class="w-full py-4 rounded-xl font-black text-base bg-gradient-to-r from-rose-600 to-red-600 text-white shadow-xl">
+          🚀 FELSZÁLLÁS INDÍTÁSA (1 000 $)
         </button>
-        <button id="minesCashBtnPro" onclick="cashoutMinesPro()" class="hidden w-full py-4 rounded-2xl font-black text-sm sm:text-base bg-gradient-to-r from-emerald-400 to-green-500 text-black shadow-xl">
+        <button id="aviatorCashBtn" onclick="cashoutAviator()" class="hidden w-full py-4 rounded-xl font-black text-base bg-gradient-to-r from-emerald-400 to-green-500 text-black shadow-xl">
           💰 KIFIZETÉS MOST
         </button>
       </div>
@@ -322,531 +392,567 @@
 
   </main>
 
-  <footer class="text-center text-[11px] text-gray-400 mt-10 px-4">
-    👑 Royal Vegas VIP Club • Baráti szórakoztató játékterem 100% virtuális zsetonokkal
-  </footer>
-
   <!-- =========================================================
-       JAVASCRIPT KASZINÓ MOTOR (MINDEN 5 JÁTÉK + HANG)
+       JAVASCRIPT KASZINÓ MOTOR
        ========================================================= -->
   <script>
-    // 1. HANGOK (WEB AUDIO API)
-    let audioCtx = null;
+    // 1. HANGOK
+    let aCtx = null;
     function initAudio() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
+      if (!aCtx) aCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (aCtx.state === 'suspended') aCtx.resume();
     }
-    function sfx(freq, type = 'sine', dur = 0.08) {
-      if (!audioCtx) return;
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.type = type;
-      o.frequency.setValueAtTime(freq, audioCtx.currentTime);
-      g.gain.setValueAtTime(0.14, audioCtx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
-      o.connect(g); g.connect(audioCtx.destination);
-      o.start(); o.stop(audioCtx.currentTime + dur);
+    function playTone(f, type = 'sine', d = 0.06, vol = 0.12) {
+      if (!aCtx) return;
+      const o = aCtx.createOscillator(), g = aCtx.createGain();
+      o.type = type; o.frequency.setValueAtTime(f, aCtx.currentTime);
+      g.gain.setValueAtTime(vol, aCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, aCtx.currentTime + d);
+      o.connect(g); g.connect(aCtx.destination);
+      o.start(); o.stop(aCtx.currentTime + d);
     }
-    function sfxWin() {
-      [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => sfx(f, 'triangle', 0.22), i * 80));
+    function playWinMusic() {
+      [523.2, 659.2, 783.9, 1046.5].forEach((f, i) => setTimeout(() => playTone(f, 'triangle', 0.22, 0.18), i * 85));
     }
 
-    // 2. EGYENLEG & TAB VÁLTÁS
-    let chips = parseInt(localStorage.getItem('royal_vegas_chips')) || 25000;
-    function updateChips() {
-      localStorage.setItem('royal_vegas_chips', chips);
-      document.getElementById('balanceText').innerText = chips.toLocaleString('hu-HU');
+    // 2. EGYENLEG & MENÜVÁLTÁS
+    let balance = parseInt(localStorage.getItem('mc_vip_balance')) || 50000;
+    function syncBalance() {
+      localStorage.setItem('mc_vip_balance', balance);
+      document.getElementById('walletBalance').innerText = balance.toLocaleString('hu-HU');
     }
-    function claimBonusChips() {
+    function refillBalance() {
       initAudio();
-      chips += 10000;
-      updateChips();
-      sfxWin();
-      confetti({ particleCount: 60, spread: 65, origin: { y: 0.2 } });
+      balance += 25000;
+      syncBalance();
+      playWinMusic();
+      confetti({ particleCount: 70, spread: 60, origin: { y: 0.2 } });
     }
 
-    function openGame(gameId) {
-      ['slots', 'crash', 'roulette', 'blackjack', 'mines'].forEach(id => {
-        document.getElementById('sec-' + id).classList.add('hidden');
-        document.getElementById('nav-' + id).className = 'game-tab shrink-0 px-4 py-3 rounded-2xl font-bold text-xs sm:text-sm bg-white/10 text-gray-200 hover:bg-white/15 transition';
+    function switchTable(view) {
+      ['roulette', 'slots', 'blackjack', 'crash'].forEach(v => {
+        document.getElementById('view-' + v).classList.add('hidden');
+        document.getElementById('tab-' + v).className = 'nav-pill shrink-0 px-5 py-3 rounded-xl font-bold text-xs sm:text-sm bg-[#131b2e] text-slate-300 border border-white/10 hover:text-white transition flex items-center gap-2';
       });
-      document.getElementById('sec-' + gameId).classList.remove('hidden');
-      document.getElementById('nav-' + gameId).className = 'game-tab shrink-0 px-4 py-3 rounded-2xl font-black text-xs sm:text-sm bg-gradient-to-r from-yellow-400 to-amber-500 text-black shadow-lg transition';
-      if (gameId === 'roulette') drawRouletteWheel(rouletteAngle);
-      if (gameId === 'crash') drawCrashGraph(1.0, false);
+      document.getElementById('view-' + view).classList.remove('hidden');
+      document.getElementById('tab-' + view).className = 'nav-pill shrink-0 px-5 py-3 rounded-xl font-black text-xs sm:text-sm bg-gradient-to-r from-yellow-400 to-amber-500 text-black shadow-lg transition flex items-center gap-2';
     }
 
     // =========================================================
-    // JÁTÉK 1: 3x3 MEGAWAYS SLOT
+    // JÁTÉK 1: IGAZI EURÓPAI RULETT (KERÉK + GOLYÓ + POSZTÓ)
     // =========================================================
-    const slotSyms = ['🍒', '🍋', '🍀', '🔔', '💎', '👑', '7️⃣'];
-    const slotMults = { '🍒': 3, '🍋': 4, '🍀': 5, '🔔': 8, '💎': 12, '👑': 18, '7️⃣': 30 };
-    let slotBet = 250;
-    let slotBusy = false;
+    const euroWheelOrder = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
+    const redNums = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
+    let selectedChip = 500;
+    let activeBets = {}; // { key: { amount, label, mult } }
+    let wheelAngle = 0;
+    let ballAngle = 0;
+    let ballRadius = 128;
+    let isRouletteSpinning = false;
 
-    function initSlotGrid() {
-      const g = document.getElementById('slotGrid3x3');
-      g.innerHTML = '';
-      for (let i = 0; i < 9; i++) {
-        g.innerHTML += `<div id="scell-${i}" class="slot-cell h-24 sm:h-28 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl select-none">${slotSyms[i % slotSyms.length]}</div>`;
-      }
-    }
-
-    function setSlotBet(b) {
-      if (slotBusy) return;
-      slotBet = b;
-      document.querySelectorAll('.sbet').forEach(el => el.className = 'sbet bg-white/10 text-white text-xs font-bold px-3 py-1.5 rounded-xl');
-      document.getElementById('sbet-' + b).className = 'sbet bg-yellow-400 text-black text-xs font-black px-3 py-1.5 rounded-xl';
-      document.getElementById('slotSpinBtn').innerText = `🎰 PÖRGETÉS INDÍTÁSA (${b} 🪙)`;
-    }
-
-    function spinMegaways() {
-      if (slotBusy) return;
-      if (chips < slotBet) { alert('Tölts fel ingyen zsetont a jobb felső sarokban (+10K)!'); return; }
-      initAudio();
-      slotBusy = true;
-      chips -= slotBet;
-      updateChips();
-
-      const banner = document.getElementById('slotBanner');
-      banner.innerText = '🔥 Pörögnek a Megaways tárcsák...';
-
-      for (let i = 0; i < 9; i++) {
-        const c = document.getElementById('scell-' + i);
-        c.classList.add('spin-anim');
-        c.classList.remove('border-emerald-400', 'bg-emerald-950');
-      }
-
-      const tickInt = setInterval(() => {
-        for (let i = 0; i < 9; i++) {
-          document.getElementById('scell-' + i).innerText = slotSyms[Math.floor(Math.random() * slotSyms.length)];
-        }
-        sfx(300 + Math.random() * 250, 'triangle', 0.04);
-      }, 95);
-
-      setTimeout(() => {
-        clearInterval(tickInt);
-        const grid = [];
-        for (let i = 0; i < 9; i++) {
-          grid.push(slotSyms[Math.floor(Math.random() * slotSyms.length)]);
-        }
-        // Barátságos nyerési rásegítés (hogy gyakran legyen sor vagy pár!)
-        if (Math.random() < 0.42) {
-          const luckySym = slotSyms[Math.floor(Math.random() * slotSyms.length)];
-          grid[3] = luckySym; grid[4] = luckySym; grid[5] = luckySym;
-        }
-
-        for (let i = 0; i < 9; i++) {
-          const c = document.getElementById('scell-' + i);
-          c.classList.remove('spin-anim');
-          c.innerText = grid[i];
-        }
-
-        // Nyerővonalak ellenőrzése (3 vízszintes + 2 átló)
-        const lines = [[0,1,2], [3,4,5], [6,7,8], [0,4,8], [2,4,6]];
-        let totalWin = 0;
-        lines.forEach(line => {
-          const [a, b, c] = line;
-          if (grid[a] === grid[b] && grid[b] === grid[c]) {
-            totalWin += slotBet * slotMults[grid[a]];
-            [a,b,c].forEach(idx => document.getElementById('scell-' + idx).classList.add('border-emerald-400'));
-          }
+    // 1..36 Számtábla felépítése (3 sor x 12 oszlop, ahogy az igazi posztón van)
+    function buildRouletteCloth() {
+      const container = document.getElementById('rouletteNumbersGrid');
+      container.innerHTML = '';
+      const rows = [
+        [3,6,9,12,15,18,21,24,27,30,33,36],
+        [2,5,8,11,14,17,20,23,26,29,32,35],
+        [1,4,7,10,13,16,19,22,25,28,31,34]
+      ];
+      rows.forEach(r => {
+        r.forEach(num => {
+          const isR = redNums.includes(num);
+          const div = document.createElement('div');
+          div.id = `rcell-n_${num}`;
+          div.className = `r-cell ${isR ? 'r-red' : 'r-black'} py-2.5`;
+          div.innerText = num;
+          div.onclick = () => placeRouletteBet(`n_${num}`, `Szám ${num}`, 36);
+          container.appendChild(div);
         });
-
-        // Ha nincs 3-as sor, nézünk középső párt
-        if (totalWin === 0 && (grid[3] === grid[4] || grid[4] === grid[5])) {
-          totalWin = slotBet * 2;
-        }
-
-        if (totalWin > 0) {
-          chips += totalWin;
-          updateChips();
-          sfxWin();
-          confetti({ particleCount: 95, spread: 80, origin: { y: 0.55 } });
-          banner.innerHTML = `🎉 <b>NYERTÉL: +${totalWin.toLocaleString('hu-HU')} 🪙!</b>`;
-        } else {
-          banner.innerText = 'Majdnem! Pörgess még egyet a nyerővonalakért! 🎲';
-        }
-        slotBusy = false;
-      }, 1350);
+      });
     }
 
-    // =========================================================
-    // JÁTÉK 2: NEON ROCKET CRASH (ÉLŐ GRAFIKON)
-    // =========================================================
-    let crashRunning = false;
-    let crashMult = 1.0;
-    let crashPoint = 1.0;
-    let crashBet = 500;
-    let crashAnimId = null;
+    function selectChipValue(val) {
+      selectedChip = val;
+      [100, 500, 1000, 5000].forEach(v => {
+        document.getElementById('chip-' + v).classList.remove('scale-110', 'ring-2', 'ring-yellow-300');
+      });
+      document.getElementById('chip-' + val).classList.add('scale-110', 'ring-2', 'ring-yellow-300');
+    }
 
-    function drawCrashGraph(mult, crashed) {
-      const cvs = document.getElementById('crashCanvas');
+    function placeRouletteBet(key, label, mult) {
+      if (isRouletteSpinning) return;
+      if (balance < selectedChip) { alert('Tölts fel zsetont a jobb felső sarokban (+25K)!'); return; }
+      initAudio();
+      playTone(680, 'triangle', 0.05);
+
+      balance -= selectedChip;
+      syncBalance();
+
+      if (!activeBets[key]) activeBets[key] = { amount: 0, label, mult };
+      activeBets[key].amount += selectedChip;
+
+      renderClothChips();
+    }
+
+    function renderClothChips() {
+      document.querySelectorAll('.table-chip').forEach(el => el.remove());
+      let total = 0;
+      Object.keys(activeBets).forEach(k => {
+        const b = activeBets[k];
+        total += b.amount;
+        const cell = document.getElementById('rcell-' + k);
+        if (cell) {
+          const chip = document.createElement('div');
+          chip.className = 'table-chip';
+          chip.innerText = b.amount >= 1000 ? (b.amount / 1000) + 'K' : b.amount;
+          cell.appendChild(chip);
+        }
+      });
+      document.getElementById('totalRouletteBetText').innerText = total.toLocaleString('hu-HU');
+    }
+
+    function clearRouletteBets() {
+      if (isRouletteSpinning) return;
+      Object.keys(activeBets).forEach(k => { balance += activeBets[k].amount; });
+      activeBets = {};
+      syncBalance();
+      renderClothChips();
+    }
+
+    function draw3DRouletteWheel(wDeg = 0, bDeg = 0, bRad = 128, showBall = false) {
+      const cvs = document.getElementById('rouletteWheelCanvas');
       if (!cvs) return;
       const ctx = cvs.getContext('2d');
-      ctx.clearRect(0, 0, cvs.width, cvs.height);
+      const cx = 155, cy = 155;
+      const slice = (2 * Math.PI) / 37;
+      const wRad = (wDeg * Math.PI) / 180;
 
-      // Háttér rács
-      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-      ctx.lineWidth = 1;
-      for (let x = 0; x < cvs.width; x += 60) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, cvs.height); ctx.stroke(); }
-      for (let y = 0; y < cvs.height; y += 50) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(cvs.width, y); ctx.stroke(); }
+      ctx.clearRect(0, 0, 310, 310);
 
-      const progress = Math.min((mult - 1) / 6, 1);
-      const endX = 40 + progress * (cvs.width - 90);
-      const endY = cvs.height - 35 - Math.pow(progress, 1.3) * (cvs.height - 85);
-
+      // 1. Külső mahagóni fa & arany perem
       ctx.beginPath();
-      ctx.moveTo(40, cvs.height - 35);
-      ctx.quadraticCurveTo(endX * 0.55, cvs.height - 35, endX, endY);
-      ctx.strokeStyle = crashed ? '#ef4444' : '#a855f7';
+      ctx.arc(cx, cy, 150, 0, 2 * Math.PI);
+      ctx.fillStyle = '#3b1507';
+      ctx.fill();
       ctx.lineWidth = 5;
+      ctx.strokeStyle = '#d4af37';
       ctx.stroke();
 
-      ctx.font = '26px sans-serif';
-      ctx.fillText(crashed ? '💥' : '🚀', endX - 14, endY + 8);
-    }
-
-    function startCrashRocket() {
-      if (crashRunning) return;
-      crashBet = parseInt(document.getElementById('crashBetSelect').value);
-      if (chips < crashBet) { alert('Tölts fel zsetont (+10K)!'); return; }
-
-      initAudio();
-      chips -= crashBet;
-      updateChips();
-
-      crashRunning = true;
-      crashMult = 1.00;
-      // Véletlen robbanási pont (1.15x és 12.0x között)
-      crashPoint = Math.random() < 0.2 ? +(1.15 + Math.random() * 0.6).toFixed(2) : +(1.5 + Math.random() * 6.5).toFixed(2);
-
-      document.getElementById('crashLaunchBtn').classList.add('hidden');
-      const cashBtn = document.getElementById('crashCashoutBtn');
-      cashBtn.classList.remove('hidden');
-      document.getElementById('crashStatusLabel').innerText = '🔥 A RAKÉTA EMELKEDIK...';
-
-      function step() {
-        if (!crashRunning) return;
-        crashMult += 0.015 + (crashMult * 0.008);
-        document.getElementById('crashBigMult').innerText = `${crashMult.toFixed(2)}×`;
-        const winNow = Math.floor(crashBet * crashMult);
-        cashBtn.innerText = `💰 KIFIZETÉS MOST: +${winNow.toLocaleString('hu-HU')} 🪙`;
-        drawCrashGraph(crashMult, false);
-
-        if (crashMult >= crashPoint) {
-          // Felrobbant!
-          crashRunning = false;
-          sfx(140, 'sawtooth', 0.35);
-          drawCrashGraph(crashMult, true);
-          document.getElementById('crashStatusLabel').innerText = '💥 BUMM! A RAKÉTA FELROBBANT!';
-          document.getElementById('crashBigMult').className = 'text-5xl sm:text-6xl font-black text-red-500';
-          cashBtn.classList.add('hidden');
-          document.getElementById('crashLaunchBtn').classList.remove('hidden');
-        } else {
-          crashAnimId = requestAnimationFrame(step);
-        }
-      }
-      document.getElementById('crashBigMult').className = 'text-5xl sm:text-6xl font-black text-white';
-      crashAnimId = requestAnimationFrame(step);
-    }
-
-    function cashoutCrashRocket() {
-      if (!crashRunning) return;
-      crashRunning = false;
-      cancelAnimationFrame(crashAnimId);
-      const win = Math.floor(crashBet * crashMult);
-      chips += win;
-      updateChips();
-      sfxWin();
-      confetti({ particleCount: 100, spread: 80, origin: { y: 0.55 } });
-      document.getElementById('crashStatusLabel').innerText = `🎉 SIKERES KIFIZETÉS: +${win.toLocaleString('hu-HU')} 🪙!`;
-      document.getElementById('crashBigMult').className = 'text-5xl sm:text-6xl font-black text-emerald-400';
-      document.getElementById('crashCashoutBtn').classList.add('hidden');
-      document.getElementById('crashLaunchBtn').classList.remove('hidden');
-    }
-
-    // =========================================================
-    // JÁTÉK 3: EUROPEAN VIP ROULETTE
-    // =========================================================
-    const rNumbers = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
-    let rouletteAngle = 0;
-    let rouletteSpinning = false;
-
-    function drawRouletteWheel(angleDeg = 0) {
-      const cvs = document.getElementById('rouletteCanvas');
-      if (!cvs) return;
-      const ctx = cvs.getContext('2d');
-      const cx = 130, cy = 130, r = 120;
-      const slice = (2 * Math.PI) / rNumbers.length;
-      const rot = (angleDeg * Math.PI) / 180;
-
-      ctx.clearRect(0, 0, 260, 260);
-      rNumbers.forEach((num, i) => {
-        const sA = i * slice + rot;
+      // 2. 37 Szektor kirajzolása
+      euroWheelOrder.forEach((num, i) => {
+        const sA = i * slice + wRad;
         const eA = sA + slice;
+
         ctx.beginPath();
         ctx.moveTo(cx, cy);
-        ctx.arc(cx, cy, r, sA, eA);
+        ctx.arc(cx, cy, 134, sA, eA);
         ctx.closePath();
-        ctx.fillStyle = num === 0 ? '#10b981' : (i % 2 === 1 ? '#dc2626' : '#111827');
+        ctx.fillStyle = num === 0 ? '#059669' : (redNums.includes(num) ? '#b91c1c' : '#111827');
         ctx.fill();
+        ctx.lineWidth = 1.2;
         ctx.strokeStyle = '#fbbf24';
-        ctx.lineWidth = 1;
         ctx.stroke();
 
+        // Számok a keréken
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(sA + slice / 2);
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 9px sans-serif';
+        ctx.font = '800 10px "Plus Jakarta Sans", sans-serif';
         ctx.textAlign = 'right';
-        ctx.fillText(num, r - 8, 3);
+        ctx.fillText(num, 127, 3.5);
         ctx.restore();
       });
 
-      // Belső arany mag
+      // 3. Belső arany elválasztó gyűrű (ahová a golyó beesik)
       ctx.beginPath();
-      ctx.arc(cx, cy, 42, 0, 2 * Math.PI);
-      ctx.fillStyle = '#451a03';
-      ctx.fill();
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = '#fbbf24';
+      ctx.arc(cx, cy, 98, 0, 2 * Math.PI);
+      ctx.strokeStyle = '#fde047';
+      ctx.lineWidth = 2.5;
       ctx.stroke();
+
+      // 4. Belső sötét kúp és küllők
+      ctx.beginPath();
+      ctx.arc(cx, cy, 78, 0, 2 * Math.PI);
+      ctx.fillStyle = '#140c08';
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#d4af37';
+      ctx.stroke();
+
+      // 5. Hófehér Rulett Golyó kirajzolása
+      if (showBall) {
+        const ballA = (bDeg * Math.PI) / 180;
+        const bx = cx + Math.cos(ballA) * bRad;
+        const by = cy + Math.sin(ballA) * bRad;
+        ctx.beginPath();
+        ctx.arc(bx, by, 6.5, 0, 2 * Math.PI);
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
     }
 
-    function spinRouletteWheel(betType) {
-      if (rouletteSpinning) return;
-      if (chips < 500) { alert('Tölts fel zsetont (+10K)!'); return; }
+    function spinRealRoulette() {
+      if (isRouletteSpinning) return;
+      if (Object.keys(activeBets).length === 0) {
+        alert('Először tegyél zsetont a posztóra (kattints egy számra vagy a Piros/Fekete mezőre)!');
+        return;
+      }
+
       initAudio();
-      rouletteSpinning = true;
-      chips -= 500;
-      updateChips();
+      isRouletteSpinning = true;
+      const banner = document.getElementById('rouletteBanner');
+      banner.innerText = '🎡 Nincs több tét! Pörög a kerék és a golyó...';
 
-      const badge = document.getElementById('rouletteResultBadge');
-      badge.innerText = '🎡 Gurul a golyó...';
+      const winIdx = Math.floor(Math.random() * 37);
+      const winNum = euroWheelOrder[winIdx];
+      const sliceDeg = 360 / 37;
 
-      const winIdx = Math.floor(Math.random() * rNumbers.length);
-      const winningNum = rNumbers[winIdx];
-      const isRed = winIdx !== 0 && winIdx % 2 === 1;
+      const startW = wheelAngle % 360;
+      const targetW = startW + 360 * 4; // Kerék jobbra forog 4 kört
+      // Golyó balra forog, és pontosan a winIdx szektor közepében áll meg
+      const finalSectorAngle = (winIdx * sliceDeg + sliceDeg / 2 + targetW) % 360;
+      const startB = 0;
+      const targetB = -360 * 6 + finalSectorAngle;
 
-      const sliceDeg = 360 / rNumbers.length;
-      const targetDeg = 360 * 5 + (270 - (winIdx * sliceDeg + sliceDeg / 2));
-      const start = performance.now();
-      const dur = 3800;
+      const startTime = performance.now();
+      const duration = 4800;
+      let lastTick = 0;
 
-      function anim(now) {
-        const p = Math.min((now - start) / dur, 1);
-        const ease = 1 - Math.pow(1 - p, 4);
-        rouletteAngle = ease * targetDeg;
-        drawRouletteWheel(rouletteAngle);
+      function animate(now) {
+        const p = Math.min((now - startTime) / duration, 1);
+        const easeW = 1 - Math.pow(1 - p, 3);
+        const easeB = 1 - Math.pow(1 - p, 4.2);
+
+        wheelAngle = startW + easeW * (targetW - startW);
+        ballAngle = startB + easeB * (targetB - startB);
+        // A golyó a külső peremről (136px) fokozatosan beesik a számok rekeszébe (105px)
+        const currentRad = p < 0.65 ? 136 : 136 - ((p - 0.65) / 0.35) * 31;
+
+        if (now - lastTick > 70 + p * 180) {
+          playTone(550 - p * 200, 'triangle', 0.03, 0.09);
+          lastTick = now;
+        }
+
+        draw3DRouletteWheel(wheelAngle, ballAngle, currentRad, true);
 
         if (p < 1) {
-          requestAnimationFrame(anim);
+          requestAnimationFrame(animate);
         } else {
-          rouletteSpinning = false;
-          let won = 0;
-          if (betType === 'red' && isRed) won = 1000;
-          if (betType === 'black' && winningNum !== 0 && !isRed) won = 1000;
-          if (betType === 'even' && winningNum !== 0 && winningNum % 2 === 0) won = 1000;
-          if (betType === 'odd' && winningNum % 2 === 1) won = 1000;
-          if (betType === 'zero' && winningNum === 0) won = 7000;
-
-          const colorIcon = winningNum === 0 ? '🟢' : (isRed ? '🔴' : '⚫');
-          if (won > 0) {
-            chips += won;
-            updateChips();
-            sfxWin();
-            confetti({ particleCount: 90, spread: 75, origin: { y: 0.6 } });
-            badge.innerText = `${colorIcon} Szám: ${winningNum} – NYERTÉL +${won} 🪙!`;
-          } else {
-            badge.innerText = `${colorIcon} Kipörgetett szám: ${winningNum}`;
-          }
+          evaluateRouletteSpin(winNum);
         }
       }
-      requestAnimationFrame(anim);
+      requestAnimationFrame(animate);
+    }
+
+    function evaluateRouletteSpin(winNum) {
+      isRouletteSpinning = false;
+      const isR = redNums.includes(winNum);
+      document.getElementById('wheelCenterNum').innerText = winNum;
+
+      // Utolsó számok frissítése
+      const hist = document.getElementById('rouletteHistory');
+      const colClass = winNum === 0 ? 'bg-emerald-600' : (isR ? 'bg-red-600' : 'bg-gray-900 border border-white/20');
+      hist.innerHTML = `<span class="w-6 h-6 rounded-full ${colClass} text-white text-[10px] font-black flex items-center justify-center">${winNum}</span>` + hist.innerHTML.slice(0, 350);
+
+      let totalWin = 0;
+      Object.keys(activeBets).forEach(k => {
+        const b = activeBets[k];
+        let hit = false;
+        if (k === `n_${winNum}`) hit = true;
+        if (k === 'red' && isR) hit = true;
+        if (k === 'black' && winNum !== 0 && !isR) hit = true;
+        if (k === 'even' && winNum !== 0 && winNum % 2 === 0) hit = true;
+        if (k === 'odd' && winNum % 2 === 1) hit = true;
+        if (k === 'low' && winNum >= 1 && winNum <= 18) hit = true;
+        if (k === 'high' && winNum >= 19 && winNum <= 36) hit = true;
+        if (k === 'doz_1' && winNum >= 1 && winNum <= 12) hit = true;
+        if (k === 'doz_2' && winNum >= 13 && winNum <= 24) hit = true;
+        if (k === 'doz_3' && winNum >= 25 && winNum <= 36) hit = true;
+
+        if (hit) totalWin += b.amount * b.mult;
+      });
+
+      const banner = document.getElementById('rouletteBanner');
+      const colorName = winNum === 0 ? 'ZÖLD NULLA' : (isR ? 'PIROS' : 'FEKETE');
+      if (totalWin > 0) {
+        balance += totalWin;
+        syncBalance();
+        playWinMusic();
+        confetti({ particleCount: 110, spread: 80, origin: { y: 0.6 } });
+        banner.innerHTML = `🎉 Nyertes szám: <b>${winNum} (${colorName})</b> – NYEREMÉNYED: <b class="text-emerald-400">+${totalWin.toLocaleString('hu-HU')} $!</b>`;
+      } else {
+        banner.innerHTML = `Nyertes szám: <b>${winNum} (${colorName})</b>. Most nem nyert, próbáld újra!`;
+      }
+
+      activeBets = {};
+      setTimeout(renderClothChips, 1200);
     }
 
     // =========================================================
-    // JÁTÉK 4: VIP BLACKJACK 21
+    // JÁTÉK 2: 5-TÁRCSÁS VEGAS MEGA SLOT (5x3)
     // =========================================================
-    const suits = ['♠', '♥', '♦', '♣'];
-    const ranks = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
-    let playerHand = [], dealerHand = [], bjActive = false;
+    const vegasSyms = ['🍒', '🍋', '🔔', '🍀', '💎', '👑', '7️⃣'];
+    const vegasPay = { '🍒': 2, '🍋': 3, '🔔': 5, '🍀': 6, '💎': 10, '👑': 15, '7️⃣': 30 };
+    let vegasBet = 500;
+    let vegasSpinning = false;
 
-    function drawRandomCard() {
-      const r = ranks[Math.floor(Math.random() * ranks.length)];
-      const s = suits[Math.floor(Math.random() * suits.length)];
-      let val = parseInt(r);
-      if (['J','Q','K'].includes(r)) val = 10;
-      if (r === 'A') val = 11;
+    function build5x3Slot() {
+      const g = document.getElementById('slotGrid5x3');
+      g.innerHTML = '';
+      for (let i = 0; i < 15; i++) {
+        g.innerHTML += `<div id="vslot-${i}" class="slot-window h-20 sm:h-24 rounded-2xl flex items-center justify-center text-3xl sm:text-5xl transition">${vegasSyms[i % vegasSyms.length]}</div>`;
+      }
+    }
+
+    function changeSlotBet(amt) {
+      if (vegasSpinning) return;
+      vegasBet = amt;
+      document.querySelectorAll('.sbet-btn').forEach(b => b.className = 'sbet-btn px-3 py-1.5 rounded-lg bg-white/10 text-xs font-bold');
+      document.getElementById('sbet-' + amt).className = 'sbet-btn px-3 py-1.5 rounded-lg bg-yellow-400 text-black text-xs font-black';
+      document.getElementById('slotSpinMainBtn').innerText = `🎰 PÖRGETÉS (${amt} $)`;
+    }
+
+    function spin5ReelSlot() {
+      if (vegasSpinning) return;
+      if (balance < vegasBet) { alert('Tölts fel zsetont (+25K)!'); return; }
+      initAudio();
+      vegasSpinning = true;
+      balance -= vegasBet;
+      syncBalance();
+
+      for (let i = 0; i < 15; i++) {
+        const el = document.getElementById('vslot-' + i);
+        el.classList.remove('win-highlight');
+        el.classList.add('reel-spinning');
+      }
+
+      const animInt = setInterval(() => {
+        for (let i = 0; i < 15; i++) {
+          document.getElementById('vslot-' + i).innerText = vegasSyms[Math.floor(Math.random() * vegasSyms.length)];
+        }
+        playTone(320 + Math.random() * 200, 'triangle', 0.03, 0.08);
+      }, 90);
+
+      setTimeout(() => {
+        clearInterval(animInt);
+        const cells = Array.from({ length: 15 }, () => vegasSyms[Math.floor(Math.random() * vegasSyms.length)]);
+        
+        // Garantált izgalom: gyakori 3-as vagy 4-es kombináció a középső sorban
+        if (Math.random() < 0.45) {
+          const s = vegasSyms[Math.floor(Math.random() * vegasSyms.length)];
+          cells[5] = s; cells[6] = s; cells[7] = s;
+          if (Math.random() < 0.4) cells[8] = s;
+        }
+
+        for (let i = 0; i < 15; i++) {
+          const el = document.getElementById('vslot-' + i);
+          el.classList.remove('reel-spinning');
+          el.innerText = cells[i];
+        }
+
+        // 3 vízszintes + 2 V-alakú nyerővonal ellenőrzése
+        const paylines = [
+          [0,1,2,3,4],
+          [5,6,7,8,9],
+          [10,11,12,13,14],
+          [0,6,12,8,4],
+          [10,6,2,8,14]
+        ];
+
+        let totalWon = 0;
+        paylines.forEach(line => {
+          const first = cells[line[0]];
+          let matchCount = 1;
+          for (let j = 1; j < 5; j++) {
+            if (cells[line[j]] === first) matchCount++;
+            else break;
+          }
+          if (matchCount >= 3) {
+            const mult = vegasPay[first] * (matchCount === 3 ? 1 : (matchCount === 4 ? 2.5 : 6));
+            totalWon += Math.floor(vegasBet * mult);
+            for (let j = 0; j < matchCount; j++) {
+              document.getElementById('vslot-' + line[j]).classList.add('win-highlight');
+            }
+          }
+        });
+
+        if (totalWon > 0) {
+          balance += totalWon;
+          syncBalance();
+          playWinMusic();
+          confetti({ particleCount: 95, spread: 80, origin: { y: 0.55 } });
+          document.getElementById('slotLastWin').innerText = `+${totalWon.toLocaleString('hu-HU')} $`;
+          document.getElementById('slotMsg').innerHTML = `🎉 <b>MEGA NYEREMÉNY: +${totalWon.toLocaleString('hu-HU')} $!</b>`;
+        } else {
+          document.getElementById('slotMsg').innerText = 'Pörgess újra a 20 nyerővonalért!';
+        }
+        vegasSpinning = false;
+      }, 1250);
+    }
+
+    // =========================================================
+    // JÁTÉK 3: VIP BLACKJACK 21
+    // =========================================================
+    const bjSuits = ['♠','♥','♦','♣'], bjRanks = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+    let pHand = [], dHand = [], bjBet = 1000, bjInPlay = false;
+
+    function pullCard() {
+      const r = bjRanks[Math.floor(Math.random() * bjRanks.length)];
+      const s = bjSuits[Math.floor(Math.random() * bjSuits.length)];
+      const val = ['J','Q','K'].includes(r) ? 10 : (r === 'A' ? 11 : parseInt(r));
       return { r, s, val };
     }
-
-    function calcHand(hand) {
-      let sum = hand.reduce((a, c) => a + c.val, 0);
-      let aces = hand.filter(c => c.r === 'A').length;
+    function sumCards(h) {
+      let sum = h.reduce((a, c) => a + c.val, 0), aces = h.filter(c => c.r === 'A').length;
       while (sum > 21 && aces > 0) { sum -= 10; aces--; }
       return sum;
     }
-
-    function renderCardHTML(c) {
-      const isRed = c.s === '♥' || c.s === '♦';
-      const col = isRed ? 'text-red-600' : 'text-slate-900';
-      return `
-        <div class="playing-card ${col}">
-          <span class="text-xs leading-none text-left">${c.r}${c.s}</span>
-          <span class="text-2xl self-center">${c.s}</span>
-          <span class="text-xs leading-none text-right">${c.r}${c.s}</span>
-        </div>
-      `;
+    function cardHTML(c) {
+      const col = (c.s === '♥' || c.s === '♦') ? 'text-red-600' : 'text-slate-900';
+      return `<div class="bj-card ${col}"><span class="text-xs text-left leading-none">${c.r}${c.s}</span><span class="text-2xl self-center">${c.s}</span><span class="text-xs text-right leading-none">${c.r}${c.s}</span></div>`;
+    }
+    function renderBjTable() {
+      document.getElementById('bjDealerCards').innerHTML = dHand.map(cardHTML).join('');
+      document.getElementById('bjPlayerCards').innerHTML = pHand.map(cardHTML).join('');
+      document.getElementById('bjDealerSum').innerText = sumCards(dHand);
+      document.getElementById('bjPlayerSum').innerText = sumCards(pHand);
     }
 
-    function updateBjUI() {
-      document.getElementById('dealerCardsRow').innerHTML = dealerHand.map(renderCardHTML).join('');
-      document.getElementById('playerCardsRow').innerHTML = playerHand.map(renderCardHTML).join('');
-      document.getElementById('dealerScoreText').innerText = calcHand(dealerHand);
-      document.getElementById('playerScoreText').innerText = calcHand(playerHand);
-    }
-
-    function startBlackjackHand() {
-      if (chips < 500) { alert('Tölts fel zsetont (+10K)!'); return; }
+    function bjStart() {
+      if (balance < 1000) { alert('Tölts fel zsetont (+25K)!'); return; }
       initAudio();
-      chips -= 500;
-      updateChips();
-      bjActive = true;
-
-      playerHand = [drawRandomCard(), drawRandomCard()];
-      dealerHand = [drawRandomCard()];
-      updateBjUI();
-
-      document.getElementById('bjDealBtn').classList.add('hidden');
-      document.getElementById('bjHitBtn').classList.remove('hidden');
-      document.getElementById('bjStandBtn').classList.remove('hidden');
-      document.getElementById('bjStatusBanner').innerText = 'Kérsz még lapot (Hit) vagy megállsz (Stand)?';
-
-      if (calcHand(playerHand) === 21) bjStand();
+      bjBet = 1000;
+      balance -= bjBet;
+      syncBalance();
+      bjInPlay = true;
+      pHand = [pullCard(), pullCard()];
+      dHand = [pullCard()];
+      renderBjTable();
+      document.getElementById('bjBetBadge').innerText = `Tét: ${bjBet} $`;
+      document.getElementById('bjBtnDeal').classList.add('hidden');
+      document.getElementById('bjBtnHit').classList.remove('hidden');
+      document.getElementById('bjBtnStand').classList.remove('hidden');
+      document.getElementById('bjBtnDouble').classList.remove('hidden');
+      document.getElementById('bjBanner').innerText = 'Lapot kérsz (Hit), Megállsz (Stand) vagy Duplázol (2x)?';
+      if (sumCards(pHand) === 21) bjActionStand();
     }
-
-    function bjHit() {
-      if (!bjActive) return;
-      sfx(600, 'sine', 0.08);
-      playerHand.push(drawRandomCard());
-      updateBjUI();
-      if (calcHand(playerHand) > 21) {
-        endBjHand('💥 Besokalltál (21 felett)! Az osztó nyert.', 0);
-      }
+    function bjActionHit() {
+      if (!bjInPlay) return;
+      playTone(620, 'sine', 0.06);
+      pHand.push(pullCard());
+      document.getElementById('bjBtnDouble').classList.add('hidden');
+      renderBjTable();
+      if (sumCards(pHand) > 21) finishBj('💥 Besokalltál (Bust)! Az osztó nyert.', 0);
     }
-
-    function bjStand() {
-      if (!bjActive) return;
-      while (calcHand(dealerHand) < 17) {
-        dealerHand.push(drawRandomCard());
-      }
-      updateBjUI();
-      const pScore = calcHand(playerHand);
-      const dScore = calcHand(dealerHand);
-
-      if (dScore > 21 || pScore > dScore) {
-        endBjHand('🎉 GYŐZELEM! Megverted az osztót (+1 000 🪙)!', 1000);
-      } else if (pScore === dScore) {
-        endBjHand('🤝 Döntetlen (Push)! Visszakaptad a téted (500 🪙).', 500);
-      } else {
-        endBjHand('🎩 Az osztó nyert!', 0);
-      }
+    function bjActionDouble() {
+      if (!bjInPlay || balance < bjBet) return;
+      balance -= bjBet;
+      bjBet *= 2;
+      syncBalance();
+      document.getElementById('bjBetBadge').innerText = `Tét: ${bjBet} $`;
+      pHand.push(pullCard());
+      renderBjTable();
+      if (sumCards(pHand) > 21) finishBj('💥 Besokalltál! Az osztó nyert.', 0);
+      else bjActionStand();
     }
-
-    function endBjHand(msg, winChips) {
-      bjActive = false;
-      document.getElementById('bjStatusBanner').innerText = msg;
-      document.getElementById('bjDealBtn').classList.remove('hidden');
-      document.getElementById('bjHitBtn').classList.add('hidden');
-      document.getElementById('bjStandBtn').classList.add('hidden');
-      if (winChips > 0) {
-        chips += winChips;
-        updateChips();
-        if (winChips > 500) { sfxWin(); confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } }); }
+    function bjActionStand() {
+      if (!bjInPlay) return;
+      while (sumCards(dHand) < 17) dHand.push(pullCard());
+      renderBjTable();
+      const p = sumCards(pHand), d = sumCards(dHand);
+      if (d > 21 || p > d) finishBj(`🎉 NYERTÉL! +${(bjBet * 2).toLocaleString('hu-HU')} $!`, bjBet * 2);
+      else if (p === d) finishBj('🤝 Döntetlen (Push)! A tét visszajár.', bjBet);
+      else finishBj('🎩 Az osztó nyert!', 0);
+    }
+    function finishBj(txt, win) {
+      bjInPlay = false;
+      document.getElementById('bjBanner').innerText = txt;
+      document.getElementById('bjBtnDeal').classList.remove('hidden');
+      ['bjBtnHit','bjBtnStand','bjBtnDouble'].forEach(id => document.getElementById(id).classList.add('hidden'));
+      if (win > 0) {
+        balance += win; syncBalance();
+        if (win > bjBet) { playWinMusic(); confetti({ particleCount: 85, spread: 70, origin: { y: 0.6 } }); }
       }
     }
 
     // =========================================================
-    // JÁTÉK 5: DIAMOND MINES PRO
+    // JÁTÉK 4: AVIATOR CRASH PRO
     // =========================================================
-    let mProActive = false, mProBombs = [], mProMult = 1.0, mProCount = 0;
+    let avActive = false, avMult = 1.0, avCrash = 1.0, avFrame = null;
+    function drawAviator(m, crashed) {
+      const c = document.getElementById('aviatorCanvas');
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      ctx.clearRect(0, 0, c.width, c.height);
+      const p = Math.min((m - 1) / 5, 1);
+      const x = 40 + p * (c.width - 90);
+      const y = c.height - 30 - Math.pow(p, 1.35) * (c.height - 80);
 
-    function initMinesProGrid() {
-      const g = document.getElementById('minesGridPro');
-      g.innerHTML = '';
-      for (let i = 0; i < 25; i++) {
-        const b = document.createElement('button');
-        b.id = 'mpro-' + i;
-        b.onclick = () => clickMinesPro(i);
-        b.className = 'aspect-square rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 text-2xl font-black flex items-center justify-center transition';
-        b.innerText = '❓';
-        g.appendChild(b);
-      }
+      ctx.beginPath();
+      ctx.moveTo(40, c.height - 30);
+      ctx.quadraticCurveTo(x * 0.5, c.height - 30, x, y);
+      ctx.strokeStyle = crashed ? '#ef4444' : '#f43f5e';
+      ctx.lineWidth = 5;
+      ctx.stroke();
+      ctx.font = '26px sans-serif';
+      ctx.fillText(crashed ? '💥' : '✈️', x - 14, y + 8);
     }
 
-    function startMinesPro() {
-      if (chips < 500) { alert('Tölts fel zsetont (+10K)!'); return; }
+    function startAviator() {
+      if (avActive || balance < 1000) return;
       initAudio();
-      chips -= 500;
-      updateChips();
-      mProActive = true; mProMult = 1.0; mProCount = 0;
-      mProBombs = [];
-      while (mProBombs.length < 4) {
-        const r = Math.floor(Math.random() * 25);
-        if (!mProBombs.includes(r)) mProBombs.push(r);
-      }
-      initMinesProGrid();
-      document.getElementById('minesMultBadge').innerText = '1.00×';
-      document.getElementById('minesStartBtnPro').classList.add('hidden');
-      const cb = document.getElementById('minesCashBtnPro');
+      balance -= 1000; syncBalance();
+      avActive = true; avMult = 1.00;
+      avCrash = Math.random() < 0.2 ? +(1.15 + Math.random() * 0.5).toFixed(2) : +(1.5 + Math.random() * 7).toFixed(2);
+      document.getElementById('aviatorStartBtn').classList.add('hidden');
+      const cb = document.getElementById('aviatorCashBtn');
       cb.classList.remove('hidden');
-      cb.innerText = '💰 KIFIZETÉS: 500 🪙';
-    }
 
-    function clickMinesPro(i) {
-      if (!mProActive) return;
-      const el = document.getElementById('mpro-' + i);
-      if (el.dataset.open === '1') return;
-      el.dataset.open = '1';
-
-      if (mProBombs.includes(i)) {
-        mProActive = false;
-        sfx(150, 'sawtooth', 0.3);
-        el.innerText = '💣';
-        el.className = 'aspect-square rounded-2xl bg-red-600 border-2 border-white text-2xl flex items-center justify-center';
-        document.getElementById('minesStartBtnPro').classList.remove('hidden');
-        document.getElementById('minesCashBtnPro').classList.add('hidden');
-      } else {
-        mProCount++;
-        mProMult = +(1 + mProCount * 0.35 + Math.pow(mProCount, 1.4) * 0.1).toFixed(2);
-        sfx(500 + mProCount * 60, 'sine', 0.1);
-        el.innerText = '💎';
-        el.className = 'aspect-square rounded-2xl bg-emerald-500/30 border-2 border-emerald-400 text-2xl flex items-center justify-center';
-        document.getElementById('minesMultBadge').innerText = `${mProMult.toFixed(2)}×`;
-        document.getElementById('minesCashBtnPro').innerText = `💰 KIFIZETÉS: +${Math.floor(500 * mProMult).toLocaleString('hu-HU')} 🪙`;
+      function loop() {
+        if (!avActive) return;
+        avMult += 0.014 + avMult * 0.008;
+        document.getElementById('aviatorMult').innerText = `${avMult.toFixed(2)}×`;
+        cb.innerText = `💰 KIFIZETÉS MOST: +${Math.floor(1000 * avMult).toLocaleString('hu-HU')} $`;
+        drawAviator(avMult, false);
+        if (avMult >= avCrash) {
+          avActive = false;
+          playTone(140, 'sawtooth', 0.35);
+          drawAviator(avMult, true);
+          document.getElementById('aviatorState').innerText = '💥 ELREPÜLT!';
+          cb.classList.add('hidden');
+          document.getElementById('aviatorStartBtn').classList.remove('hidden');
+        } else {
+          avFrame = requestAnimationFrame(loop);
+        }
       }
+      document.getElementById('aviatorState').innerText = '✈️ EMELKEDIK...';
+      avFrame = requestAnimationFrame(loop);
     }
 
-    function cashoutMinesPro() {
-      if (!mProActive) return;
-      mProActive = false;
-      const w = Math.floor(500 * mProMult);
-      chips += w;
-      updateChips();
-      sfxWin();
-      confetti({ particleCount: 90, spread: 75, origin: { y: 0.6 } });
-      document.getElementById('minesStartBtnPro').classList.remove('hidden');
-      document.getElementById('minesCashBtnPro').classList.add('hidden');
+    function cashoutAviator() {
+      if (!avActive) return;
+      avActive = false;
+      cancelAnimationFrame(avFrame);
+      const w = Math.floor(1000 * avMult);
+      balance += w; syncBalance();
+      playWinMusic();
+      confetti({ particleCount: 95, spread: 80, origin: { y: 0.6 } });
+      document.getElementById('aviatorState').innerText = `🎉 KIFIZETVE: +${w.toLocaleString('hu-HU')} $!`;
+      document.getElementById('aviatorCashBtn').classList.add('hidden');
+      document.getElementById('aviatorStartBtn').classList.remove('hidden');
     }
 
     // Kezdeti betöltés
-    updateChips();
-    initSlotGrid();
-    initMinesProGrid();
-    drawRouletteWheel(0);
+    syncBalance();
+    buildRouletteCloth();
+    draw3DRouletteWheel(0, 0, 128, false);
+    build5x3Slot();
+    drawAviator(1.0, false);
   </script>
 </body>
-</html> 
+</html>
