@@ -1,468 +1,557 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="hu" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Lulu Webshop – Egyedi Festett & Hímzett Air Force 1</title>
+  <title>LULU KICKS – Custom Painted & Embroidered AF1</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #FAF7F2;
-      color: #2C221E;
+      background: radial-gradient(circle at 50% 0%, #181826 0%, #09090f 55%, #050508 100%);
+      color: #ffffff;
       overflow-x: hidden;
       -webkit-tap-highlight-color: transparent;
     }
-    .serif-title {
-      font-family: 'Cormorant Garamond', serif;
+    .street-font {
+      font-family: 'Space Grotesk', sans-serif;
     }
-    .gold-gradient {
-      background: linear-gradient(135deg, #D4AF37 0%, #F3E5AB 50%, #AA7C11 100%);
+    .street-card {
+      background: rgba(22, 22, 34, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .gold-border {
-      border: 1.5px solid rgba(212, 175, 55, 0.45);
+    .street-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(250, 204, 21, 0.6);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(250, 204, 21, 0.15);
     }
-    .boutique-card {
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(212, 175, 55, 0.28);
-      box-shadow: 0 12px 32px rgba(44, 34, 30, 0.06);
-      transition: all 0.3s ease;
+    @keyframes floatShoe {
+      0%, 100% { transform: translateY(0px) rotate(-2deg); }
+      50% { transform: translateY(-8px) rotate(1deg); }
     }
-    .boutique-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 40px rgba(212, 175, 55, 0.18);
-      border-color: rgba(212, 175, 55, 0.7);
+    .shoe-float { animation: floatShoe 3.6s ease-in-out infinite; }
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
-    @keyframes floatSlow {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-6px); }
+    .animate-ticker {
+      display: flex;
+      width: max-content;
+      animation: ticker 24s linear infinite;
     }
-    .floating { animation: floatSlow 3.5s ease-in-out infinite; }
   </style>
 </head>
-<body class="min-h-screen relative pb-20">
+<body class="min-h-screen relative pb-24">
 
-  <!-- FINOM ARANY-FEHÉR HÓSZÁLLINGÓZÁS HÁTTÉR -->
+  <!-- HÓFEHÉR HÓSZÁLLINGÓZÁS A SÖTÉT HÁTTÉREN (MOST TÖKÉLETESEN LÁTSZIK!) -->
   <canvas id="snowCanvas" class="fixed inset-0 pointer-events-none z-10"></canvas>
 
-  <!-- FELSŐ KARÁCSONYI HIRDETŐSÁV -->
-  <div class="relative z-30 bg-[#2C221E] text-[#FAF7F2] text-xs py-2 px-4 text-center font-medium tracking-wide border-b border-[#D4AF37]/40">
-    🎄 <span class="text-[#F3E5AB] font-bold">Karácsonyi Rendelések:</span> Minden cipő kézzel készül! Használd a <b class="underline text-[#F3E5AB] cursor-pointer" onclick="showPromoModal()">LULUXMAS</b> kódot <b>-5 000 Ft</b> kedvezményért!
+  <!-- FELSŐ HYPEBEAST TICKER SÁV -->
+  <div class="relative z-30 bg-gradient-to-r from-red-600 via-pink-600 to-amber-500 text-white text-[11px] font-black uppercase tracking-wider py-2 overflow-hidden shadow-lg">
+    <div class="animate-ticker flex space-x-8">
+      <span>❄️ XMAS DROP 2026: KÉZZEL FESTETT & HÍMZETT EREDETI NIKE AIR FORCE 1</span>
+      <span>🎁 KÓD: <b class="bg-black/30 px-2 py-0.5 rounded text-yellow-300">LULUXMAS</b> (-5 000 FT AZONNALI KEDVEZMÉNY!)</span>
+      <span>🔥 100% VÍZÁLLÓ ANGELUS BŐRFESTÉK & PRÉMIUM SELYEMHÍMZÉS</span>
+      <span>❄️ XMAS DROP 2026: KÉZZEL FESTETT & HÍMZETT EREDETI NIKE AIR FORCE 1</span>
+      <span>🎁 KÓD: <b class="bg-black/30 px-2 py-0.5 rounded text-yellow-300">LULUXMAS</b> (-5 000 FT AZONNALI KEDVEZMÉNY!)</span>
+    </div>
   </div>
 
-  <!-- NAVIGÁCIÓS FEJLÉC -->
-  <header class="sticky top-0 z-30 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#D4AF37]/25 px-4 py-3.5">
+  <!-- MODERN STREETWEAR FEJLÉC -->
+  <header class="sticky top-0 z-30 bg-[#09090f]/85 backdrop-blur-xl border-b border-white/10 px-4 py-3.5">
     <div class="max-w-6xl mx-auto flex items-center justify-between">
-      <!-- Lulu Logó -->
       <a href="#" class="flex items-center gap-2.5">
-        <div class="w-10 h-10 rounded-full gold-gradient flex items-center justify-center shadow-md">
-          <span class="serif-title font-bold text-2xl text-[#2C221E] leading-none">L</span>
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-yellow-400 via-pink-500 to-cyan-400 p-0.5 shadow-lg">
+          <div class="w-full h-full bg-[#09090f] rounded-[14px] flex items-center justify-center font-black text-xl street-font text-white">
+            L
+          </div>
         </div>
         <div>
-          <span class="serif-title text-2xl sm:text-3xl font-bold tracking-wide text-[#2C221E] block leading-none">Lulu</span>
-          <span class="text-[9px] uppercase tracking-[0.2em] text-[#9A7B2C] font-bold block mt-0.5">Custom Sneakers</span>
+          <span class="street-font text-xl sm:text-2xl font-extrabold tracking-tight text-white block leading-none">LULU<span class="text-yellow-400">KICKS</span></span>
+          <span class="text-[9px] uppercase tracking-[0.22em] text-cyan-400 font-extrabold block mt-0.5">Custom AF1 Lab</span>
         </div>
       </a>
 
-      <!-- Gyorsmenü -->
-      <nav class="hidden md:flex items-center gap-7 text-xs font-bold uppercase tracking-wider text-[#5C4D46]">
-        <a href="#kollekcio" class="hover:text-[#9A7B2C] transition">Kollekció</a>
-        <a href="#egyedi-tervezes" class="hover:text-[#9A7B2C] transition">Egyedi Tervezés</a>
-        <a href="#rolunk" class="hover:text-[#9A7B2C] transition">Minőség & Moshatóság</a>
-      </nav>
-
-      <!-- Jobb oldali gombok: Kupon + Kosár -->
-      <div class="flex items-center gap-2.5">
-        <button onclick="showPromoModal()" class="bg-[#FFF8E7] border border-[#D4AF37] text-[#8A6615] text-xs font-bold px-3 py-2 rounded-full hover:bg-[#F3E5AB]/50 transition flex items-center gap-1">
-          <span>🎁</span> <span class="hidden sm:inline">-5 000 Ft Kupon</span>
+      <div class="flex items-center gap-2">
+        <button onclick="showPromoModal()" class="bg-white/10 hover:bg-white/15 border border-yellow-400/50 text-yellow-300 text-xs font-extrabold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+          <span>🎄</span> <span class="hidden sm:inline">-5 000 Ft Kupon</span>
         </button>
 
-        <button onclick="toggleCart()" class="relative bg-[#2C221E] text-white px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 shadow-md active:scale-95 transition">
-          <span>🛍️</span>
+        <button onclick="toggleCart()" class="bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-4 py-2 rounded-xl text-xs font-black flex items-center gap-2 shadow-lg active:scale-95 transition">
+          <span>🛒</span>
           <span>Kosár</span>
-          <span id="cartCount" class="bg-[#D4AF37] text-[#2C221E] font-extrabold text-[10px] w-5 h-5 rounded-full flex items-center justify-center">0</span>
+          <span id="cartCount" class="bg-black text-yellow-400 font-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center">0</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- HERO SZEKCIÓ -->
-  <section class="relative z-20 max-w-6xl mx-auto px-4 pt-6 pb-10">
-    <div class="boutique-card rounded-3xl p-6 sm:p-10 gold-border relative overflow-hidden bg-gradient-to-br from-white via-[#FAF7F2] to-[#FFF5E1]">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-        
-        <!-- Bal oldal: Szöveg -->
-        <div class="md:col-span-7 text-center md:text-left space-y-4">
-          <div class="inline-flex items-center gap-2 bg-[#FFF8E7] border border-[#D4AF37]/50 text-[#8A6615] text-xs font-bold px-3.5 py-1.5 rounded-full">
-            <span>✨</span> 100% Eredeti Nike Air Force 1 • Kézzel Festve & Hímezve
+  <!-- HERO SZEKCIÓ (LÁTVÁNYOS CUSTOM AF1 GRAFIKÁVAL) -->
+  <section class="relative z-20 max-w-6xl mx-auto px-4 pt-6 pb-8">
+    <div class="street-card rounded-3xl p-6 sm:p-10 relative overflow-hidden border border-white/15">
+      <!-- Neon háttérfények -->
+      <div class="absolute -top-24 -right-24 w-72 h-72 bg-pink-500/20 rounded-full blur-[90px] pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-cyan-500/20 rounded-full blur-[90px] pointer-events-none"></div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+        <div class="lg:col-span-7 text-center lg:text-left space-y-4">
+          <div class="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-cyan-300 text-xs font-extrabold px-3.5 py-1.5 rounded-full">
+            <span>⚡</span> TikTok & Streetwear Kedvenc • 100% Eredeti Nike AF1 Alap
           </div>
 
-          <h1 class="serif-title text-4xl sm:text-6xl font-bold text-[#2C221E] leading-[1.1]">
-            Mesés karakterek, <br>
-            <span class="italic text-[#9A7B2C]">rád szabott</span> lépések.
+          <h1 class="street-font text-3xl sm:text-6xl font-extrabold text-white leading-[1.08] tracking-tight">
+            NE HORDJ UNALMAS <br>
+            <span class="bg-gradient-to-r from-cyan-400 via-pink-400 to-yellow-400 bg-clip-text text-transparent">FEHÉR FORCE-OT!</span>
           </h1>
 
-          <p class="text-sm sm:text-base text-[#5C4D46] leading-relaxed max-w-xl mx-auto md:mx-0">
-            Üdvözlünk a <b>Lulu Webshopban</b>! Minden pár cipőnk egy eredeti, hófehér Nike Air Force 1 alapra készül, vízálló prémium bőrfestékkel és aprólékos gépi/kézi hímzéssel. Válassz a <b class="text-[#2C221E]">Stitch, Grincs, Disney és Anime</b> kiadásaink közül, vagy kérj teljesen egyedi karaktert!
+          <p class="text-xs sm:text-base text-gray-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
+            A <b>Lulu Kicks</b> stúdióban minden pár Nike Air Force 1 cipőt kézzel festünk és selyemcérnával hímzünk. Válaszd a limitált <b class="text-white">Stitch, Grincs, Naruto, Disney vagy Sakura</b> modelljeinket, vagy rakd össze a sajátodat az Élő 3D Tervezőben!
           </p>
 
-          <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3 pt-2">
-            <a href="#kollekcio" class="w-full sm:w-auto text-center px-7 py-3.5 rounded-full font-bold text-sm bg-[#2C221E] text-[#FAF7F2] shadow-lg hover:bg-[#43352F] transition">
-              👟 Kollekció Megtekintése
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-1">
+            <a href="#drops" class="w-full sm:w-auto text-center px-7 py-4 rounded-2xl font-black text-sm bg-gradient-to-r from-yellow-400 to-amber-500 text-black shadow-xl hover:brightness-110 transition">
+              🔥 Custom Cipők Megtekintése
             </a>
-            <a href="#egyedi-tervezes" class="w-full sm:w-auto text-center px-6 py-3.5 rounded-full font-bold text-sm bg-white border-2 border-[#D4AF37] text-[#2C221E] hover:bg-[#FFF8E7] transition">
-              🎨 Saját Karaktert Kérek
+            <a href="#customizer" class="w-full sm:w-auto text-center px-6 py-4 rounded-2xl font-extrabold text-sm bg-white/10 border border-white/20 text-white hover:bg-white/15 transition">
+              🎨 Élő Cipő-Tervező Stúdió
             </a>
-          </div>
-
-          <!-- Bizalmi pontok -->
-          <div class="grid grid-cols-3 gap-2 pt-4 border-t border-[#D4AF37]/25 text-center md:text-left">
-            <div>
-              <span class="text-xs font-extrabold text-[#2C221E] block">💧 100% Vízálló</span>
-              <span class="text-[11px] text-[#7A6A63]">Angelus bőrfesték</span>
-            </div>
-            <div>
-              <span class="text-xs font-extrabold text-[#2C221E] block">🧵 Prémium Hímzés</span>
-              <span class="text-[11px] text-[#7A6A63]">Tartós selyemcérna</span>
-            </div>
-            <div>
-              <span class="text-xs font-extrabold text-[#2C221E] block">🎄 Díszdobozban</span>
-              <span class="text-[11px] text-[#7A6A63]">Készen a fa alá</span>
-            </div>
           </div>
         </div>
 
-        <!-- Jobb oldal: Kiemelt Sneaker Kép Keretben -->
-        <div class="md:col-span-5 relative">
-          <div class="relative mx-auto max-w-sm rounded-3xl p-3 bg-white shadow-2xl border-2 border-[#D4AF37]/50 floating">
-            <div class="relative rounded-2xl overflow-hidden aspect-[4/3] bg-[#F4EFE6]">
-              <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=900&q=85" alt="Lulu Custom Air Force 1" class="w-full h-full object-cover">
-              <div class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-[#2C221E] text-[11px] font-extrabold px-3 py-1 rounded-full shadow border border-[#D4AF37]">
-                ⭐ Karácsonyi Bestseller
-              </div>
-              <div class="absolute bottom-3 right-3 bg-[#2C221E]/90 text-[#F3E5AB] text-xs font-bold px-3 py-1 rounded-full">
-                45 990 Ft-tól
-              </div>
-            </div>
-            <div class="pt-3 px-1 flex items-center justify-between">
+        <!-- Jobb oldal: Kiemelt Custom Festett Cipő Grafika -->
+        <div class="lg:col-span-5">
+          <div class="bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-pink-500/20 rounded-3xl p-4 border border-white/15 text-center relative">
+            <span class="absolute top-3 left-3 bg-pink-500 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full shadow">
+              🎨 Kézzel Festett + 🧵 Hímzett
+            </span>
+            <div id="heroShoePreview" class="py-4 shoe-float"></div>
+            <div class="bg-black/50 backdrop-blur-md rounded-2xl p-3 border border-white/10 flex items-center justify-between text-left">
               <div>
-                <span class="text-[10px] uppercase tracking-wider text-[#9A7B2C] font-bold block">Festett + Hímzett Kiadás</span>
-                <h3 class="serif-title text-xl font-bold text-[#2C221E]">Lulu Signature AF1</h3>
+                <span class="text-[10px] text-cyan-400 font-extrabold uppercase block">Kiemelt Karácsonyi Drop</span>
+                <span class="font-black text-sm text-white">AF1 "Stitch & Angel Ohana"</span>
               </div>
-              <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">Raktáron</span>
+              <span class="text-base font-black text-yellow-400">54 990 Ft</span>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- KOLLEKCIÓ & SZŰRŐ SZEKCIÓ -->
-  <section id="kollekcio" class="relative z-20 max-w-6xl mx-auto px-4 py-6">
-    <div class="text-center mb-6">
-      <span class="text-xs font-extrabold uppercase tracking-[0.2em] text-[#9A7B2C]">Kézzel Készült Műalkotások</span>
-      <h2 class="serif-title text-3xl sm:text-5xl font-bold text-[#2C221E] mt-1">Válaszd ki a kedvenc karaktered</h2>
-      <p class="text-xs sm:text-sm text-[#5C4D46] mt-1">Az ár tartalmazza az eredeti Nike Air Force 1 cipőt, az egyedi festést/hímzést és a karácsonyi díszcsomagolást.</p>
+  <!-- =========================================================
+       CUSTOM CIPŐ KOLLEKCIÓ (MINDEN CIPŐN RAJTA VAN A MINTA!)
+       ========================================================= -->
+  <section id="drops" class="relative z-20 max-w-6xl mx-auto px-4 py-6">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-4">
+      <div>
+        <span class="text-xs font-extrabold uppercase tracking-widest text-yellow-400">🎄 Karácsonyi Limitált Széria</span>
+        <h2 class="street-font text-2xl sm:text-4xl font-extrabold text-white mt-1">Válassz a Festett & Hímzett Modellekből</h2>
+      </div>
+
+      <!-- Szűrő gombok -->
+      <div class="flex flex-wrap gap-2">
+        <button onclick="filterShoes('all')" id="btn-all" class="f-btn bg-yellow-400 text-black text-xs font-black px-4 py-2 rounded-xl transition">Összes (6)</button>
+        <button onclick="filterShoes('disney')" id="btn-disney" class="f-btn bg-white/10 text-white text-xs font-bold px-3.5 py-2 rounded-xl hover:bg-white/20 transition">💙 Stitch & Disney</button>
+        <button onclick="filterShoes('xmas')" id="btn-xmas" class="f-btn bg-white/10 text-white text-xs font-bold px-3.5 py-2 rounded-xl hover:bg-white/20 transition">🎄 Grincs</button>
+        <button onclick="filterShoes('anime')" id="btn-anime" class="f-btn bg-white/10 text-white text-xs font-bold px-3.5 py-2 rounded-xl hover:bg-white/20 transition">⚡ Anime & Hímzett</button>
+      </div>
     </div>
 
-    <!-- Kategória Szűrő Gombok -->
-    <div class="flex flex-wrap items-center justify-center gap-2 mb-8">
-      <button onclick="filterShoes('all')" id="filter-all" class="filter-btn bg-[#2C221E] text-white text-xs font-bold px-4 py-2 rounded-full transition">
-        Összes Modell (6)
-      </button>
-      <button onclick="filterShoes('disney')" id="filter-disney" class="filter-btn bg-white border border-[#D4AF37]/40 text-[#2C221E] text-xs font-bold px-4 py-2 rounded-full hover:bg-[#FFF8E7] transition">
-        💙 Stitch & Disney
-      </button>
-      <button onclick="filterShoes('xmas')" id="filter-xmas" class="filter-btn bg-white border border-[#D4AF37]/40 text-[#2C221E] text-xs font-bold px-4 py-2 rounded-full hover:bg-[#FFF8E7] transition">
-        🎄 Grincs (Karácsonyi)
-      </button>
-      <button onclick="filterShoes('anime')" id="filter-anime" class="filter-btn bg-white border border-[#D4AF37]/40 text-[#2C221E] text-xs font-bold px-4 py-2 rounded-full hover:bg-[#FFF8E7] transition">
-        ⚡ Anime & Hímzett
-      </button>
-    </div>
-
-    <!-- TERMÉKRÁCS (JS TÖLTI FEL) -->
-    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    <!-- TERMÉK KÁRTYÁK (JS TÖLTI FEL LÁTVÁNYOS MINTA-GRAFIKÁKKAL) -->
+    <div id="shoeGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </section>
 
-  <!-- EGYEDI TERVEZÉS ("TERVEZD MEG A SAJÁTOD") SZEKCIÓ -->
-  <section id="egyedi-tervezes" class="relative z-20 max-w-4xl mx-auto px-4 py-10">
-    <div class="boutique-card rounded-3xl p-6 sm:p-9 gold-border bg-gradient-to-b from-white to-[#FFF9EB]">
+  <!-- =========================================================
+       INTERAKTÍV ÉLŐ CIPŐ-TERVEZŐ STÚDIÓ (FIATALOS CUSTOMIZER!)
+       ========================================================= -->
+  <section id="customizer" class="relative z-20 max-w-5xl mx-auto px-4 py-10">
+    <div class="street-card rounded-3xl p-6 sm:p-8 border-2 border-cyan-400/40 relative overflow-hidden">
       <div class="text-center max-w-xl mx-auto mb-6">
-        <span class="bg-[#FFF8E7] border border-[#D4AF37] text-[#8A6615] text-[11px] font-extrabold uppercase px-3 py-1 rounded-full">
-          🎨 100% Egyedi Megvalósítás
+        <span class="bg-cyan-400/20 text-cyan-300 border border-cyan-400/40 text-[11px] font-black uppercase px-3 py-1 rounded-full">
+          👟 Interaktív Lulu Lab
         </span>
-        <h2 class="serif-title text-3xl sm:text-4xl font-bold text-[#2C221E] mt-2">
-          Álmodd meg a saját Lulu cipődet!
+        <h2 class="street-font text-2xl sm:text-4xl font-extrabold text-white mt-2">
+          Tervezd meg élőben a saját Air Force-od!
         </h2>
-        <p class="text-xs sm:text-sm text-[#5C4D46] mt-1">
-          Másik mesefigurát, sorozat-karaktert, saját háziállatot vagy egyedi nevet/dátumot szeretnél a cipőre? Írd meg nekünk, és elkészítjük!
+        <p class="text-xs sm:text-sm text-gray-300 mt-1">
+          Kattints a színekre és a karakterekre: nézd meg élőben a cipőn, hogyan fog kinézni, és írd rá a saját feliratodat a sarokrészre!
         </p>
       </div>
 
-      <form onsubmit="submitCustomShoe(event)" class="space-y-4">
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        <!-- Élő Cipő Előnézet -->
+        <div class="lg:col-span-7 bg-gradient-to-b from-white/10 to-black/60 rounded-3xl p-6 border border-white/15 text-center relative">
+          <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-2">Élő Előnézet (Nike AF1 Low):</span>
+          <div id="liveCustomShoe" class="py-4"></div>
+          <div class="inline-flex items-center gap-2 bg-black/60 px-4 py-1.5 rounded-full border border-white/10 text-xs text-yellow-300 font-bold">
+            ✨ Vízálló kézi festés + Valódi sarokhímzés
+          </div>
+        </div>
+
+        <!-- Vezérlőpult -->
+        <div class="lg:col-span-5 space-y-4">
           <div>
-            <label class="text-xs font-bold text-[#2C221E] block mb-1">1. Válassz Méretet:</label>
-            <select id="customSize" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D4AF37]/50 bg-white text-sm font-semibold focus:outline-none">
-              <option value="36">EU 36</option>
-              <option value="37">EU 37</option>
-              <option value="38" selected>EU 38</option>
-              <option value="39">EU 39</option>
-              <option value="40">EU 40</option>
-              <option value="41">EU 41</option>
-              <option value="42">EU 42</option>
-              <option value="43">EU 43</option>
-              <option value="44">EU 44</option>
-            </select>
+            <label class="text-xs font-extrabold text-gray-300 uppercase block mb-1.5">1. Válassz Karaktert / Minta Témát:</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" onclick="setCustomTheme('stitch')" class="px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-cyan-400/50 text-xs font-bold text-left">💙 Stitch & Ohana</button>
+              <button type="button" onclick="setCustomTheme('grinch')" class="px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-lime-400/50 text-xs font-bold text-left">🎄 Grincs Xmas</button>
+              <button type="button" onclick="setCustomTheme('anime')" class="px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-red-400/50 text-xs font-bold text-left">⚡ Anime / Naruto</button>
+              <button type="button" onclick="setCustomTheme('sakura')" class="px-3 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-pink-400/50 text-xs font-bold text-left">🌸 Hímzett Sakura</button>
+            </div>
           </div>
 
-          <div class="sm:col-span-2">
-            <label class="text-xs font-bold text-[#2C221E] block mb-1">2. Kivitelezés Stílusa & Ára:</label>
-            <select id="customStyle" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D4AF37]/50 bg-white text-sm font-semibold focus:outline-none">
-              <option value="49990">🎨 Kézzel Festett Karakter (Oldalsó minta) – 49 990 Ft</option>
-              <option value="54990">🧵 Prémium Hímzett + Festett Kombináció – 54 990 Ft</option>
-              <option value="64990">👑 Full Custom VIP (Kétoldali karakter + Hímzett név + Swarovski/Dísz) – 64 990 Ft</option>
-            </select>
+          <div>
+            <label class="text-xs font-extrabold text-gray-300 uppercase block mb-1.5">2. Pipa (Swoosh) & Festés Színe:</label>
+            <div class="flex gap-2.5">
+              <button type="button" onclick="setCustomColor('#38bdf8', '#ec4899')" class="w-9 h-9 rounded-full bg-gradient-to-tr from-sky-400 to-pink-500 border-2 border-white shadow"></button>
+              <button type="button" onclick="setCustomColor('#84cc16', '#dc2626')" class="w-9 h-9 rounded-full bg-gradient-to-tr from-lime-500 to-red-600 border-2 border-white shadow"></button>
+              <button type="button" onclick="setCustomColor('#ef4444', '#111827')" class="w-9 h-9 rounded-full bg-gradient-to-tr from-red-500 to-gray-900 border-2 border-white shadow"></button>
+              <button type="button" onclick="setCustomColor('#f472b6', '#facc15')" class="w-9 h-9 rounded-full bg-gradient-to-tr from-pink-400 to-yellow-400 border-2 border-white shadow"></button>
+              <button type="button" onclick="setCustomColor('#a855f7', '#06b6d4')" class="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-500 to-cyan-400 border-2 border-white shadow"></button>
+            </div>
           </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs font-extrabold text-gray-300 uppercase block mb-1">3. Hímzett Felirat:</label>
+              <input id="customHeelInput" type="text" maxlength="8" value="LULU" oninput="updateLiveCustomShoe()" placeholder="Pl. Név / Evszám" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/20 text-xs font-bold text-white uppercase">
+            </div>
+            <div>
+              <label class="text-xs font-extrabold text-gray-300 uppercase block mb-1">4. Méreted:</label>
+              <select id="customLabSize" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/20 text-xs font-bold text-white">
+                <option value="36">EU 36</option>
+                <option value="37">EU 37</option>
+                <option value="38" selected>EU 38</option>
+                <option value="39">EU 39</option>
+                <option value="40">EU 40</option>
+                <option value="41">EU 41</option>
+                <option value="42">EU 42</option>
+                <option value="43">EU 43</option>
+                <option value="44">EU 44</option>
+              </select>
+            </div>
+          </div>
+
+          <button onclick="addCustomLabToCart()" class="w-full py-4 rounded-2xl font-black text-sm bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white shadow-xl hover:brightness-110 active:scale-95 transition">
+            🛒 Saját Tervezésű AF1 Kosárba (59 990 Ft)
+          </button>
         </div>
-
-        <div>
-          <label class="text-xs font-bold text-[#2C221E] block mb-1">3. Milyen mesefigurát, karaktert vagy színeket szeretnél rá?</label>
-          <textarea id="customIdea" rows="3" required placeholder="Pl.: Szeretnék egy Stitch és Angel párost pasztell rózsaszín-kék hímzett virágokkal, a sarkára pedig a 'Lili' feliratot..." class="w-full px-4 py-3 rounded-xl border border-[#D4AF37]/50 bg-white text-sm focus:outline-none"></textarea>
-        </div>
-
-        <button type="submit" class="w-full py-4 rounded-full font-extrabold text-sm bg-[#2C221E] text-[#F3E5AB] shadow-xl hover:bg-[#43352F] transition">
-          ✨ Egyedi Terv Hozzáadása a Kosárhoz
-        </button>
-      </form>
-    </div>
-  </section>
-
-  <!-- MINŐSÉG ÉS GYIK SZEKCIÓ -->
-  <section id="rolunk" class="relative z-20 max-w-6xl mx-auto px-4 py-6">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-      <div class="boutique-card rounded-2xl p-5">
-        <span class="text-2xl">🎨</span>
-        <h3 class="serif-title text-xl font-bold text-[#2C221E] mt-2">Nem kopik le a festék?</h3>
-        <p class="text-xs text-[#5C4D46] mt-1 leading-relaxed">
-          Nem! Kizárólag eredeti amerikai <b>Angelus bőrfestéket</b> használunk, amit több réteg rugalmas, víz- és karcálló védőlakkal zárunk le. Esőben és hóban is biztonsággal hordható.
-        </p>
-      </div>
-      <div class="boutique-card rounded-2xl p-5">
-        <span class="text-2xl">🧵</span>
-        <h3 class="serif-title text-xl font-bold text-[#2C221E] mt-2">Valódi hímzés és varrás</h3>
-        <p class="text-xs text-[#5C4D46] mt-1 leading-relaxed">
-          A hímzett modelljeinken a virágok, kontúrok és karakter-elemek magas szakítószilárdságú selyemcérnával közvetlenül a bőrbe vannak varrva, így térbeli, exkluzív hatást keltenek.
-        </p>
-      </div>
-      <div class="boutique-card rounded-2xl p-5">
-        <span class="text-2xl">🎁</span>
-        <h3 class="serif-title text-xl font-bold text-[#2C221E] mt-2">Karácsonyi Garancia</h3>
-        <p class="text-xs text-[#5C4D46] mt-1 leading-relaxed">
-          Minden Lulu cipőt selyempapírba és ünnepi masnis dobozba csomagolunk. Méretprobléma esetén 14 napos rugalmas cserét biztosítunk.
-        </p>
       </div>
     </div>
   </section>
 
-  <footer class="relative z-20 text-center text-xs text-[#7A6A63] border-t border-[#D4AF37]/30 pt-6 mt-8">
-    <p class="font-bold text-[#2C221E] mb-1">Lulu Webshop Magyarország – Egyedi Sneaker Stúdió</p>
-    <p>🔒 Biztonságos Apple Pay & Bankkártyás fizetés • 📦 Ingyenes Karácsonyi Díszcsomagolás • 🧾 Hivatalos E-számla</p>
+  <footer class="relative z-20 text-center text-xs text-gray-400 border-t border-white/10 pt-6 mt-6">
+    <p class="font-extrabold text-white mb-1">LULU KICKS HUNGARY – Custom Sneaker Art Studio</p>
+    <p>🔒 Apple Pay & Stripe • 💧 100% Vízálló Angelus Festés • 🎄 Ingyenes Karácsonyi Díszdoboz</p>
   </footer>
 
   <!-- =========================================================
-       FELUGRÓ KARÁCSONYI KEDVEZMÉNY ABLAK (POP-UP MODAL)
+       KARÁCSONYI FELUGRÓ KEDVEZMÉNY ABLAK (POP-UP)
        ========================================================= -->
-  <div id="promoModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="boutique-card rounded-3xl max-w-md w-full p-6 sm:p-7 relative text-center border-2 border-[#D4AF37] bg-gradient-to-b from-[#FFFDF9] to-[#FFF3D6] shadow-2xl">
-      <button onclick="closePromoModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#2C221E]/10 text-[#2C221E] font-bold flex items-center justify-center hover:bg-[#2C221E]/20">✕</button>
+  <div id="promoModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="street-card rounded-3xl max-w-md w-full p-6 sm:p-7 relative text-center border-2 border-yellow-400 shadow-[0_0_50px_rgba(250,204,21,0.25)]">
+      <button onclick="closePromoModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 text-white font-bold flex items-center justify-center">✕</button>
 
-      <div class="w-16 h-16 rounded-full gold-gradient mx-auto flex items-center justify-center text-3xl shadow-md mb-3">
-        🎄
-      </div>
-
-      <span class="bg-[#2C221E] text-[#F3E5AB] text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full">
-        Ünnepi Lulu Ajándék
+      <div class="text-5xl mb-2">🎄👟</div>
+      <span class="bg-red-600 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">
+        Karácsonyi Sneaker Drop
       </span>
 
-      <h3 class="serif-title text-3xl font-bold text-[#2C221E] mt-2">
-        5 000 Ft Karácsonyi Kedvezmény!
+      <h3 class="street-font text-2xl sm:text-3xl font-extrabold text-white mt-2">
+        -5 000 Ft Minden Egyedi Cipőre!
       </h3>
 
-      <p class="text-xs sm:text-sm text-[#5C4D46] mt-2 leading-relaxed">
-        Rendeld meg egyedi festett vagy hímzett <b>Nike Air Force 1</b> cipődet a karácsonyfa alá! Aktiváld az ünnepi kuponodat most, és <b>azonnal levonunk 5 000 Ft-ot</b> bármelyik cipő árából + <b>ajándék díszcsomagolást</b> adunk!
+      <p class="text-xs sm:text-sm text-gray-300 mt-2 leading-relaxed">
+        Lepd meg magad vagy valakit a fa alatt egy kézzel festett & hímzett <b>Nike Air Force 1</b> cipővel! Aktiváld a karácsonyi kuponodat most, és <b>azonnal levonunk 5 000 Ft-ot</b> minden cipő árából!
       </p>
 
-      <div class="my-4 bg-white border-2 border-dashed border-[#D4AF37] rounded-2xl p-3">
-        <span class="text-[10px] uppercase text-[#7A6A63] font-bold block">Kuponkódod:</span>
-        <span class="text-xl font-black tracking-widest text-[#2C221E]">LULUXMAS</span>
+      <div class="my-4 bg-black/60 border-2 border-dashed border-yellow-400 rounded-2xl p-3">
+        <span class="text-[10px] uppercase text-gray-400 font-bold block">Karácsonyi Kuponkód:</span>
+        <span class="street-font text-2xl font-black tracking-widest text-yellow-400">LULUXMAS</span>
       </div>
 
-      <button onclick="activateCoupon()" class="w-full py-4 rounded-full font-extrabold text-sm bg-[#2C221E] text-[#F3E5AB] shadow-xl hover:bg-[#43352F] active:scale-95 transition">
-        ✨ Aktiválom az 5 000 Ft Kedvezményt!
+      <button onclick="activateCoupon()" class="w-full py-4 rounded-2xl font-black text-sm bg-gradient-to-r from-yellow-400 to-amber-500 text-black shadow-xl hover:brightness-110 active:scale-95 transition">
+        ⚡ -5 000 FT KEDVEZMÉNY AKTIVÁLÁSA MOST!
       </button>
     </div>
   </div>
 
   <!-- =========================================================
-       OLDALSÓ KOSÁR ÉS PÉNZTÁR FIÓK (SLIDE-OVER CART)
+       OLDALSÓ KOSÁR FIÓK
        ========================================================= -->
-  <div id="cartDrawer" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-xs flex justify-end">
-    <div class="bg-[#FAF7F2] w-full max-w-md h-full flex flex-col justify-between p-6 shadow-2xl border-l border-[#D4AF37]/40 overflow-y-auto">
-      
+  <div id="cartDrawer" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex justify-end">
+    <div class="bg-[#12121c] w-full max-w-md h-full flex flex-col justify-between p-6 shadow-2xl border-l border-white/15 overflow-y-auto">
       <div>
-        <div class="flex items-center justify-between pb-4 border-b border-[#D4AF37]/30">
+        <div class="flex items-center justify-between pb-4 border-b border-white/10">
           <div>
-            <h3 class="serif-title text-2xl font-bold text-[#2C221E]">Kosarad</h3>
-            <span id="couponStatusBadge" class="text-[11px] font-bold text-[#9A7B2C]">Nincs aktív kupon</span>
+            <h3 class="street-font text-2xl font-extrabold text-white">Kosarad</h3>
+            <span id="couponStatusBadge" class="text-[11px] font-bold text-yellow-400">Nincs aktív kupon</span>
           </div>
-          <button onclick="toggleCart()" class="w-8 h-8 rounded-full bg-[#2C221E]/10 font-bold">✕</button>
+          <button onclick="toggleCart()" class="w-8 h-8 rounded-full bg-white/10 font-bold text-white">✕</button>
         </div>
-
-        <!-- Kosár tételek -->
         <div id="cartItemsList" class="py-4 space-y-3"></div>
       </div>
 
-      <!-- Összesítő és Megrendelő Űrlap -->
-      <div class="border-t border-[#D4AF37]/30 pt-4 space-y-3">
-        <div class="flex justify-between text-xs text-[#5C4D46]">
-          <span>Karácsonyi Díszcsomagolás:</span>
-          <span class="font-bold text-emerald-700">INGYENES</span>
+      <div class="border-t border-white/10 pt-4 space-y-3">
+        <div class="flex justify-between text-xs text-gray-300">
+          <span>Karácsonyi Díszdoboz + Vízálló réteg:</span>
+          <span class="font-bold text-emerald-400">INGYENES</span>
         </div>
-        <div id="discountRow" class="hidden flex justify-between text-xs text-emerald-700 font-bold">
+        <div id="discountRow" class="hidden flex justify-between text-xs text-emerald-400 font-bold">
           <span>LULUXMAS Karácsonyi Kupon:</span>
           <span>-5 000 Ft</span>
         </div>
-        <div class="flex justify-between text-lg font-black text-[#2C221E]">
-          <span>Fizetendő összesen:</span>
-          <span id="cartTotalText">0 Ft</span>
+        <div class="flex justify-between text-xl font-black text-white">
+          <span>Fizetendő:</span>
+          <span id="cartTotalText" class="text-yellow-400">0 Ft</span>
         </div>
 
-        <button id="applyCouponBtnInCart" onclick="activateCoupon()" class="w-full py-2 rounded-xl text-xs font-bold bg-[#FFF8E7] border border-[#D4AF37] text-[#8A6615]">
+        <button id="applyCouponBtnInCart" onclick="activateCoupon()" class="w-full py-2.5 rounded-xl text-xs font-extrabold bg-yellow-400/15 border border-yellow-400/50 text-yellow-300">
           🎁 -5 000 Ft Karácsonyi Kupon Aktiválása
         </button>
 
         <form onsubmit="submitCheckout(event)" class="space-y-2.5 pt-2">
-          <input type="text" required placeholder="Teljes Név (Szállításhoz)" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D4AF37]/40 bg-white text-xs font-semibold">
-          <input type="email" required placeholder="E-mail cím (Visszaigazoláshoz)" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D4AF37]/40 bg-white text-xs font-semibold">
-          <input type="text" required placeholder="Szállítási cím (Irányítószám, Város, Utca)" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D4AF37]/40 bg-white text-xs font-semibold">
-          <button type="submit" class="w-full py-4 rounded-full font-extrabold text-sm bg-[#2C221E] text-[#F3E5AB] shadow-xl hover:bg-[#43352F] transition">
-            💳 Megrendelés & Fizetés
+          <input type="text" required placeholder="Teljes Név" class="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-black/50 text-xs font-semibold text-white">
+          <input type="email" required placeholder="E-mail cím" class="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-black/50 text-xs font-semibold text-white">
+          <input type="text" required placeholder="Szállítási cím (Irányítószám, Város, Utca)" class="w-full px-3.5 py-2.5 rounded-xl border border-white/15 bg-black/50 text-xs font-semibold text-white">
+          <button type="submit" class="w-full py-4 rounded-2xl font-black text-sm bg-gradient-to-r from-yellow-400 to-amber-500 text-black shadow-xl">
+            💳 Megrendelés & Fizetés (Apple Pay / Kártya)
           </button>
         </form>
       </div>
-
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIKA -->
   <script>
-    // 1. TERMÉK ADATBÁZIS (STITCH, GRINCS, ANIME, DISNEY - 45k és 65k KÖZÖTT)
-    const products = [
+    // =========================================================
+    // 1. EGYEDI FESTETT & HÍMZETT AF1 GRAFIKUS GENERÁTOR (HOGY LÁTSZÓDJON A MINTA A CIPŐN!)
+    // =========================================================
+    function renderCustomAF1SVG(cfg) {
+      return `
+        <svg viewBox="0 0 380 210" class="w-full h-auto drop-shadow-[0_16px_25px_rgba(0,0,0,0.65)] select-none">
+          <defs>
+            <linearGradient id="swoosh-${cfg.id}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="${cfg.c1}"/>
+              <stop offset="100%" stop-color="${cfg.c2}"/>
+            </linearGradient>
+            <linearGradient id="panel-${cfg.id}" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="${cfg.c1}" stop-opacity="0.28"/>
+              <stop offset="100%" stop-color="${cfg.c2}" stop-opacity="0.42"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Árnyék a cipő alatt -->
+          <ellipse cx="190" cy="192" rx="155" ry="10" fill="rgba(0,0,0,0.55)"/>
+
+          <!-- 1. CIPŐ FELSŐRÉSZ (Hófehér Prémium Bőr) -->
+          <path d="M40,145 L40,70 C40,52 62,45 85,52 L135,72 L185,42 C200,34 218,42 228,62 L270,100 L332,110 C352,114 358,132 352,145 Z" 
+                fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+
+          <!-- 2. FESTETT OLDALSÓ PANEL MINTA -->
+          <path d="M88,75 L220,70 L265,105 L245,142 L85,142 Z" fill="url(#panel-${cfg.id})"/>
+
+          <!-- 3. HÍMZETT VARRÁSVONALAK (Szaggatott selyemöltések) -->
+          <path d="M88,142 C92,100 120,75 135,72" fill="none" stroke="${cfg.c1}" stroke-width="2" stroke-dasharray="4,3"/>
+          <path d="M225,65 L268,142" fill="none" stroke="${cfg.c2}" stroke-width="2" stroke-dasharray="4,3"/>
+
+          <!-- 4. TÉMA SZERINTI FESTETT & HÍMZETT MOTÍVUMOK A CIPŐ OLDALÁN -->
+          ${cfg.artOverlay}
+
+          <!-- 5. FESTETT NIKE PIPA (SWOOSH) + KONTÚR HÍMZÉS -->
+          <path d="M215,92 C175,120 115,126 62,102 C102,140 175,142 242,108 Z" 
+                fill="url(#swoosh-${cfg.id})" stroke="#0f172a" stroke-width="2.5"/>
+
+          <!-- 6. SAROK TAB + EGYEDI HÍMZETT FELIRAT -->
+          <path d="M40,70 L72,58 L76,86 L40,94 Z" fill="${cfg.c1}" stroke="#0f172a" stroke-width="1.5"/>
+          <text x="58" y="79" fill="#ffffff" font-size="9.5" font-weight="900" text-anchor="middle" letter-spacing="1">${cfg.heelText}</text>
+
+          <!-- 7. CIPŐFŰZŐK -->
+          <line x1="196" y1="52" x2="214" y2="45" stroke="${cfg.c1}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="210" y1="65" x2="228" y2="58" stroke="${cfg.c2}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="224" y1="78" x2="242" y2="71" stroke="${cfg.c1}" stroke-width="5" stroke-linecap="round"/>
+          <line x1="238" y1="91" x2="256" y2="84" stroke="${cfg.c2}" stroke-width="5" stroke-linecap="round"/>
+
+          <!-- 8. IKONIKUS VASTAG AIR FORCE 1 TALP ("AIR" FELIRATTAL) -->
+          <rect x="32" y="144" width="324" height="30" rx="12" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+          <line x1="36" y1="162" x2="352" y2="162" stroke="#e2e8f0" stroke-width="2"/>
+          <line x1="65" y1="154" x2="98" y2="154" stroke="${cfg.c1}" stroke-width="3" stroke-linecap="round"/>
+          <text x="114" y="158" fill="${cfg.c1}" font-size="10" font-weight="900" font-family="sans-serif">AIR</text>
+        </svg>
+      `;
+    }
+
+    // 6 LÁTVÁNYOS CUSTOM MODELL (MINDENKINEK SAJÁT FESTETT MINTÁVAL A CIPŐN!)
+    const shoes = [
       {
-        id: 1,
+        id: 'stitch',
         name: 'AF1 "Stitch & Angel Ohana"',
         category: 'disney',
-        technique: '🎨 Kézzel Festett + 🧵 Hímzett Virágok',
         price: 54990,
-        badge: '🔥 Legnépszerűbb',
-        desc: 'Kézzel festett Stitch és Angel karakterek a cipő külső oldalán, hímzett trópusi hibiszkusz virágokkal és pasztell kék-rózsaszín pipával.',
-        img: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=800&q=80'
+        badge: '🔥 TikTok #1',
+        tech: '🎨 Festett Stitch & Angel + 🧵 Hímzett Virágok',
+        c1: '#0ea5e9',
+        c2: '#ec4899',
+        heelText: 'OHANA',
+        desc: 'Kézzel festett Stitch és Angel motívum, pasztell kék-pink színátmenetes pipával és varrott trópusi hibiszkusz virágokkal.',
+        artOverlay: `
+          <circle cx="155" cy="102" r="22" fill="#38bdf8" opacity="0.85"/>
+          <ellipse cx="136" cy="82" rx="8" ry="18" transform="rotate(-28 136 82)" fill="#ec4899"/>
+          <ellipse cx="174" cy="82" rx="8" ry="18" transform="rotate(28 174 82)" fill="#ec4899"/>
+          <circle cx="147" cy="99" r="4.5" fill="#0f172a"/>
+          <circle cx="163" cy="99" r="4.5" fill="#0f172a"/>
+          <ellipse cx="155" cy="106" rx="6" ry="4" fill="#1e3a8a"/>
+          <text x="275" y="128" font-size="22">🌺</text>
+          <text x="100" y="95" font-size="16">✨</text>
+        `
       },
       {
-        id: 2,
-        name: 'AF1 "Grincs Ellopja a Karácsonyt"',
+        id: 'grinch',
+        name: 'AF1 "Grinch Stole Xmas"',
         category: 'xmas',
-        technique: '🎄 Limitált Karácsonyi Festés + Hímzés',
         price: 58990,
-        badge: '🎄 Karácsonyi VIP',
-        desc: 'Ünnepi különkiadás! Részletgazdag Grincs portré Mikulás-sapkában, hímzett hópelyhekkel és piros-arany selyemfűzővel.',
-        img: 'https://images.unsplash.com/photo-1600269452121-4f2416e55c28?auto=format&fit=crop&w=800&q=80'
+        badge: '🎄 Karácsonyi Drop',
+        tech: '🎄 Neon-Zöld Festés + 🧵 Hímzett Hópelyhek',
+        c1: '#84cc16',
+        c2: '#dc2626',
+        heelText: 'GRINCH',
+        desc: 'Limitált karácsonyi kiadás! Kézzel festett Grincs szemek és vigyor, piros Mikulás-sapka díszítés és hímzett hópelyhek.',
+        artOverlay: `
+          <circle cx="155" cy="102" r="23" fill="#84cc16" opacity="0.9"/>
+          <polygon points="138,84 176,84 160,60" fill="#dc2626"/>
+          <circle cx="160" cy="58" r="6" fill="#ffffff"/>
+          <ellipse cx="147" cy="98" rx="5" ry="3.5" fill="#fde047" stroke="#000" stroke-width="1"/>
+          <ellipse cx="163" cy="98" rx="5" ry="3.5" fill="#fde047" stroke="#000" stroke-width="1"/>
+          <path d="M143,110 Q155,118 167,110" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+          <text x="275" y="128" font-size="20">❄️</text>
+          <text x="98" y="96" font-size="18">🎄</text>
+        `
       },
       {
-        id: 3,
-        name: 'AF1 "Anime Legends" (Naruto / One Piece)',
+        id: 'naruto',
+        name: 'AF1 "Naruto & Akatsuki Cloud"',
         category: 'anime',
-        technique: '⚡ Manga Panel Festés + Hímzett Felhők',
         price: 62990,
-        badge: '⚡ Prémium Custom',
-        desc: 'Vízálló fekete-fehér és színes anime karakterfestés a cipő két oldalán, aprólékosan varrott japán felhő motívumokkal.',
-        img: 'https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=800&q=80'
+        badge: '⚡ Anime VIP',
+        tech: '⚡ Festett Sharingan + 🧵 Hímzett Vörös Felhők',
+        c1: '#ef4444',
+        c2: '#111827',
+        heelText: 'SHINOBI',
+        desc: 'Eredeti selyemcérnával hímzett vörös Akatsuki felhők a cipő oldalán, tűéles kézzel festett anime részletekkel.',
+        artOverlay: `
+          <circle cx="155" cy="100" r="20" fill="#dc2626" stroke="#000000" stroke-width="3"/>
+          <circle cx="155" cy="100" r="6" fill="#000000"/>
+          <circle cx="145" cy="93" r="3" fill="#000000"/>
+          <circle cx="165" cy="93" r="3" fill="#000000"/>
+          <circle cx="155" cy="111" r="3" fill="#000000"/>
+          <text x="272" y="130" font-size="20">☁️</text>
+          <text x="98" y="96" font-size="18">🔥</text>
+        `
       },
       {
-        id: 4,
-        name: 'AF1 "Disney Magic & Minnie"',
-        category: 'disney',
-        technique: '✨ Kézzel Festett + Csillogó Arany Kontúr',
-        price: 49990,
-        badge: '✨ Ajándék Kedvenc',
-        desc: 'Klasszikus Disney hangulat meleg arany és púder-rózsaszín árnyalatokban, kézzel festett karakterrel és arany sarokhímzéssel.',
-        img: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=800&q=80'
-      },
-      {
-        id: 5,
-        name: 'AF1 "Sakura & Cartoon" Hímzett',
+        id: 'sakura',
+        name: 'AF1 "Sakura Blossom" Hímzett',
         category: 'anime',
-        technique: '🧵 100% Gépi & Kézi Prémium Hímzés',
         price: 45990,
-        badge: '🌸 Finom Hímzés',
-        desc: 'Elegáns, letisztult Air Force 1, oldalán sűrű selyemcérnával varrott cseresznyevirág ágakkal és választható mini rajzfilm-sziluettel.',
-        img: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=800&q=80'
+        badge: '🌸 100% Hímzett',
+        tech: '🧵 Sűrű Gépi & Kézi Cseresznyevirág Hímzés',
+        c1: '#f472b6',
+        c2: '#db2777',
+        heelText: 'SAKURA',
+        desc: 'Letisztult, csajos bestseller: valódi domború selyemhímzéssel varrott japán cseresznyevirág ágak és rózsaszín pipa.',
+        artOverlay: `
+          <path d="M95,125 Q150,85 215,98" fill="none" stroke="#78350f" stroke-width="3" stroke-linecap="round"/>
+          <text x="125" y="105" font-size="22">🌸</text>
+          <text x="165" y="98" font-size="24">🌸</text>
+          <text x="272" y="128" font-size="20">🌸</text>
+        `
       },
       {
-        id: 6,
-        name: 'AF1 "Disney Lion King & Bambi" Gold',
+        id: 'mickey',
+        name: 'AF1 "Disney Gold & Minnie"',
         category: 'disney',
-        technique: '👑 Kézzel Festett Mesés Kollekció',
+        price: 49990,
+        badge: '✨ Disney Classic',
+        tech: '👑 Arany-Rózsaszín Festés + Masni Hímzés',
+        c1: '#eab308',
+        c2: '#ec4899',
+        heelText: 'MAGIC',
+        desc: 'Ikonikus Disney sziluett csillogó arany és pink festéssel, a sarokrészen hímzett masnival és csillagokkal.',
+        artOverlay: `
+          <circle cx="155" cy="104" r="16" fill="#111827"/>
+          <circle cx="141" cy="88" r="10" fill="#111827"/>
+          <circle cx="169" cy="88" r="10" fill="#111827"/>
+          <path d="M145,86 L165,86 L155,94 Z" fill="#ec4899"/>
+          <text x="274" y="128" font-size="20">✨</text>
+          <text x="98" y="96" font-size="18">👑</text>
+        `
+      },
+      {
+        id: 'onepiece',
+        name: 'AF1 "Gear 5 Luffy & Lightning"',
+        category: 'anime',
         price: 64990,
         badge: '👑 Full Custom',
-        desc: 'A legmagasabb részletességű mesés kiadásunk: arany-krém színátmenetes pipa és mindkét cipőn egyedi Disney jelenet.',
-        img: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=800&q=80'
+        tech: '💜 Lila-Arany Villám Festés + Hímzett Kontúr',
+        c1: '#a855f7',
+        c2: '#facc15',
+        heelText: 'GEAR 5',
+        desc: 'Full Custom kivitel: mindkét cipőn egyedi anime jelenet, neon-lila villámokkal és sötétben fluoreszkáló kontúrokkal.',
+        artOverlay: `
+          <circle cx="155" cy="100" r="20" fill="#facc15" opacity="0.9"/>
+          <path d="M135,100 L175,100" stroke="#dc2626" stroke-width="4"/>
+          <text x="144" y="108" font-size="22">⚡</text>
+          <text x="274" y="128" font-size="20">🔥</text>
+        `
       }
     ];
 
     let cart = [];
     let couponActive = false;
 
-    function renderProducts(filter = 'all') {
-      const grid = document.getElementById('productGrid');
-      const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
+    // Hero cipő kirajzolása
+    document.getElementById('heroShoePreview').innerHTML = renderCustomAF1SVG(shoes[0]);
 
-      grid.innerHTML = filtered.map(p => {
-        const displayPrice = couponActive ? p.price - 5000 : p.price;
+    function renderGrid(filter = 'all') {
+      const grid = document.getElementById('shoeGrid');
+      const list = filter === 'all' ? shoes : shoes.filter(s => s.category === filter);
+
+      grid.innerHTML = list.map(s => {
+        const finalP = couponActive ? s.price - 5000 : s.price;
         return `
-          <div class="boutique-card rounded-3xl p-4 flex flex-col justify-between">
+          <div class="street-card rounded-3xl p-5 flex flex-col justify-between">
             <div>
-              <div class="relative rounded-2xl overflow-hidden aspect-[4/3] mb-3.5 bg-[#F4EFE6]">
-                <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
-                <span class="absolute top-3 left-3 bg-white/95 text-[#2C221E] text-[10px] font-extrabold px-3 py-1 rounded-full shadow border border-[#D4AF37]/50">
-                  ${p.badge}
+              <!-- LÁTVÁNYOS MINTA-GRAFIKA A CIPŐN -->
+              <div class="relative rounded-2xl bg-gradient-to-b from-white/10 to-black/60 p-4 mb-4 border border-white/10 overflow-hidden">
+                <span class="absolute top-3 left-3 bg-black/80 text-yellow-400 text-[10px] font-black uppercase px-3 py-1 rounded-full border border-yellow-400/40">
+                  ${s.badge}
                 </span>
-                ${couponActive ? `<span class="absolute bottom-3 left-3 bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full">-5 000 Ft Aktív!</span>` : ''}
+                ${couponActive ? `<span class="absolute top-3 right-3 bg-emerald-500 text-black text-[10px] font-black px-2.5 py-1 rounded-full">-5 000 Ft!</span>` : ''}
+                <div class="pt-4 pb-1 hover:scale-105 transition duration-300">
+                  ${renderCustomAF1SVG(s)}
+                </div>
               </div>
 
-              <span class="text-[11px] font-bold text-[#9A7B2C] block">${p.technique}</span>
-              <h3 class="serif-title text-2xl font-bold text-[#2C221E] mt-0.5">${p.name}</h3>
-              <p class="text-xs text-[#5C4D46] mt-1.5 leading-relaxed">${p.desc}</p>
+              <span class="text-[11px] font-extrabold text-cyan-400 block">${s.tech}</span>
+              <h3 class="street-font text-xl font-extrabold text-white mt-0.5">${s.name}</h3>
+              <p class="text-xs text-gray-300 mt-1.5 leading-relaxed">${s.desc}</p>
             </div>
 
-            <div class="mt-4 pt-3.5 border-t border-[#D4AF37]/25">
+            <div class="mt-4 pt-3.5 border-t border-white/10">
               <div class="flex items-center justify-between mb-3">
                 <div>
-                  <span class="text-[10px] text-[#7A6A63] uppercase font-bold block">Ár (AF1 cipővel együtt):</span>
-                  ${couponActive ? `<span class="text-xs text-gray-400 line-through mr-1">${p.price.toLocaleString('hu-HU')} Ft</span>` : ''}
-                  <span class="text-xl font-black text-[#2C221E]">${displayPrice.toLocaleString('hu-HU')} Ft</span>
+                  <span class="text-[10px] text-gray-400 uppercase font-bold block">Komplett ár (AF1 cipővel):</span>
+                  ${couponActive ? `<span class="text-xs text-gray-500 line-through mr-1">${s.price.toLocaleString('hu-HU')} Ft</span>` : ''}
+                  <span class="text-xl font-black text-yellow-400">${finalP.toLocaleString('hu-HU')} Ft</span>
                 </div>
 
-                <!-- Méretválasztó -->
                 <div>
-                  <label class="text-[10px] font-bold text-[#7A6A63] block">Méret:</label>
-                  <select id="size-${p.id}" class="px-2.5 py-1.5 rounded-lg border border-[#D4AF37]/50 bg-white text-xs font-bold">
+                  <label class="text-[10px] font-bold text-gray-400 block">Méret:</label>
+                  <select id="size-${s.id}" class="px-2.5 py-1.5 rounded-xl bg-black border border-white/20 text-xs font-bold text-white">
                     <option value="36">EU 36</option>
                     <option value="37">EU 37</option>
                     <option value="38" selected>EU 38</option>
@@ -471,12 +560,13 @@
                     <option value="41">EU 41</option>
                     <option value="42">EU 42</option>
                     <option value="43">EU 43</option>
+                    <option value="44">EU 44</option>
                   </select>
                 </div>
               </div>
 
-              <button onclick="addToCart(${p.id})" class="w-full py-3 rounded-full font-bold text-xs bg-[#2C221E] text-[#FAF7F2] hover:bg-[#43352F] active:scale-95 transition flex items-center justify-center gap-1.5 shadow-md">
-                <span>🛍️</span> Kosárba teszem
+              <button onclick="addToCart('${s.id}')" class="w-full py-3.5 rounded-2xl font-black text-xs sm:text-sm bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:brightness-110 active:scale-95 transition shadow-lg">
+                🛒 Kosárba teszem
               </button>
             </div>
           </div>
@@ -485,56 +575,98 @@
     }
 
     function filterShoes(cat) {
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.className = 'filter-btn bg-white border border-[#D4AF37]/40 text-[#2C221E] text-xs font-bold px-4 py-2 rounded-full hover:bg-[#FFF8E7] transition';
+      document.querySelectorAll('.f-btn').forEach(b => {
+        b.className = 'f-btn bg-white/10 text-white text-xs font-bold px-3.5 py-2 rounded-xl hover:bg-white/20 transition';
       });
-      document.getElementById('filter-' + cat).className = 'filter-btn bg-[#2C221E] text-white text-xs font-bold px-4 py-2 rounded-full transition shadow';
-      renderProducts(cat);
+      document.getElementById('btn-' + cat).className = 'f-btn bg-yellow-400 text-black text-xs font-black px-4 py-2 rounded-xl transition shadow';
+      renderGrid(cat);
     }
 
-    // 2. KOSÁR ÉS KUPON KEZELÉS
-    function addToCart(productId) {
-      const prod = products.find(p => p.id === productId);
-      const size = document.getElementById('size-' + productId).value;
-      cart.push({ name: prod.name, size: size, price: prod.price });
-      updateCartUI();
-      toggleCart(true);
+    // =========================================================
+    // 2. ÉLŐ 3D/2D CIPŐ-TERVEZŐ STÚDIÓ LOGIKA
+    // =========================================================
+    let customConfig = {
+      id: 'live',
+      c1: '#38bdf8',
+      c2: '#ec4899',
+      heelText: 'LULU',
+      themeName: 'Stitch & Ohana',
+      artOverlay: shoes[0].artOverlay
+    };
+
+    function setCustomTheme(themeKey) {
+      if (themeKey === 'stitch') {
+        customConfig.artOverlay = shoes[0].artOverlay;
+        customConfig.c1 = '#38bdf8'; customConfig.c2 = '#ec4899';
+        customConfig.themeName = 'Stitch & Ohana';
+      } else if (themeKey === 'grinch') {
+        customConfig.artOverlay = shoes[1].artOverlay;
+        customConfig.c1 = '#84cc16'; customConfig.c2 = '#dc2626';
+        customConfig.themeName = 'Grincs Xmas';
+      } else if (themeKey === 'anime') {
+        customConfig.artOverlay = shoes[2].artOverlay;
+        customConfig.c1 = '#ef4444'; customConfig.c2 = '#111827';
+        customConfig.themeName = 'Anime / Naruto';
+      } else {
+        customConfig.artOverlay = shoes[3].artOverlay;
+        customConfig.c1 = '#f472b6'; customConfig.c2 = '#db2777';
+        customConfig.themeName = 'Sakura Hímzett';
+      }
+      updateLiveCustomShoe();
     }
 
-    function submitCustomShoe(e) {
-      e.preventDefault();
-      const size = document.getElementById('customSize').value;
-      const price = parseInt(document.getElementById('customStyle').value);
-      const idea = document.getElementById('customIdea').value;
+    function setCustomColor(c1, c2) {
+      customConfig.c1 = c1;
+      customConfig.c2 = c2;
+      updateLiveCustomShoe();
+    }
+
+    function updateLiveCustomShoe() {
+      const txt = document.getElementById('customHeelInput').value.trim().toUpperCase() || 'LULU';
+      customConfig.heelText = txt;
+      document.getElementById('liveCustomShoe').innerHTML = renderCustomAF1SVG(customConfig);
+    }
+
+    function addCustomLabToCart() {
+      const size = document.getElementById('customLabSize').value;
       cart.push({
-        name: `Egyedi Tervezésű AF1 (${idea.substring(0, 28)}...)`,
+        name: `Custom Lab AF1 (${customConfig.themeName} • "${customConfig.heelText}")`,
         size: size,
-        price: price
+        price: 59990
       });
-      document.getElementById('customIdea').value = '';
       updateCartUI();
       toggleCart(true);
     }
 
-    function removeFromCart(idx) {
-      cart.splice(idx, 1);
+    // =========================================================
+    // 3. KOSÁR & KARÁCSONYI POP-UP
+    // =========================================================
+    function addToCart(shoeId) {
+      const s = shoes.find(x => x.id === shoeId);
+      const size = document.getElementById('size-' + shoeId).value;
+      cart.push({ name: s.name, size: size, price: s.price });
+      updateCartUI();
+      toggleCart(true);
+    }
+
+    function removeFromCart(i) {
+      cart.splice(i, 1);
       updateCartUI();
     }
 
     function updateCartUI() {
       document.getElementById('cartCount').innerText = cart.length;
       const list = document.getElementById('cartItemsList');
-
       if (cart.length === 0) {
-        list.innerHTML = `<p class="text-xs text-[#7A6A63] text-center py-8">A kosarad jelenleg üres. Válassz egy egyedi Lulu cipőt!</p>`;
+        list.innerHTML = `<p class="text-xs text-gray-400 text-center py-8">A kosarad még üres. Válassz egy egyedi Lulu cipőt!</p>`;
       } else {
-        list.innerHTML = cart.map((item, i) => `
-          <div class="bg-white p-3 rounded-2xl border border-[#D4AF37]/30 flex items-center justify-between">
+        list.innerHTML = cart.map((item, idx) => `
+          <div class="bg-white/5 p-3 rounded-2xl border border-white/10 flex items-center justify-between">
             <div>
-              <h4 class="font-bold text-xs text-[#2C221E]">${item.name}</h4>
-              <span class="text-[11px] text-[#7A6A63]">Méret: EU ${item.size} • ${item.price.toLocaleString('hu-HU')} Ft</span>
+              <h4 class="font-bold text-xs text-white">${item.name}</h4>
+              <span class="text-[11px] text-gray-400">Méret: EU ${item.size} • ${item.price.toLocaleString('hu-HU')} Ft</span>
             </div>
-            <button onclick="removeFromCart(${i})" class="text-xs text-red-700 font-bold px-2">✕</button>
+            <button onclick="removeFromCart(${idx})" class="text-xs text-red-400 font-bold px-2">✕</button>
           </div>
         `).join('');
       }
@@ -550,15 +682,11 @@
     }
 
     function toggleCart(forceOpen = false) {
-      const drawer = document.getElementById('cartDrawer');
-      if (forceOpen) {
-        drawer.classList.remove('hidden');
-      } else {
-        drawer.classList.toggle('hidden');
-      }
+      const dr = document.getElementById('cartDrawer');
+      if (forceOpen) dr.classList.remove('hidden');
+      else dr.classList.toggle('hidden');
     }
 
-    // 3. KARÁCSONYI FELUGRÓ ABLAK (POP-UP)
     function showPromoModal() {
       document.getElementById('promoModal').classList.remove('hidden');
     }
@@ -568,31 +696,29 @@
     function activateCoupon() {
       couponActive = true;
       closePromoModal();
-      renderProducts();
+      renderGrid();
       updateCartUI();
-      confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } });
+      confetti({ particleCount: 90, spread: 75, origin: { y: 0.6 } });
     }
 
     function submitCheckout(e) {
       e.preventDefault();
-      if (cart.length === 0) {
-        alert('Először tegyél egy cipőt a kosárba!');
-        return;
-      }
-      confetti({ particleCount: 110, spread: 80, origin: { y: 0.6 } });
-      alert('🎄 Köszönjük a rendelésed a Lulu Webshopban! A visszaigazolást és a fizetési részleteket elküldtük az e-mail címedre.');
+      if (cart.length === 0) { alert('Először tegyél egy cipőt a kosárba!'); return; }
+      confetti({ particleCount: 120, spread: 85, origin: { y: 0.6 } });
+      alert('🎄 Köszönjük a rendelésed a Lulu Kicks-nél! A visszaigazolást elküldtük az e-mail címedre.');
       cart = [];
       updateCartUI();
       toggleCart();
     }
 
-    // Oldalbetöltéskor termékek kirajzolása + 2.5 mp után Karácsonyi Pop-up
-    renderProducts();
-    setTimeout(() => {
-      if (!couponActive) showPromoModal();
-    }, 2500);
+    // Kezdeti betöltés
+    renderGrid();
+    updateLiveCustomShoe();
+    setTimeout(() => { if (!couponActive) showPromoModal(); }, 2200);
 
-    // 4. FINOM ARANY ÉS FEHÉR HÓSZÁLLINGÓZÁS
+    // =========================================================
+    // 4. HÓFEHÉR HÓESÉS A SÖTÉT HÁTTÉREN
+    // =========================================================
     const sCanvas = document.getElementById('snowCanvas');
     const sCtx = sCanvas.getContext('2d');
     let w, h, flakes = [];
@@ -600,25 +726,26 @@
     function initSnow() {
       w = sCanvas.width = window.innerWidth;
       h = sCanvas.height = window.innerHeight;
-      flakes = Array.from({ length: 45 }, (_, i) => ({
+      flakes = Array.from({ length: 50 }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        r: Math.random() * 2.5 + 1,
-        d: Math.random() * 0.6 + 0.25,
-        gold: i % 3 === 0
+        r: Math.random() * 2.4 + 0.8,
+        d: Math.random() * 0.7 + 0.3
       }));
     }
 
     function drawSnow() {
       sCtx.clearRect(0, 0, w, h);
+      sCtx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+      sCtx.beginPath();
       for (let f of flakes) {
-        sCtx.beginPath();
+        sCtx.moveTo(f.x, f.y);
         sCtx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-        sCtx.fillStyle = f.gold ? 'rgba(212, 175, 55, 0.45)' : 'rgba(212, 195, 165, 0.55)';
-        sCtx.fill();
-
+      }
+      sCtx.fill();
+      for (let f of flakes) {
         f.y += f.d;
-        f.x += Math.sin(f.y * 0.01) * 0.25;
+        f.x += Math.sin(f.y * 0.01) * 0.3;
         if (f.y > h) { f.y = -5; f.x = Math.random() * w; }
       }
       requestAnimationFrame(drawSnow);
