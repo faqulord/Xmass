@@ -3,479 +3,356 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>XmasBox.hu – Karácsonyi Ajándékdobozok & Fődíj Kerék</title>
+  <title>Lulu Webshop – Egyedi Festett & Hímzett Air Force 1</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #260609;
-      color: #fffbeb;
+      background-color: #FAF7F2;
+      color: #2C221E;
       overflow-x: hidden;
       -webkit-tap-highlight-color: transparent;
     }
-    .holiday-serif {
-      font-family: 'Playfair Display', serif;
+    .serif-title {
+      font-family: 'Cormorant Garamond', serif;
     }
-    .cozy-bg {
-      background-image: 
-        linear-gradient(180deg, rgba(38, 6, 9, 0.72) 0%, rgba(69, 10, 15, 0.65) 35%, rgba(28, 4, 7, 0.94) 100%),
-        url('https://images.unsplash.com/photo-1543589077-47d81606c1bf?auto=format&fit=crop&w=1400&q=85');
-      background-size: cover;
-      background-position: center top;
-      background-attachment: fixed;
+    .gold-gradient {
+      background: linear-gradient(135deg, #D4AF37 0%, #F3E5AB 50%, #AA7C11 100%);
     }
-    .cream-card {
-      background: linear-gradient(180deg, #fffdf9 0%, #fef3c7 100%);
-      color: #450a0a;
-      border: 2px solid #f59e0b;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 30px rgba(245, 158, 11, 0.3);
+    .gold-border {
+      border: 1.5px solid rgba(212, 175, 55, 0.45);
     }
-    .ruby-card {
-      background: linear-gradient(165deg, rgba(127, 29, 29, 0.92) 0%, rgba(55, 8, 12, 0.96) 100%);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1.5px solid rgba(251, 191, 36, 0.45);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    .boutique-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 175, 55, 0.28);
+      box-shadow: 0 12px 32px rgba(44, 34, 30, 0.06);
+      transition: all 0.3s ease;
     }
-    @keyframes bulbGlow {
-      0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 6px #fde047); }
-      50% { opacity: 1; filter: drop-shadow(0 0 16px #facc15); }
+    .boutique-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px rgba(212, 175, 55, 0.18);
+      border-color: rgba(212, 175, 55, 0.7);
     }
-    .warm-bulb { animation: bulbGlow 2.2s infinite ease-in-out; }
-    .warm-bulb-2 { animation: bulbGlow 2.2s infinite 1.1s ease-in-out; }
-
-    .gift-lid {
-      transition: all 0.75s cubic-bezier(0.34, 1.56, 0.64, 1);
-      transform-origin: center bottom;
-    }
-    .lid-open {
-      transform: translateY(-95px) rotate(-14deg) scale(1.06);
-      opacity: 0;
-    }
-    @keyframes boxFloat {
+    @keyframes floatSlow {
       0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-7px); }
+      50% { transform: translateY(-6px); }
     }
-    .floating-gift { animation: boxFloat 3.2s ease-in-out infinite; }
-
-    @keyframes ticker {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    .animate-ticker {
-      display: flex;
-      width: max-content;
-      animation: ticker 28s linear infinite;
-    }
-    .wheel-flapper {
-      transform-origin: 50% 10%;
-      transition: transform 0.06s ease-out;
-    }
-    .flapper-hit {
-      transform: rotate(-28deg);
-    }
+    .floating { animation: floatSlow 3.5s ease-in-out infinite; }
   </style>
 </head>
-<body class="min-h-screen cozy-bg relative pb-20">
+<body class="min-h-screen relative pb-20">
 
-  <!-- FINOM HÓESÉS -->
+  <!-- FINOM ARANY-FEHÉR HÓSZÁLLINGÓZÁS HÁTTÉR -->
   <canvas id="snowCanvas" class="fixed inset-0 pointer-events-none z-10"></canvas>
 
-  <!-- FELSŐ MELEG KARÁCSONYI ÉGŐSOR -->
-  <div class="relative z-20 w-full overflow-hidden pointer-events-none h-7 flex justify-around items-start px-2">
-    <div class="w-3 h-4 rounded-full bg-amber-300 warm-bulb -mt-1"></div>
-    <div class="w-3 h-4 rounded-full bg-red-400 warm-bulb-2 -mt-1"></div>
-    <div class="w-3 h-4 rounded-full bg-amber-200 warm-bulb -mt-1"></div>
-    <div class="w-3 h-4 rounded-full bg-emerald-400 warm-bulb-2 -mt-1"></div>
-    <div class="w-3 h-4 rounded-full bg-amber-300 warm-bulb -mt-1"></div>
-    <div class="w-3 h-4 rounded-full bg-red-400 warm-bulb-2 -mt-1"></div>
-    <div class="w-3 h-4 rounded-full bg-amber-200 warm-bulb -mt-1"></div>
-    <div class="w-3 h-4 rounded-full bg-amber-300 warm-bulb-2 -mt-1"></div>
-    <div class="w-3 h-4 rounded-full bg-red-400 warm-bulb -mt-1"></div>
-    <div class="w-3 h-4 rounded-full bg-amber-200 warm-bulb-2 -mt-1"></div>
+  <!-- FELSŐ KARÁCSONYI HIRDETŐSÁV -->
+  <div class="relative z-30 bg-[#2C221E] text-[#FAF7F2] text-xs py-2 px-4 text-center font-medium tracking-wide border-b border-[#D4AF37]/40">
+    🎄 <span class="text-[#F3E5AB] font-bold">Karácsonyi Rendelések:</span> Minden cipő kézzel készül! Használd a <b class="underline text-[#F3E5AB] cursor-pointer" onclick="showPromoModal()">LULUXMAS</b> kódot <b>-5 000 Ft</b> kedvezményért!
   </div>
 
-  <!-- ÉLŐ NYERTESEK SÁV -->
-  <div class="relative z-20 bg-red-950/85 border-y border-amber-300/30 py-1.5 overflow-hidden backdrop-blur-md">
-    <div class="animate-ticker flex space-x-10 text-xs font-semibold text-amber-100">
-      <span>🎄 <b class="text-amber-300">Kovács Bence (Bp)</b> most pörgette ki: 2x Steam Játék + <b class="text-white">-1 500 Ft VIP Kupon</b></span>
-      <span>🔥 <b class="text-amber-300">Tóth Eszter (Győr)</b> kipörgette a keréken: <b class="text-yellow-300">25 000 Ft eMAG Ajándékkártya!</b></span>
-      <span>🎁 <b class="text-amber-300">Szabó Dávid (Debrecen)</b> most bontotta ki: 4x VIP Steam Játék + <b class="text-white">-1 500 Ft Kupon</b></span>
-      <span>🎄 <b class="text-amber-300">Kovács Bence (Bp)</b> most pörgette ki: 2x Steam Játék + <b class="text-white">-1 500 Ft VIP Kupon</b></span>
-    </div>
-  </div>
-
-  <!-- FŐ KONTÉNER -->
-  <div class="relative z-20 max-w-5xl mx-auto px-4 pt-3">
-
-    <!-- FEJLÉC -->
-    <header class="flex items-center justify-between mb-6">
-      <div class="flex items-center gap-3">
-        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-300 to-amber-500 flex items-center justify-center shadow-lg border border-white/50">
-          <svg class="w-6 h-6 text-red-950" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2a2 2 0 0 0-2 2v.29C7.12 5.14 5 7.82 5 11v5l-2 2v1h18v-1l-2-2v-5c0-3.18-2.12-5.86-5-6.71V4a2 2 0 0 0-2-2zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3z"/>
-          </svg>
+  <!-- NAVIGÁCIÓS FEJLÉC -->
+  <header class="sticky top-0 z-30 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#D4AF37]/25 px-4 py-3.5">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <!-- Lulu Logó -->
+      <a href="#" class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-full gold-gradient flex items-center justify-center shadow-md">
+          <span class="serif-title font-bold text-2xl text-[#2C221E] leading-none">L</span>
         </div>
         <div>
-          <span class="holiday-serif text-xl sm:text-2xl font-black tracking-wide text-amber-200 block leading-none">XmasBox.hu</span>
-          <span class="text-[11px] text-amber-100/90 font-semibold">Ünnepi Ajándékdobozok & Fődíj Kerék</span>
+          <span class="serif-title text-2xl sm:text-3xl font-bold tracking-wide text-[#2C221E] block leading-none">Lulu</span>
+          <span class="text-[9px] uppercase tracking-[0.2em] text-[#9A7B2C] font-bold block mt-0.5">Custom Sneakers</span>
         </div>
-      </div>
+      </a>
 
-      <button onclick="openExperience('Arany Adventi Doboz', 2, 4990)" class="bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 text-red-950 text-xs font-extrabold px-4 py-2.5 rounded-full shadow-xl border border-white hover:scale-105 active:scale-95 transition">
-        🎰 Ingyen Próba-Pörgetés
+      <!-- Gyorsmenü -->
+      <nav class="hidden md:flex items-center gap-7 text-xs font-bold uppercase tracking-wider text-[#5C4D46]">
+        <a href="#kollekcio" class="hover:text-[#9A7B2C] transition">Kollekció</a>
+        <a href="#egyedi-tervezes" class="hover:text-[#9A7B2C] transition">Egyedi Tervezés</a>
+        <a href="#rolunk" class="hover:text-[#9A7B2C] transition">Minőség & Moshatóság</a>
+      </nav>
+
+      <!-- Jobb oldali gombok: Kupon + Kosár -->
+      <div class="flex items-center gap-2.5">
+        <button onclick="showPromoModal()" class="bg-[#FFF8E7] border border-[#D4AF37] text-[#8A6615] text-xs font-bold px-3 py-2 rounded-full hover:bg-[#F3E5AB]/50 transition flex items-center gap-1">
+          <span>🎁</span> <span class="hidden sm:inline">-5 000 Ft Kupon</span>
+        </button>
+
+        <button onclick="toggleCart()" class="relative bg-[#2C221E] text-white px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 shadow-md active:scale-95 transition">
+          <span>🛍️</span>
+          <span>Kosár</span>
+          <span id="cartCount" class="bg-[#D4AF37] text-[#2C221E] font-extrabold text-[10px] w-5 h-5 rounded-full flex items-center justify-center">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SZEKCIÓ -->
+  <section class="relative z-20 max-w-6xl mx-auto px-4 pt-6 pb-10">
+    <div class="boutique-card rounded-3xl p-6 sm:p-10 gold-border relative overflow-hidden bg-gradient-to-br from-white via-[#FAF7F2] to-[#FFF5E1]">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        
+        <!-- Bal oldal: Szöveg -->
+        <div class="md:col-span-7 text-center md:text-left space-y-4">
+          <div class="inline-flex items-center gap-2 bg-[#FFF8E7] border border-[#D4AF37]/50 text-[#8A6615] text-xs font-bold px-3.5 py-1.5 rounded-full">
+            <span>✨</span> 100% Eredeti Nike Air Force 1 • Kézzel Festve & Hímezve
+          </div>
+
+          <h1 class="serif-title text-4xl sm:text-6xl font-bold text-[#2C221E] leading-[1.1]">
+            Mesés karakterek, <br>
+            <span class="italic text-[#9A7B2C]">rád szabott</span> lépések.
+          </h1>
+
+          <p class="text-sm sm:text-base text-[#5C4D46] leading-relaxed max-w-xl mx-auto md:mx-0">
+            Üdvözlünk a <b>Lulu Webshopban</b>! Minden pár cipőnk egy eredeti, hófehér Nike Air Force 1 alapra készül, vízálló prémium bőrfestékkel és aprólékos gépi/kézi hímzéssel. Válassz a <b class="text-[#2C221E]">Stitch, Grincs, Disney és Anime</b> kiadásaink közül, vagy kérj teljesen egyedi karaktert!
+          </p>
+
+          <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3 pt-2">
+            <a href="#kollekcio" class="w-full sm:w-auto text-center px-7 py-3.5 rounded-full font-bold text-sm bg-[#2C221E] text-[#FAF7F2] shadow-lg hover:bg-[#43352F] transition">
+              👟 Kollekció Megtekintése
+            </a>
+            <a href="#egyedi-tervezes" class="w-full sm:w-auto text-center px-6 py-3.5 rounded-full font-bold text-sm bg-white border-2 border-[#D4AF37] text-[#2C221E] hover:bg-[#FFF8E7] transition">
+              🎨 Saját Karaktert Kérek
+            </a>
+          </div>
+
+          <!-- Bizalmi pontok -->
+          <div class="grid grid-cols-3 gap-2 pt-4 border-t border-[#D4AF37]/25 text-center md:text-left">
+            <div>
+              <span class="text-xs font-extrabold text-[#2C221E] block">💧 100% Vízálló</span>
+              <span class="text-[11px] text-[#7A6A63]">Angelus bőrfesték</span>
+            </div>
+            <div>
+              <span class="text-xs font-extrabold text-[#2C221E] block">🧵 Prémium Hímzés</span>
+              <span class="text-[11px] text-[#7A6A63]">Tartós selyemcérna</span>
+            </div>
+            <div>
+              <span class="text-xs font-extrabold text-[#2C221E] block">🎄 Díszdobozban</span>
+              <span class="text-[11px] text-[#7A6A63]">Készen a fa alá</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Jobb oldal: Kiemelt Sneaker Kép Keretben -->
+        <div class="md:col-span-5 relative">
+          <div class="relative mx-auto max-w-sm rounded-3xl p-3 bg-white shadow-2xl border-2 border-[#D4AF37]/50 floating">
+            <div class="relative rounded-2xl overflow-hidden aspect-[4/3] bg-[#F4EFE6]">
+              <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=900&q=85" alt="Lulu Custom Air Force 1" class="w-full h-full object-cover">
+              <div class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-[#2C221E] text-[11px] font-extrabold px-3 py-1 rounded-full shadow border border-[#D4AF37]">
+                ⭐ Karácsonyi Bestseller
+              </div>
+              <div class="absolute bottom-3 right-3 bg-[#2C221E]/90 text-[#F3E5AB] text-xs font-bold px-3 py-1 rounded-full">
+                45 990 Ft-tól
+              </div>
+            </div>
+            <div class="pt-3 px-1 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] uppercase tracking-wider text-[#9A7B2C] font-bold block">Festett + Hímzett Kiadás</span>
+                <h3 class="serif-title text-xl font-bold text-[#2C221E]">Lulu Signature AF1</h3>
+              </div>
+              <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">Raktáron</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- KOLLEKCIÓ & SZŰRŐ SZEKCIÓ -->
+  <section id="kollekcio" class="relative z-20 max-w-6xl mx-auto px-4 py-6">
+    <div class="text-center mb-6">
+      <span class="text-xs font-extrabold uppercase tracking-[0.2em] text-[#9A7B2C]">Kézzel Készült Műalkotások</span>
+      <h2 class="serif-title text-3xl sm:text-5xl font-bold text-[#2C221E] mt-1">Válaszd ki a kedvenc karaktered</h2>
+      <p class="text-xs sm:text-sm text-[#5C4D46] mt-1">Az ár tartalmazza az eredeti Nike Air Force 1 cipőt, az egyedi festést/hímzést és a karácsonyi díszcsomagolást.</p>
+    </div>
+
+    <!-- Kategória Szűrő Gombok -->
+    <div class="flex flex-wrap items-center justify-center gap-2 mb-8">
+      <button onclick="filterShoes('all')" id="filter-all" class="filter-btn bg-[#2C221E] text-white text-xs font-bold px-4 py-2 rounded-full transition">
+        Összes Modell (6)
       </button>
-    </header>
+      <button onclick="filterShoes('disney')" id="filter-disney" class="filter-btn bg-white border border-[#D4AF37]/40 text-[#2C221E] text-xs font-bold px-4 py-2 rounded-full hover:bg-[#FFF8E7] transition">
+        💙 Stitch & Disney
+      </button>
+      <button onclick="filterShoes('xmas')" id="filter-xmas" class="filter-btn bg-white border border-[#D4AF37]/40 text-[#2C221E] text-xs font-bold px-4 py-2 rounded-full hover:bg-[#FFF8E7] transition">
+        🎄 Grincs (Karácsonyi)
+      </button>
+      <button onclick="filterShoes('anime')" id="filter-anime" class="filter-btn bg-white border border-[#D4AF37]/40 text-[#2C221E] text-xs font-bold px-4 py-2 rounded-full hover:bg-[#FFF8E7] transition">
+        ⚡ Anime & Hímzett
+      </button>
+    </div>
 
-    <!-- MEGHITT KARÁCSONYI HERO SZEKCIÓ -->
-    <div class="text-center max-w-2xl mx-auto mb-7 px-2">
-      <div class="inline-flex items-center gap-2 bg-red-900/80 border border-amber-300/50 text-amber-200 text-xs font-bold px-4 py-1.5 rounded-full mb-3 shadow-lg backdrop-blur-sm">
-        <span>🎄</span> Garantált Steam Játékok + Karácsonyi Fődíj Kerék
+    <!-- TERMÉKRÁCS (JS TÖLTI FEL) -->
+    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </section>
+
+  <!-- EGYEDI TERVEZÉS ("TERVEZD MEG A SAJÁTOD") SZEKCIÓ -->
+  <section id="egyedi-tervezes" class="relative z-20 max-w-4xl mx-auto px-4 py-10">
+    <div class="boutique-card rounded-3xl p-6 sm:p-9 gold-border bg-gradient-to-b from-white to-[#FFF9EB]">
+      <div class="text-center max-w-xl mx-auto mb-6">
+        <span class="bg-[#FFF8E7] border border-[#D4AF37] text-[#8A6615] text-[11px] font-extrabold uppercase px-3 py-1 rounded-full">
+          🎨 100% Egyedi Megvalósítás
+        </span>
+        <h2 class="serif-title text-3xl sm:text-4xl font-bold text-[#2C221E] mt-2">
+          Álmodd meg a saját Lulu cipődet!
+        </h2>
+        <p class="text-xs sm:text-sm text-[#5C4D46] mt-1">
+          Másik mesefigurát, sorozat-karaktert, saját háziállatot vagy egyedi nevet/dátumot szeretnél a cipőre? Írd meg nekünk, és elkészítjük!
+        </p>
       </div>
-      <h1 class="holiday-serif text-3xl sm:text-5xl font-black text-white leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.85)]">
-        Bontsd ki a Karácsonyi Dobozod & <span class="text-amber-300">Pörgess a Fődíjakért!</span>
-      </h1>
-      <p class="text-sm sm:text-base text-amber-50/95 mt-2.5 leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)] font-medium">
-        Minden ünnepi díszdobozban <b>garantáltan eredeti PC / Steam játékkulcsokat</b> kapsz, ráadásul minden doboz mellé jár <b>1 INGYENES pörgetés a Nagy Karácsonyi Fődíj Keréken</b>!
+
+      <form onsubmit="submitCustomShoe(event)" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="text-xs font-bold text-[#2C221E] block mb-1">1. Válassz Méretet:</label>
+            <select id="customSize" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D4AF37]/50 bg-white text-sm font-semibold focus:outline-none">
+              <option value="36">EU 36</option>
+              <option value="37">EU 37</option>
+              <option value="38" selected>EU 38</option>
+              <option value="39">EU 39</option>
+              <option value="40">EU 40</option>
+              <option value="41">EU 41</option>
+              <option value="42">EU 42</option>
+              <option value="43">EU 43</option>
+              <option value="44">EU 44</option>
+            </select>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="text-xs font-bold text-[#2C221E] block mb-1">2. Kivitelezés Stílusa & Ára:</label>
+            <select id="customStyle" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D4AF37]/50 bg-white text-sm font-semibold focus:outline-none">
+              <option value="49990">🎨 Kézzel Festett Karakter (Oldalsó minta) – 49 990 Ft</option>
+              <option value="54990">🧵 Prémium Hímzett + Festett Kombináció – 54 990 Ft</option>
+              <option value="64990">👑 Full Custom VIP (Kétoldali karakter + Hímzett név + Swarovski/Dísz) – 64 990 Ft</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-[#2C221E] block mb-1">3. Milyen mesefigurát, karaktert vagy színeket szeretnél rá?</label>
+          <textarea id="customIdea" rows="3" required placeholder="Pl.: Szeretnék egy Stitch és Angel párost pasztell rózsaszín-kék hímzett virágokkal, a sarkára pedig a 'Lili' feliratot..." class="w-full px-4 py-3 rounded-xl border border-[#D4AF37]/50 bg-white text-sm focus:outline-none"></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-4 rounded-full font-extrabold text-sm bg-[#2C221E] text-[#F3E5AB] shadow-xl hover:bg-[#43352F] transition">
+          ✨ Egyedi Terv Hozzáadása a Kosárhoz
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- MINŐSÉG ÉS GYIK SZEKCIÓ -->
+  <section id="rolunk" class="relative z-20 max-w-6xl mx-auto px-4 py-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="boutique-card rounded-2xl p-5">
+        <span class="text-2xl">🎨</span>
+        <h3 class="serif-title text-xl font-bold text-[#2C221E] mt-2">Nem kopik le a festék?</h3>
+        <p class="text-xs text-[#5C4D46] mt-1 leading-relaxed">
+          Nem! Kizárólag eredeti amerikai <b>Angelus bőrfestéket</b> használunk, amit több réteg rugalmas, víz- és karcálló védőlakkal zárunk le. Esőben és hóban is biztonsággal hordható.
+        </p>
+      </div>
+      <div class="boutique-card rounded-2xl p-5">
+        <span class="text-2xl">🧵</span>
+        <h3 class="serif-title text-xl font-bold text-[#2C221E] mt-2">Valódi hímzés és varrás</h3>
+        <p class="text-xs text-[#5C4D46] mt-1 leading-relaxed">
+          A hímzett modelljeinken a virágok, kontúrok és karakter-elemek magas szakítószilárdságú selyemcérnával közvetlenül a bőrbe vannak varrva, így térbeli, exkluzív hatást keltenek.
+        </p>
+      </div>
+      <div class="boutique-card rounded-2xl p-5">
+        <span class="text-2xl">🎁</span>
+        <h3 class="serif-title text-xl font-bold text-[#2C221E] mt-2">Karácsonyi Garancia</h3>
+        <p class="text-xs text-[#5C4D46] mt-1 leading-relaxed">
+          Minden Lulu cipőt selyempapírba és ünnepi masnis dobozba csomagolunk. Méretprobléma esetén 14 napos rugalmas cserét biztosítunk.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="relative z-20 text-center text-xs text-[#7A6A63] border-t border-[#D4AF37]/30 pt-6 mt-8">
+    <p class="font-bold text-[#2C221E] mb-1">Lulu Webshop Magyarország – Egyedi Sneaker Stúdió</p>
+    <p>🔒 Biztonságos Apple Pay & Bankkártyás fizetés • 📦 Ingyenes Karácsonyi Díszcsomagolás • 🧾 Hivatalos E-számla</p>
+  </footer>
+
+  <!-- =========================================================
+       FELUGRÓ KARÁCSONYI KEDVEZMÉNY ABLAK (POP-UP MODAL)
+       ========================================================= -->
+  <div id="promoModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="boutique-card rounded-3xl max-w-md w-full p-6 sm:p-7 relative text-center border-2 border-[#D4AF37] bg-gradient-to-b from-[#FFFDF9] to-[#FFF3D6] shadow-2xl">
+      <button onclick="closePromoModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#2C221E]/10 text-[#2C221E] font-bold flex items-center justify-center hover:bg-[#2C221E]/20">✕</button>
+
+      <div class="w-16 h-16 rounded-full gold-gradient mx-auto flex items-center justify-center text-3xl shadow-md mb-3">
+        🎄
+      </div>
+
+      <span class="bg-[#2C221E] text-[#F3E5AB] text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full">
+        Ünnepi Lulu Ajándék
+      </span>
+
+      <h3 class="serif-title text-3xl font-bold text-[#2C221E] mt-2">
+        5 000 Ft Karácsonyi Kedvezmény!
+      </h3>
+
+      <p class="text-xs sm:text-sm text-[#5C4D46] mt-2 leading-relaxed">
+        Rendeld meg egyedi festett vagy hímzett <b>Nike Air Force 1</b> cipődet a karácsonyfa alá! Aktiváld az ünnepi kuponodat most, és <b>azonnal levonunk 5 000 Ft-ot</b> bármelyik cipő árából + <b>ajándék díszcsomagolást</b> adunk!
       </p>
+
+      <div class="my-4 bg-white border-2 border-dashed border-[#D4AF37] rounded-2xl p-3">
+        <span class="text-[10px] uppercase text-[#7A6A63] font-bold block">Kuponkódod:</span>
+        <span class="text-xl font-black tracking-widest text-[#2C221E]">LULUXMAS</span>
+      </div>
+
+      <button onclick="activateCoupon()" class="w-full py-4 rounded-full font-extrabold text-sm bg-[#2C221E] text-[#F3E5AB] shadow-xl hover:bg-[#43352F] active:scale-95 transition">
+        ✨ Aktiválom az 5 000 Ft Kedvezményt!
+      </button>
     </div>
-
-    <!-- VALÓDI FOTÓS FŐDÍJ GALÉRIA -->
-    <div class="mb-8">
-      <div class="text-center mb-3">
-        <span class="text-xs font-extrabold uppercase tracking-wider text-amber-300 drop-shadow">📸 Ezek a nyeremények pörögnek a Karácsonyi Keréken:</span>
-      </div>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div class="ruby-card rounded-2xl p-2.5 text-center border border-amber-300/50 hover:scale-[1.03] transition">
-          <div class="h-24 w-full rounded-xl overflow-hidden mb-2 relative bg-black">
-            <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=400&q=80" alt="iPhone 18 Pro" class="w-full h-full object-cover">
-            <span class="absolute top-1.5 right-1.5 bg-amber-400 text-red-950 text-[9px] font-black uppercase px-2 py-0.5 rounded-full shadow">Fődíj</span>
-          </div>
-          <h4 class="font-black text-xs sm:text-sm text-white">iPhone 18 Pro</h4>
-          <span class="text-[10px] text-amber-300 font-bold block">450.000 Ft eMAG utalvány</span>
-        </div>
-
-        <div class="ruby-card rounded-2xl p-2.5 text-center border border-amber-300/50 hover:scale-[1.03] transition">
-          <div class="h-24 w-full rounded-xl overflow-hidden mb-2 relative bg-black">
-            <img src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=400&q=80" alt="PlayStation 5" class="w-full h-full object-cover">
-            <span class="absolute top-1.5 right-1.5 bg-amber-400 text-red-950 text-[9px] font-black uppercase px-2 py-0.5 rounded-full shadow">Fődíj</span>
-          </div>
-          <h4 class="font-black text-xs sm:text-sm text-white">PlayStation 5 Slim</h4>
-          <span class="text-[10px] text-amber-300 font-bold block">200.000 Ft eMAG utalvány</span>
-        </div>
-
-        <div class="ruby-card rounded-2xl p-2.5 text-center border border-amber-300/50 hover:scale-[1.03] transition">
-          <div class="h-24 w-full rounded-xl overflow-hidden mb-2 relative bg-gradient-to-br from-blue-600 via-indigo-700 to-red-600 flex flex-col items-center justify-center p-2 border border-white/20">
-            <span class="text-[10px] uppercase font-extrabold text-white/80 tracking-widest">AJÁNDÉKKÁRTYA</span>
-            <span class="text-xl font-black text-white tracking-tight">eMAG.hu</span>
-            <span class="bg-amber-300 text-red-950 text-[10px] font-black px-2 py-0.5 rounded mt-1">5.000 – 50.000 Ft</span>
-          </div>
-          <h4 class="font-black text-xs sm:text-sm text-white">eMAG Utalványok</h4>
-          <span class="text-[10px] text-amber-300 font-bold block">Azonnali digitális kód</span>
-        </div>
-
-        <div class="ruby-card rounded-2xl p-2.5 text-center border border-amber-300/50 hover:scale-[1.03] transition">
-          <div class="h-24 w-full rounded-xl overflow-hidden mb-2 relative bg-black">
-            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80" alt="Steam Gaming" class="w-full h-full object-cover opacity-85">
-            <span class="absolute top-1.5 right-1.5 bg-emerald-400 text-slate-950 text-[9px] font-black uppercase px-2 py-0.5 rounded-full shadow">100% Nyerő</span>
-          </div>
-          <h4 class="font-black text-xs sm:text-sm text-white">Steam Kulcs & Kupon</h4>
-          <span class="text-[10px] text-emerald-300 font-bold block">Garantált játék + -1500 Ft</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- A 3 ÜNNEPI AJÁNDÉKDOBOZ -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 items-stretch">
-
-      <!-- ⭐ 1. ARANY KARÁCSONYI DOBOZ -->
-      <div class="order-1 md:order-2 cream-card rounded-3xl p-6 flex flex-col justify-between relative transform md:-translate-y-3">
-        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-red-800 via-red-600 to-red-800 text-amber-200 text-[11px] font-extrabold uppercase px-4 py-1 rounded-full shadow-lg border border-amber-300 whitespace-nowrap">
-          🎄 Legnépszerűbb • Dupla Játék + Kerék
-        </div>
-
-        <div>
-          <div class="flex justify-between items-center mt-2 mb-2">
-            <span class="bg-red-800/10 text-red-900 text-xs font-extrabold px-3 py-0.5 rounded-full border border-red-800/20">Arany Kiadás</span>
-            <span class="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">Érték: 10 000 Ft+</span>
-          </div>
-
-          <div class="text-center my-3">
-            <div class="w-28 h-28 mx-auto floating-gift">
-              <svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-xl">
-                <rect x="20" y="45" width="80" height="65" rx="8" fill="#b91c1c" stroke="#f59e0b" stroke-width="2"/>
-                <rect x="52" y="45" width="16" height="65" fill="#fbbf24"/>
-                <rect x="20" y="70" width="80" height="14" fill="#fbbf24"/>
-                <rect x="15" y="32" width="90" height="18" rx="5" fill="#dc2626" stroke="#f59e0b" stroke-width="2"/>
-                <rect x="51" y="32" width="18" height="18" fill="#fde047"/>
-                <path d="M60 32 C40 10, 25 25, 52 32 Z" fill="#fbbf24" stroke="#b45309" stroke-width="1.5"/>
-                <path d="M60 32 C80 10, 95 25, 68 32 Z" fill="#fbbf24" stroke="#b45309" stroke-width="1.5"/>
-                <circle cx="60" cy="30" r="6" fill="#fef08a"/>
-              </svg>
-            </div>
-            <h2 class="holiday-serif text-2xl font-black text-red-950">Arany Adventi Doboz</h2>
-            <p class="text-xs text-red-900/80 font-semibold mt-1">2 db garantált Steam játék + 1 Pörgetés a Fődíj Keréken!</p>
-          </div>
-
-          <div class="bg-white/85 rounded-2xl p-3.5 my-3 border border-amber-400/60 space-y-2 text-xs text-red-950 shadow-inner">
-            <div class="font-extrabold text-amber-800 uppercase text-[10px] tracking-wider">A díszdoboz garantált tartalma:</div>
-            <div class="flex items-center gap-2">
-              <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0">✓</span>
-              <span><b>2 db Eredeti Steam PC Játék</b> (CD-kulcs)</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0">🎰</span>
-              <span><b>+1 Ingyen Pörgetés</b> a Nagy Karácsonyi Keréken!</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="w-5 h-5 rounded-full bg-red-700 text-white flex items-center justify-center text-[10px] font-bold shrink-0">♥</span>
-              <span><b>Nyomtatható Karácsonyi QR-kártya</b> a fa alá</span>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="text-center mb-3">
-            <span class="text-xs text-red-900/50 line-through font-bold mr-1.5">7 990 Ft</span>
-            <span class="text-3xl font-black text-red-900">4 990 Ft</span>
-          </div>
-          <button onclick="openExperience('Arany Adventi Doboz', 2, 4990)" class="w-full py-4 rounded-2xl font-extrabold text-sm sm:text-base bg-gradient-to-r from-red-800 via-red-700 to-red-800 text-amber-200 shadow-xl border border-amber-300 hover:brightness-110 active:scale-95 transition">
-            🎀 DOBOZ KIBONTÁSA + KERÉK PÖRGETÉS!
-          </button>
-        </div>
-      </div>
-
-      <!-- 🥉 2. BRONZ KARÁCSONYI DOBOZ -->
-      <div class="order-2 md:order-1 ruby-card rounded-3xl p-6 flex flex-col justify-between">
-        <div>
-          <div class="flex justify-between items-center mb-2">
-            <span class="bg-amber-400/20 text-amber-200 text-xs font-bold px-3 py-0.5 rounded-full">Bronz Kiadás</span>
-            <span class="text-xs font-bold text-emerald-300">Érték: 5 000 Ft+</span>
-          </div>
-
-          <div class="text-center my-3">
-            <div class="w-24 h-24 mx-auto floating-gift">
-              <svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-lg">
-                <rect x="22" y="48" width="76" height="60" rx="8" fill="#065f46" stroke="#fbbf24" stroke-width="2"/>
-                <rect x="53" y="48" width="14" height="60" fill="#f59e0b"/>
-                <rect x="18" y="35" width="84" height="16" rx="5" fill="#047857" stroke="#fbbf24" stroke-width="2"/>
-                <path d="M60 35 C42 15, 28 28, 53 35 Z" fill="#fbbf24"/>
-                <path d="M60 35 C78 15, 92 28, 67 35 Z" fill="#fbbf24"/>
-                <circle cx="60" cy="33" r="5" fill="#fef08a"/>
-              </svg>
-            </div>
-            <h3 class="holiday-serif text-xl font-bold text-amber-200">Bronz Adventi Doboz</h3>
-            <p class="text-xs text-amber-100/80 mt-1">1 db garantált PC játék + 1 Pörgetés a Karácsonyi Keréken!</p>
-          </div>
-
-          <div class="bg-black/30 rounded-2xl p-3.5 my-3 border border-amber-300/20 space-y-2 text-xs text-amber-50">
-            <div class="flex items-center gap-2">
-              <span class="text-emerald-400 font-bold">✓</span>
-              <span><b>1 db Garantált Steam PC Játék</b></span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="text-amber-300 font-bold">🎰</span>
-              <span><b>+1 Ingyen Pörgetés</b> a Fődíj Keréken</span>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="text-center mb-3">
-            <span class="text-2xl font-black text-white">2 990 Ft</span>
-          </div>
-          <button onclick="openExperience('Bronz Adventi Doboz', 1, 2990)" class="w-full py-3.5 rounded-2xl font-bold text-xs sm:text-sm bg-amber-400/20 hover:bg-amber-400/30 text-amber-200 border border-amber-300/50 active:scale-95 transition">
-            Kibontom a Bronz Dobozt (2 990 Ft) →
-          </button>
-        </div>
-      </div>
-
-      <!-- 💎 3. KIRÁLYI VIP DOBOZ -->
-      <div class="order-3 ruby-card rounded-3xl p-6 flex flex-col justify-between">
-        <div>
-          <div class="flex justify-between items-center mb-2">
-            <span class="bg-amber-400 text-red-950 text-xs font-extrabold px-3 py-0.5 rounded-full">VIP Kiadás</span>
-            <span class="text-xs font-bold text-amber-300">Érték: 22 000 Ft+</span>
-          </div>
-
-          <div class="text-center my-3">
-            <div class="w-24 h-24 mx-auto floating-gift">
-              <svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-lg">
-                <rect x="22" y="48" width="76" height="60" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2.5"/>
-                <rect x="53" y="48" width="14" height="60" fill="#dc2626"/>
-                <rect x="22" y="72" width="76" height="12" fill="#dc2626"/>
-                <rect x="18" y="35" width="84" height="16" rx="5" fill="#fde68a" stroke="#f59e0b" stroke-width="2.5"/>
-                <path d="M60 35 C40 12, 25 28, 53 35 Z" fill="#dc2626"/>
-                <path d="M60 35 C80 12, 95 28, 67 35 Z" fill="#dc2626"/>
-                <circle cx="60" cy="33" r="5" fill="#fbbf24"/>
-              </svg>
-            </div>
-            <h3 class="holiday-serif text-xl font-bold text-amber-300">Királyi VIP Doboz</h3>
-            <p class="text-xs text-amber-100/80 mt-1">4 db Prémium Játék + 2x VIP Pörgetés az iPhone 18 és PS5 fődíjakra!</p>
-          </div>
-
-          <div class="bg-black/30 rounded-2xl p-3.5 my-3 border border-amber-300/20 space-y-2 text-xs text-amber-50">
-            <div class="flex items-center gap-2">
-              <span class="text-emerald-400 font-bold">✓</span>
-              <span><b>4 db Prémium Steam PC Játék</b></span>
-            </div>
-            <div class="flex items-center gap-2 text-amber-300 font-bold">
-              <span>🎰</span>
-              <span><b>+2 db VIP Pörgetés</b> a Fődíj Keréken!</span>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="text-center mb-3">
-            <span class="text-2xl font-black text-white">9 990 Ft</span>
-          </div>
-          <button onclick="openExperience('Királyi VIP Doboz', 4, 9990)" class="w-full py-3.5 rounded-2xl font-extrabold text-xs sm:text-sm bg-gradient-to-r from-amber-400 to-yellow-300 text-red-950 shadow-lg active:scale-95 transition">
-            Kibontom a VIP Dobozt (9 990 Ft) →
-          </button>
-        </div>
-      </div>
-
-    </div>
-
-    <footer class="text-center text-xs text-amber-100/70 border-t border-amber-200/20 pt-5">
-      🔒 Hivatalos Magyar Webshop • Apple Pay & Bankkártyás fizetés • Azonnali E-mail Kézbesítés • Számlázz.hu E-számla
-    </footer>
-
   </div>
 
-  <!-- MODAL: 1. DÍSZDOBOZ BONTÁS -> 2. KÉPES ADRENALIN KERÉK -> 3. PÉNZTÁR -->
-  <div id="unboxModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex items-center justify-center p-3 overflow-y-auto">
-    <div class="cream-card rounded-3xl max-w-md w-full p-5 sm:p-6 relative text-center my-auto">
+  <!-- =========================================================
+       OLDALSÓ KOSÁR ÉS PÉNZTÁR FIÓK (SLIDE-OVER CART)
+       ========================================================= -->
+  <div id="cartDrawer" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-xs flex justify-end">
+    <div class="bg-[#FAF7F2] w-full max-w-md h-full flex flex-col justify-between p-6 shadow-2xl border-l border-[#D4AF37]/40 overflow-y-auto">
       
-      <button onclick="closeModal()" class="absolute top-3.5 right-3.5 text-red-950/60 hover:text-red-950 text-lg font-extrabold w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center z-30">✕</button>
-
-      <!-- 1. LÉPÉS: MASNIS DÍSZDOBOZ KIBONTÁSA -->
-      <div id="step-1-openbox" class="py-2">
-        <span class="bg-red-800 text-amber-200 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full">🎄 1. Lépés: Ajándékdoboz Kibontása</span>
-        <h3 id="modalBoxTitle" class="holiday-serif text-2xl font-black text-red-950 mt-2">Arany Adventi Doboz</h3>
-        <p class="text-xs text-red-900/80 font-medium mt-1">Érintsd meg a selyemmasnis díszdobozt a fedél leemeléséhez!</p>
-
-        <div onclick="popGiftLid()" class="relative w-44 h-44 mx-auto my-4 cursor-pointer select-none flex items-center justify-center">
-          <div class="absolute inset-0 bg-amber-400/30 rounded-full blur-2xl"></div>
-
-          <div id="emergingCard" class="absolute opacity-0 transform translate-y-6 transition-all duration-700 z-10 bg-gradient-to-br from-slate-900 to-blue-950 text-white px-4 py-2.5 rounded-xl border-2 border-amber-400 shadow-2xl">
-            <span class="text-[10px] uppercase tracking-wider text-amber-300 font-bold block">Garantált Ajándékod:</span>
-            <span id="emergingSteamText" class="text-sm font-black block">🎮 2x STEAM JÁTÉK</span>
+      <div>
+        <div class="flex items-center justify-between pb-4 border-b border-[#D4AF37]/30">
+          <div>
+            <h3 class="serif-title text-2xl font-bold text-[#2C221E]">Kosarad</h3>
+            <span id="couponStatusBadge" class="text-[11px] font-bold text-[#9A7B2C]">Nincs aktív kupon</span>
           </div>
-
-          <svg viewBox="0 0 140 140" class="w-full h-full relative z-20 overflow-visible">
-            <g>
-              <rect x="25" y="60" width="90" height="68" rx="8" fill="#b91c1c" stroke="#991b1b" stroke-width="2"/>
-              <rect x="61" y="60" width="18" height="68" fill="#fbbf24"/>
-              <rect x="25" y="88" width="90" height="14" fill="#fbbf24"/>
-            </g>
-            <g id="svgLid" class="gift-lid">
-              <rect x="18" y="44" width="104" height="20" rx="6" fill="#dc2626" stroke="#f59e0b" stroke-width="2"/>
-              <rect x="59" y="44" width="22" height="20" fill="#fde047"/>
-              <path d="M70 44 C46 16, 28 34, 60 44 Z" fill="#fbbf24" stroke="#b45309" stroke-width="1.5"/>
-              <path d="M70 44 C94 16, 112 34, 80 44 Z" fill="#fbbf24" stroke="#b45309" stroke-width="1.5"/>
-              <circle cx="70" cy="42" r="7" fill="#fef08a"/>
-            </g>
-          </svg>
+          <button onclick="toggleCart()" class="w-8 h-8 rounded-full bg-[#2C221E]/10 font-bold">✕</button>
         </div>
 
-        <button id="openLidBtn" onclick="popGiftLid()" class="w-full py-4 rounded-2xl font-extrabold text-sm sm:text-base bg-gradient-to-r from-red-800 via-red-700 to-red-800 text-amber-200 shadow-xl border border-amber-300 active:scale-95 transition">
-          🎀 MASNI KIOLDÁSA & DOBOZ KINYITÁSA!
-        </button>
+        <!-- Kosár tételek -->
+        <div id="cartItemsList" class="py-4 space-y-3"></div>
       </div>
 
-      <!-- 2. LÉPÉS: NAGY KÉPES KARÁCSONYI SZERENCSEKERÉK -->
-      <div id="step-2-wheel" class="hidden py-1">
-        <div class="bg-emerald-900 text-white rounded-2xl p-2.5 mb-2.5 text-left flex items-center justify-between border border-emerald-400/40 shadow">
-          <div>
-            <span class="text-[10px] uppercase font-bold text-emerald-300 block">✓ 1. Garantált Ajándékod Megvan:</span>
-            <h4 id="wonSteamBadge" class="text-xs sm:text-sm font-black">2 db Eredeti Steam PC Játékkulcs</h4>
-          </div>
-          <span class="bg-emerald-400 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-md">Kész!</span>
+      <!-- Összesítő és Megrendelő Űrlap -->
+      <div class="border-t border-[#D4AF37]/30 pt-4 space-y-3">
+        <div class="flex justify-between text-xs text-[#5C4D46]">
+          <span>Karácsonyi Díszcsomagolás:</span>
+          <span class="font-bold text-emerald-700">INGYENES</span>
+        </div>
+        <div id="discountRow" class="hidden flex justify-between text-xs text-emerald-700 font-bold">
+          <span>LULUXMAS Karácsonyi Kupon:</span>
+          <span>-5 000 Ft</span>
+        </div>
+        <div class="flex justify-between text-lg font-black text-[#2C221E]">
+          <span>Fizetendő összesen:</span>
+          <span id="cartTotalText">0 Ft</span>
         </div>
 
-        <h3 class="holiday-serif text-xl sm:text-2xl font-black text-red-950">Karácsonyi Fődíj Kerék</h3>
-
-        <div id="wheelStatusBanner" class="text-xs font-extrabold bg-red-950 text-amber-200 py-1.5 px-3 rounded-xl border border-amber-400 my-2 shadow-inner">
-          🔥 Pörgess az iPhone 18, PS5 vagy azonnali kedvezményért!
-        </div>
-
-        <div class="relative w-[290px] h-[290px] sm:w-[310px] sm:h-[310px] mx-auto my-2 flex items-center justify-center select-none">
-          <div id="wheelFlapper" class="wheel-flapper absolute -top-3 left-1/2 -translate-x-1/2 z-30 drop-shadow-[0_5px_6px_rgba(0,0,0,0.75)]">
-            <svg width="34" height="42" viewBox="0 0 34 42">
-              <polygon points="17,40 3,10 31,10" fill="#fbbf24" stroke="#78350f" stroke-width="2.5"/>
-              <circle cx="17" cy="10" r="8" fill="#dc2626" stroke="#fde047" stroke-width="2.5"/>
-            </svg>
-          </div>
-
-          <canvas id="christmasWheel" width="310" height="310" class="w-full h-full rounded-full shadow-2xl"></canvas>
-
-          <button onclick="startAdrenalineWheel()" class="absolute w-16 h-16 rounded-full bg-gradient-to-b from-amber-300 via-amber-400 to-amber-600 border-4 border-white text-red-950 font-black text-[11px] shadow-[0_0_20px_rgba(0,0,0,0.8)] flex items-center justify-center z-20 active:scale-95">
-            PÖRGESS!
-          </button>
-        </div>
-
-        <button id="spinActionBtn" onclick="startAdrenalineWheel()" class="w-full py-4 rounded-2xl font-black text-sm sm:text-base bg-gradient-to-r from-red-800 via-red-600 to-red-800 text-amber-200 shadow-xl border border-amber-300 active:scale-95 transition mt-1">
-          🎰 KARÁCSONYI KERÉK MEGPÖRGETÉSE!
+        <button id="applyCouponBtnInCart" onclick="activateCoupon()" class="w-full py-2 rounded-xl text-xs font-bold bg-[#FFF8E7] border border-[#D4AF37] text-[#8A6615]">
+          🎁 -5 000 Ft Karácsonyi Kupon Aktiválása
         </button>
 
-        <div id="finalOfferBox" class="hidden mt-2 bg-gradient-to-b from-red-950 to-red-900 text-white rounded-2xl p-4 border-2 border-amber-400 shadow-2xl text-left">
-          <div class="flex items-center justify-between mb-1.5">
-            <span class="bg-amber-400 text-red-950 text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full">🎉 Kerék Nyereményed Aktiválva!</span>
-            <span id="offerTimer" class="text-xs font-mono font-black text-amber-300">09:59</span>
-          </div>
-          <ul class="text-xs text-amber-50 space-y-1 my-2">
-            <li>✔ <b id="summaryGames">2 db Garantált Eredeti Steam PC Játék</b></li>
-            <li>✔ <b>-1 500 Ft VIP Kedvezmény</b> (Kód: <b>XMAS1500</b>)</li>
-          </ul>
-          <div class="bg-black/35 rounded-xl p-2.5 mb-3 flex items-center justify-between">
-            <span class="text-xs text-amber-200">Fizetendő a kuponnal:</span>
-            <div>
-              <span id="oldPriceStrike" class="text-xs text-gray-400 line-through mr-1">4 990 Ft</span>
-              <span id="discountedPriceText" class="text-xl font-black text-emerald-300">3 490 Ft</span>
-            </div>
-          </div>
-          <button onclick="openCheckoutStep()" class="w-full py-3.5 rounded-xl font-black text-sm bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 text-red-950 shadow-xl hover:brightness-110 transition">
-            🎄 TOVÁBB A KEDVEZMÉNYES MEGRENDELÉSHEZ →
-          </button>
-        </div>
-      </div>
-
-      <!-- 3. LÉPÉS: BARÁTSÁGOS MINTA-PÉNZTÁR -->
-      <div id="step-3-checkout" class="hidden py-2 text-left">
-        <span class="bg-emerald-700 text-white text-[10px] font-extrabold uppercase px-3 py-1 rounded-full">🔒 3. Lépés: Azonnali Kézbesítés</span>
-        <h3 class="holiday-serif text-2xl font-black text-red-950 mt-2">Hová küldjük az ajándékodat?</h3>
-        <p class="text-xs text-red-900/80 mb-4">A játékkulcsokat és a nyomtatható karácsonyi kártyát fizetés után azonnal e-mailben kapod meg.</p>
-
-        <form onsubmit="submitDemoOrder(event)" class="space-y-3">
-          <div class="bg-white rounded-xl p-3 border border-amber-400 flex justify-between items-center">
-            <div>
-              <span id="checkoutBoxName" class="font-black text-sm text-red-950 block">Arany Adventi Doboz</span>
-              <span class="text-[11px] text-emerald-700 font-bold">-1 500 Ft Kupon levonva (XMAS1500)</span>
-            </div>
-            <span id="checkoutFinalPrice" class="text-lg font-black text-red-900">3 490 Ft</span>
-          </div>
-
-          <div>
-            <label class="text-xs font-extrabold text-red-950 block mb-1">E-mail címed (ide küldjük a kódokat):</label>
-            <input id="customerEmail" type="email" required placeholder="pelda@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl border border-amber-400 bg-white text-red-950 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-700">
-          </div>
-
-          <div>
-            <label class="text-xs font-extrabold text-red-950 block mb-1">Számlázási Név (Magánszemély):</label>
-            <input type="text" required placeholder="Kovács János" class="w-full px-3.5 py-2.5 rounded-xl border border-amber-400 bg-white text-red-950 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-700">
-          </div>
-
-          <label class="flex items-center gap-2.5 bg-amber-500/15 p-3 rounded-xl border border-amber-500/40 cursor-pointer">
-            <input type="checkbox" checked class="w-4 h-4 accent-red-800">
-            <span class="text-xs font-bold text-red-950">Kérek ingyenes <b>nyomtatható Karácsonyi Ajándékkártyát</b> is az e-mailbe!</span>
-          </label>
-
-          <button type="submit" class="w-full py-4 rounded-2xl font-black text-sm sm:text-base bg-gradient-to-r from-red-800 via-red-700 to-red-800 text-amber-200 shadow-xl border border-amber-300">
-            💳 FIZETÉS MOST (Apple Pay / Bankkártya)
+        <form onsubmit="submitCheckout(event)" class="space-y-2.5 pt-2">
+          <input type="text" required placeholder="Teljes Név (Szállításhoz)" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D4AF37]/40 bg-white text-xs font-semibold">
+          <input type="email" required placeholder="E-mail cím (Visszaigazoláshoz)" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D4AF37]/40 bg-white text-xs font-semibold">
+          <input type="text" required placeholder="Szállítási cím (Irányítószám, Város, Utca)" class="w-full px-3.5 py-2.5 rounded-xl border border-[#D4AF37]/40 bg-white text-xs font-semibold">
+          <button type="submit" class="w-full py-4 rounded-full font-extrabold text-sm bg-[#2C221E] text-[#F3E5AB] shadow-xl hover:bg-[#43352F] transition">
+            💳 Megrendelés & Fizetés
           </button>
         </form>
       </div>
@@ -483,305 +360,239 @@
     </div>
   </div>
 
+  <!-- JAVASCRIPT LOGIKA -->
   <script>
-    let audioCtx = null;
-
-    function initAudio() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-    }
-
-    function playWheelTick(pitch = 720) {
-      if (!audioCtx) return;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(pitch, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(180, audioCtx.currentTime + 0.045);
-      gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.045);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.045);
-    }
-
-    function playHolidayChime() {
-      if (!audioCtx) return;
-      [587.33, 783.99, 987.77, 1174.66, 1567.98].forEach((freq, i) => {
-        setTimeout(() => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-          gain.gain.setValueAtTime(0.16, audioCtx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.38);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start();
-          osc.stop(audioCtx.currentTime + 0.38);
-        }, i * 80);
-      });
-    }
-
-    const wheelSlices = [
-      { title: 'iPhone 18 Pro', sub: '450.000 Ft', color: '#991b1b', textCol: '#fef08a', icon: '📱', imgUrl: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=200&q=80' },
-      { title: '-1 500 Ft KUPON', sub: 'Azonnali Kód', color: '#fbbf24', textCol: '#450a0a', icon: '🎟️', imgUrl: '' },
-      { title: 'PlayStation 5', sub: '200.000 Ft', color: '#065f46', textCol: '#ffffff', icon: '🎮', imgUrl: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=200&q=80' },
-      { title: '5 000 Ft eMAG', sub: 'Utalvány', color: '#7f1d1d', textCol: '#fde68a', icon: '💳', imgUrl: '' },
-      { title: '50 000 Ft eMAG', sub: 'Nagyutalvány', color: '#1e3a8a', textCol: '#ffffff', icon: '💎', imgUrl: '' },
-      { title: '+1 Steam Játék', sub: 'Extra Kulcs', color: '#047857', textCol: '#fef08a', icon: '🕹️', imgUrl: '' },
-      { title: '25 000 Ft eMAG', sub: 'Utalvány', color: '#991b1b', textCol: '#ffffff', icon: '🎁', imgUrl: '' },
-      { title: 'Dupla Esély', sub: 'Bónusz Kód', color: '#78350f', textCol: '#fde68a', icon: '✨', imgUrl: '' }
+    // 1. TERMÉK ADATBÁZIS (STITCH, GRINCS, ANIME, DISNEY - 45k és 65k KÖZÖTT)
+    const products = [
+      {
+        id: 1,
+        name: 'AF1 "Stitch & Angel Ohana"',
+        category: 'disney',
+        technique: '🎨 Kézzel Festett + 🧵 Hímzett Virágok',
+        price: 54990,
+        badge: '🔥 Legnépszerűbb',
+        desc: 'Kézzel festett Stitch és Angel karakterek a cipő külső oldalán, hímzett trópusi hibiszkusz virágokkal és pasztell kék-rózsaszín pipával.',
+        img: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 2,
+        name: 'AF1 "Grincs Ellopja a Karácsonyt"',
+        category: 'xmas',
+        technique: '🎄 Limitált Karácsonyi Festés + Hímzés',
+        price: 58990,
+        badge: '🎄 Karácsonyi VIP',
+        desc: 'Ünnepi különkiadás! Részletgazdag Grincs portré Mikulás-sapkában, hímzett hópelyhekkel és piros-arany selyemfűzővel.',
+        img: 'https://images.unsplash.com/photo-1600269452121-4f2416e55c28?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 3,
+        name: 'AF1 "Anime Legends" (Naruto / One Piece)',
+        category: 'anime',
+        technique: '⚡ Manga Panel Festés + Hímzett Felhők',
+        price: 62990,
+        badge: '⚡ Prémium Custom',
+        desc: 'Vízálló fekete-fehér és színes anime karakterfestés a cipő két oldalán, aprólékosan varrott japán felhő motívumokkal.',
+        img: 'https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 4,
+        name: 'AF1 "Disney Magic & Minnie"',
+        category: 'disney',
+        technique: '✨ Kézzel Festett + Csillogó Arany Kontúr',
+        price: 49990,
+        badge: '✨ Ajándék Kedvenc',
+        desc: 'Klasszikus Disney hangulat meleg arany és púder-rózsaszín árnyalatokban, kézzel festett karakterrel és arany sarokhímzéssel.',
+        img: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 5,
+        name: 'AF1 "Sakura & Cartoon" Hímzett',
+        category: 'anime',
+        technique: '🧵 100% Gépi & Kézi Prémium Hímzés',
+        price: 45990,
+        badge: '🌸 Finom Hímzés',
+        desc: 'Elegáns, letisztult Air Force 1, oldalán sűrű selyemcérnával varrott cseresznyevirág ágakkal és választható mini rajzfilm-sziluettel.',
+        img: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 6,
+        name: 'AF1 "Disney Lion King & Bambi" Gold',
+        category: 'disney',
+        technique: '👑 Kézzel Festett Mesés Kollekció',
+        price: 64990,
+        badge: '👑 Full Custom',
+        desc: 'A legmagasabb részletességű mesés kiadásunk: arany-krém színátmenetes pipa és mindkét cipőn egyedi Disney jelenet.',
+        img: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&w=800&q=80'
+      }
     ];
 
-    const loadedImages = {};
-    wheelSlices.forEach((s, idx) => {
-      if (s.imgUrl) {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.src = s.imgUrl;
-        img.onload = () => { loadedImages[idx] = img; drawWheel(currentWheelAngle); };
-      }
-    });
+    let cart = [];
+    let couponActive = false;
 
-    let currentWheelAngle = 0;
-    let isWheelSpinning = false;
+    function renderProducts(filter = 'all') {
+      const grid = document.getElementById('productGrid');
+      const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
 
-    function drawWheel(angleDeg = 0) {
-      const canvas = document.getElementById('christmasWheel');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const cx = canvas.width / 2;
-      const cy = canvas.height / 2;
-      const outerR = cx - 8;
-      const innerR = outerR - 14;
-      const numSlices = wheelSlices.length;
-      const sliceRad = (2 * Math.PI) / numSlices;
-      const rotRad = (angleDeg * Math.PI) / 180;
+      grid.innerHTML = filtered.map(p => {
+        const displayPrice = couponActive ? p.price - 5000 : p.price;
+        return `
+          <div class="boutique-card rounded-3xl p-4 flex flex-col justify-between">
+            <div>
+              <div class="relative rounded-2xl overflow-hidden aspect-[4/3] mb-3.5 bg-[#F4EFE6]">
+                <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                <span class="absolute top-3 left-3 bg-white/95 text-[#2C221E] text-[10px] font-extrabold px-3 py-1 rounded-full shadow border border-[#D4AF37]/50">
+                  ${p.badge}
+                </span>
+                ${couponActive ? `<span class="absolute bottom-3 left-3 bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full">-5 000 Ft Aktív!</span>` : ''}
+              </div>
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+              <span class="text-[11px] font-bold text-[#9A7B2C] block">${p.technique}</span>
+              <h3 class="serif-title text-2xl font-bold text-[#2C221E] mt-0.5">${p.name}</h3>
+              <p class="text-xs text-[#5C4D46] mt-1.5 leading-relaxed">${p.desc}</p>
+            </div>
 
-      ctx.beginPath();
-      ctx.arc(cx, cy, outerR, 0, 2 * Math.PI);
-      ctx.fillStyle = '#450a0a';
-      ctx.fill();
-      ctx.lineWidth = 5;
-      ctx.strokeStyle = '#fbbf24';
-      ctx.stroke();
+            <div class="mt-4 pt-3.5 border-t border-[#D4AF37]/25">
+              <div class="flex items-center justify-between mb-3">
+                <div>
+                  <span class="text-[10px] text-[#7A6A63] uppercase font-bold block">Ár (AF1 cipővel együtt):</span>
+                  ${couponActive ? `<span class="text-xs text-gray-400 line-through mr-1">${p.price.toLocaleString('hu-HU')} Ft</span>` : ''}
+                  <span class="text-xl font-black text-[#2C221E]">${displayPrice.toLocaleString('hu-HU')} Ft</span>
+                </div>
 
-      wheelSlices.forEach((slice, i) => {
-        const startA = i * sliceRad + rotRad;
-        const endA = startA + sliceRad;
+                <!-- Méretválasztó -->
+                <div>
+                  <label class="text-[10px] font-bold text-[#7A6A63] block">Méret:</label>
+                  <select id="size-${p.id}" class="px-2.5 py-1.5 rounded-lg border border-[#D4AF37]/50 bg-white text-xs font-bold">
+                    <option value="36">EU 36</option>
+                    <option value="37">EU 37</option>
+                    <option value="38" selected>EU 38</option>
+                    <option value="39">EU 39</option>
+                    <option value="40">EU 40</option>
+                    <option value="41">EU 41</option>
+                    <option value="42">EU 42</option>
+                    <option value="43">EU 43</option>
+                  </select>
+                </div>
+              </div>
 
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.arc(cx, cy, innerR, startA, endA);
-        ctx.closePath();
-        ctx.fillStyle = slice.color;
-        ctx.fill();
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = '#fde047';
-        ctx.stroke();
+              <button onclick="addToCart(${p.id})" class="w-full py-3 rounded-full font-bold text-xs bg-[#2C221E] text-[#FAF7F2] hover:bg-[#43352F] active:scale-95 transition flex items-center justify-center gap-1.5 shadow-md">
+                <span>🛍️</span> Kosárba teszem
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
 
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(startA + sliceRad / 2);
-
-        const iconDist = innerR - 32;
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(iconDist, 0, 16, 0, 2 * Math.PI);
-        ctx.fillStyle = 'rgba(0,0,0,0.35)';
-        ctx.fill();
-        ctx.lineWidth = 1.5;
-        ctx.strokeStyle = '#fde047';
-        ctx.stroke();
-
-        if (loadedImages[i]) {
-          ctx.clip();
-          ctx.rotate(Math.PI / 2);
-          ctx.drawImage(loadedImages[i], -16, -iconDist - 16, 32, 32);
-        } else {
-          ctx.font = '16px sans-serif';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(slice.icon, iconDist, 1);
-        }
-        ctx.restore();
-
-        ctx.textAlign = 'right';
-        ctx.fillStyle = slice.textCol;
-        ctx.font = '900 11px "Plus Jakarta Sans", sans-serif';
-        ctx.fillText(slice.title, innerR - 54, -2);
-
-        ctx.font = '700 9px "Plus Jakarta Sans", sans-serif';
-        ctx.fillStyle = slice.textCol === '#450a0a' ? '#78350f' : '#fef08a';
-        ctx.fillText(slice.sub, innerR - 54, 10);
-
-        ctx.restore();
+    function filterShoes(cat) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.className = 'filter-btn bg-white border border-[#D4AF37]/40 text-[#2C221E] text-xs font-bold px-4 py-2 rounded-full hover:bg-[#FFF8E7] transition';
       });
-
-      for (let i = 0; i < 16; i++) {
-        const a = (i * 2 * Math.PI) / 16 + rotRad;
-        const px = cx + Math.cos(a) * (outerR - 6);
-        const py = cy + Math.sin(a) * (outerR - 6);
-        ctx.beginPath();
-        ctx.arc(px, py, 4, 0, 2 * Math.PI);
-        ctx.fillStyle = i % 2 === 0 ? '#fef08a' : '#ef4444';
-        ctx.fill();
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = '#ffffff';
-        ctx.stroke();
-      }
+      document.getElementById('filter-' + cat).className = 'filter-btn bg-[#2C221E] text-white text-xs font-bold px-4 py-2 rounded-full transition shadow';
+      renderProducts(cat);
     }
 
-    let activeBoxName = 'Arany Adventi Doboz';
-    let activeGamesCount = 2;
-    let activeBoxPrice = 4990;
-    let countdownTimer = null;
-
-    function openExperience(boxTitle, gamesCount, price) {
-      activeBoxName = boxTitle;
-      activeGamesCount = gamesCount;
-      activeBoxPrice = price;
-      isWheelSpinning = false;
-
-      document.getElementById('modalBoxTitle').innerText = boxTitle;
-      document.getElementById('emergingSteamText').innerText = `🎮 ${gamesCount}x STEAM JÁTÉK`;
-      document.getElementById('wonSteamBadge').innerText = `${gamesCount} db Eredeti Steam PC Játékkulcs`;
-      document.getElementById('summaryGames').innerText = `${gamesCount} db Garantált Eredeti Steam PC Játék (${boxTitle})`;
-      document.getElementById('oldPriceStrike').innerText = `${price.toLocaleString('hu-HU')} Ft`;
-      document.getElementById('discountedPriceText').innerText = `${(price - 1500).toLocaleString('hu-HU')} Ft`;
-
-      document.getElementById('unboxModal').classList.remove('hidden');
-      document.getElementById('step-1-openbox').classList.remove('hidden');
-      document.getElementById('step-2-wheel').classList.add('hidden');
-      document.getElementById('step-3-checkout').classList.add('hidden');
-      document.getElementById('finalOfferBox').classList.add('hidden');
-      document.getElementById('spinActionBtn').classList.remove('hidden');
-      document.getElementById('spinActionBtn').disabled = false;
-      document.getElementById('spinActionBtn').innerText = '🎰 KARÁCSONYI KERÉK MEGPÖRGETÉSE!';
-      document.getElementById('wheelStatusBanner').innerText = '🔥 Pörgess az iPhone 18, PS5 vagy azonnali kedvezményért!';
-
-      document.getElementById('svgLid').classList.remove('lid-open');
-      const card = document.getElementById('emergingCard');
-      card.className = 'absolute opacity-0 transform translate-y-6 transition-all duration-700 z-10 bg-gradient-to-br from-slate-900 to-blue-950 text-white px-4 py-2.5 rounded-xl border-2 border-amber-400 shadow-2xl';
-      
-      const lidBtn = document.getElementById('openLidBtn');
-      lidBtn.disabled = false;
-      lidBtn.innerText = '🎀 MASNI KIOLDÁSA & DOBOZ KINYITÁSA!';
+    // 2. KOSÁR ÉS KUPON KEZELÉS
+    function addToCart(productId) {
+      const prod = products.find(p => p.id === productId);
+      const size = document.getElementById('size-' + productId).value;
+      cart.push({ name: prod.name, size: size, price: prod.price });
+      updateCartUI();
+      toggleCart(true);
     }
 
-    function popGiftLid() {
-      initAudio();
-      const btn = document.getElementById('openLidBtn');
-      if (btn.disabled) return;
-      btn.disabled = true;
-      btn.innerText = '✨ NYÍLIK A KARÁCSONYI DÍSZDOBOZ...';
-
-      document.getElementById('svgLid').classList.add('lid-open');
-      const card = document.getElementById('emergingCard');
-      card.classList.remove('opacity-0', 'translate-y-6');
-      card.classList.add('opacity-100', '-translate-y-10');
-
-      playHolidayChime();
-      confetti({ particleCount: 65, spread: 65, origin: { y: 0.55 } });
-
-      setTimeout(() => {
-        document.getElementById('step-1-openbox').classList.add('hidden');
-        document.getElementById('step-2-wheel').classList.remove('hidden');
-        currentWheelAngle = 0;
-        drawWheel(0);
-      }, 1350);
-    }
-
-    function startAdrenalineWheel() {
-      if (isWheelSpinning) return;
-      isWheelSpinning = true;
-      initAudio();
-
-      const btn = document.getElementById('spinActionBtn');
-      btn.disabled = true;
-      btn.innerText = '⏳ PÖRÖG A FŐDÍJ KERÉK...';
-
-      const flapper = document.getElementById('wheelFlapper');
-      const statusBanner = document.getElementById('wheelStatusBanner');
-
-      const totalSpins = 6 * 360;
-      const targetAngle = totalSpins + 206; 
-      const duration = 5800;
-      const startTime = performance.now();
-      let lastPegIndex = -1;
-
-      function animateWheel(now) {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-
-        const ease = 1 - Math.pow(1 - progress, 4.4);
-        currentWheelAngle = ease * targetAngle;
-        drawWheel(currentWheelAngle);
-
-        const normAngle = (270 - (currentWheelAngle % 360) + 360) % 360;
-        const activeSliceIndex = Math.floor(normAngle / 45) % wheelSlices.length;
-        const currentSlice = wheelSlices[activeSliceIndex];
-        statusBanner.innerHTML = `🎯 Mutató alatt: <b class="text-amber-300">${currentSlice.icon} ${currentSlice.title} (${currentSlice.sub})</b>`;
-
-        const pegIndex = Math.floor(currentWheelAngle / 22.5);
-        if (pegIndex !== lastPegIndex) {
-          playWheelTick(480 + progress * 320);
-          flapper.classList.add('flapper-hit');
-          setTimeout(() => flapper.classList.remove('flapper-hit'), 55);
-          lastPegIndex = pegIndex;
-        }
-
-        if (progress < 1) {
-          requestAnimationFrame(animateWheel);
-        } else {
-          playHolidayChime();
-          confetti({ particleCount: 130, spread: 90, origin: { y: 0.5 } });
-          statusBanner.innerHTML = `😱 <b>HAJSZÁLON MÚLT AZ IPHONE 18!</b> Nyereményed: <b class="text-emerald-300">-1 500 Ft VIP KUPON!</b>`;
-          btn.classList.add('hidden');
-          document.getElementById('finalOfferBox').classList.remove('hidden');
-          startOfferCountdown(599);
-        }
-      }
-
-      requestAnimationFrame(animateWheel);
-    }
-
-    function openCheckoutStep() {
-      document.getElementById('step-2-wheel').classList.add('hidden');
-      document.getElementById('step-3-checkout').classList.remove('hidden');
-      document.getElementById('checkoutBoxName').innerText = activeBoxName;
-      document.getElementById('checkoutFinalPrice').innerText = `${(activeBoxPrice - 1500).toLocaleString('hu-HU')} Ft`;
-    }
-
-    function submitDemoOrder(e) {
+    function submitCustomShoe(e) {
       e.preventDefault();
-      const email = document.getElementById('customerEmail').value;
-      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-      alert(`🎄 Köszönjük! Az élesítés után a rendszer most átirányít az Apple Pay / Bankkártyás fizetésre (${(activeBoxPrice - 1500).toLocaleString('hu-HU')} Ft), majd 0 percen belül küldi a Steam kulcsokat a(z) ${email} címre!`);
-      closeModal();
+      const size = document.getElementById('customSize').value;
+      const price = parseInt(document.getElementById('customStyle').value);
+      const idea = document.getElementById('customIdea').value;
+      cart.push({
+        name: `Egyedi Tervezésű AF1 (${idea.substring(0, 28)}...)`,
+        size: size,
+        price: price
+      });
+      document.getElementById('customIdea').value = '';
+      updateCartUI();
+      toggleCart(true);
     }
 
-    function startOfferCountdown(sec) {
-      if (countdownTimer) clearInterval(countdownTimer);
-      const el = document.getElementById('offerTimer');
-      let rem = sec;
-      countdownTimer = setInterval(() => {
-        rem--;
-        if (rem <= 0) { clearInterval(countdownTimer); return; }
-        const m = String(Math.floor(rem / 60)).padStart(2, '0');
-        const s = String(rem % 60).padStart(2, '0');
-        el.innerText = `${m}:${s}`;
-      }, 1000);
+    function removeFromCart(idx) {
+      cart.splice(idx, 1);
+      updateCartUI();
     }
 
-    function closeModal() {
-      document.getElementById('unboxModal').classList.add('hidden');
+    function updateCartUI() {
+      document.getElementById('cartCount').innerText = cart.length;
+      const list = document.getElementById('cartItemsList');
+
+      if (cart.length === 0) {
+        list.innerHTML = `<p class="text-xs text-[#7A6A63] text-center py-8">A kosarad jelenleg üres. Válassz egy egyedi Lulu cipőt!</p>`;
+      } else {
+        list.innerHTML = cart.map((item, i) => `
+          <div class="bg-white p-3 rounded-2xl border border-[#D4AF37]/30 flex items-center justify-between">
+            <div>
+              <h4 class="font-bold text-xs text-[#2C221E]">${item.name}</h4>
+              <span class="text-[11px] text-[#7A6A63]">Méret: EU ${item.size} • ${item.price.toLocaleString('hu-HU')} Ft</span>
+            </div>
+            <button onclick="removeFromCart(${i})" class="text-xs text-red-700 font-bold px-2">✕</button>
+          </div>
+        `).join('');
+      }
+
+      let total = cart.reduce((sum, item) => sum + item.price, 0);
+      if (couponActive && total > 0) {
+        total -= 5000;
+        document.getElementById('discountRow').classList.remove('hidden');
+        document.getElementById('applyCouponBtnInCart').classList.add('hidden');
+        document.getElementById('couponStatusBadge').innerText = '✓ LULUXMAS (-5 000 Ft) aktiválva!';
+      }
+      document.getElementById('cartTotalText').innerText = `${total.toLocaleString('hu-HU')} Ft`;
     }
 
+    function toggleCart(forceOpen = false) {
+      const drawer = document.getElementById('cartDrawer');
+      if (forceOpen) {
+        drawer.classList.remove('hidden');
+      } else {
+        drawer.classList.toggle('hidden');
+      }
+    }
+
+    // 3. KARÁCSONYI FELUGRÓ ABLAK (POP-UP)
+    function showPromoModal() {
+      document.getElementById('promoModal').classList.remove('hidden');
+    }
+    function closePromoModal() {
+      document.getElementById('promoModal').classList.add('hidden');
+    }
+    function activateCoupon() {
+      couponActive = true;
+      closePromoModal();
+      renderProducts();
+      updateCartUI();
+      confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } });
+    }
+
+    function submitCheckout(e) {
+      e.preventDefault();
+      if (cart.length === 0) {
+        alert('Először tegyél egy cipőt a kosárba!');
+        return;
+      }
+      confetti({ particleCount: 110, spread: 80, origin: { y: 0.6 } });
+      alert('🎄 Köszönjük a rendelésed a Lulu Webshopban! A visszaigazolást és a fizetési részleteket elküldtük az e-mail címedre.');
+      cart = [];
+      updateCartUI();
+      toggleCart();
+    }
+
+    // Oldalbetöltéskor termékek kirajzolása + 2.5 mp után Karácsonyi Pop-up
+    renderProducts();
+    setTimeout(() => {
+      if (!couponActive) showPromoModal();
+    }, 2500);
+
+    // 4. FINOM ARANY ÉS FEHÉR HÓSZÁLLINGÓZÁS
     const sCanvas = document.getElementById('snowCanvas');
     const sCtx = sCanvas.getContext('2d');
     let w, h, flakes = [];
@@ -789,26 +600,25 @@
     function initSnow() {
       w = sCanvas.width = window.innerWidth;
       h = sCanvas.height = window.innerHeight;
-      flakes = Array.from({ length: 42 }, () => ({
+      flakes = Array.from({ length: 45 }, (_, i) => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        r: Math.random() * 2.2 + 0.8,
-        d: Math.random() * 0.65 + 0.3
+        r: Math.random() * 2.5 + 1,
+        d: Math.random() * 0.6 + 0.25,
+        gold: i % 3 === 0
       }));
     }
 
     function drawSnow() {
       sCtx.clearRect(0, 0, w, h);
-      sCtx.fillStyle = 'rgba(255, 251, 235, 0.75)';
-      sCtx.beginPath();
       for (let f of flakes) {
-        sCtx.moveTo(f.x, f.y);
+        sCtx.beginPath();
         sCtx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-      }
-      sCtx.fill();
-      for (let f of flakes) {
+        sCtx.fillStyle = f.gold ? 'rgba(212, 175, 55, 0.45)' : 'rgba(212, 195, 165, 0.55)';
+        sCtx.fill();
+
         f.y += f.d;
-        f.x += Math.sin(f.y * 0.01) * 0.3;
+        f.x += Math.sin(f.y * 0.01) * 0.25;
         if (f.y > h) { f.y = -5; f.x = Math.random() * w; }
       }
       requestAnimationFrame(drawSnow);
